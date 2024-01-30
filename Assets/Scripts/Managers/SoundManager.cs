@@ -28,4 +28,14 @@ public class SoundManager : MonoBehaviour
     {
         return 1.0f;
     }
+
+    public static float S_GetMusicVolume()
+    {
+        return 1.0f;
+    }
+
+    public static float S_GetAmbienceVolume()
+    {
+        return 1.0f;
+    }
 }
