@@ -65,7 +65,7 @@ public class GravityObject : MonoBehaviour
             attractor.Reorient(orientation, model);
             if (!_onGround)
             {
-                attractor.Attract(transform, orientation, maxFallSpeed, gravityMult);
+                attractor.Attract(transform, maxFallSpeed, gravityMult);
             }
         }
     }

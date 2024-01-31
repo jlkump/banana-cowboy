@@ -40,9 +40,9 @@ public class GravityAttractor : MonoBehaviour
         centerOfGravity = transform;
     }
 
-    public void Attract(Transform body, Transform orientation, float maxFallSpeed, float gravityMult)
+    public void Attract(Transform body, float maxFallSpeed, float gravityMult)
     {
-        Vector3 targetDir = GetGravityUp(orientation);
+        Vector3 targetDir = GetGravityUp(body);
         //Vector3 fallVec = body.InverseTransformDirection(body.GetComponent<CharacterController>());
         //fallVec.x = 0;
         //fallVec.z = 0;

@@ -408,7 +408,8 @@ public class PlayerController : MonoBehaviour
      */
     void Run()
     {
-        _moveInput = cameraTransform.TransformDirection(_moveInput);
+        //_moveInput = cameraTransform.InverseTransformDirection(_moveInput);
+        _moveInput = _moveInput.z * -cameraTransform.right + _moveInput.x * cameraTransform.forward;
         _moveInput = Vector3.Dot(orientation.right, _moveInput) * orientation.right + Vector3.Dot(orientation.forward, _moveInput) * orientation.forward;
         Vector3 targetVelocity = _moveInput * walkSpeed;
         float targetSpeed = targetVelocity.magnitude;
@@ -418,7 +419,7 @@ public class PlayerController : MonoBehaviour
         
         if (targetSpeed > 0 && model != null)
         {
-            model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(_moveInput, orientation.up), Time.deltaTime * 8);
+            model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(_moveInput, model.up), Time.deltaTime * 8);
         }
 
         float accelRate;
