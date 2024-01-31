@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using UnityEngine;
 
+[RequireComponent(typeof(Renderer))]
 public class Collectable : MonoBehaviour
 {
     public AudioClip collectSFX;
@@ -22,7 +23,13 @@ public class Collectable : MonoBehaviour
         {
             source.Play();
             // Perform after delay and just destroy rendered instead?
-            Destroy(gameObject);
+            Invoke("DestroyMe", collectSFX.length);
+            Destroy(GetComponent<Renderer>());
         }
+    }
+
+    void DestroyMe()
+    {
+        Destroy(gameObject);
     }
 }

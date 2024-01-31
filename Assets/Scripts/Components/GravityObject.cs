@@ -11,7 +11,7 @@ using UnityEngine.UI;
  * GravityAttractors, so the object is attracted to the
  * attractor with the highest priority.
  */
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(CharacterController))]
 public class GravityObject : MonoBehaviour
 {
     // The list of all attractors having influence on this object
@@ -49,22 +49,23 @@ public class GravityObject : MonoBehaviour
     private bool _onGround = false;
 
 
+    public Transform model = null;
+    public Transform orientation = null;
+
     void Awake()
     {
-        GetComponent<Rigidbody>().useGravity = false;
-        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
         attractors = new List<GravityAttractor>();
     }
 
     void FixedUpdate()
     {
-        if (highestPrioAttractorIndex != -1)
+        if (highestPrioAttractorIndex != -1 && orientation != null && model != null)
         {
             GravityAttractor attractor = attractors[highestPrioAttractorIndex];
-            attractor.Reorient(transform);
+            attractor.Reorient(orientation, model);
             if (!_onGround)
             {
-                attractor.Attract(transform, maxFallSpeed, gravityMult);
+                attractor.Attract(transform, orientation, maxFallSpeed, gravityMult);
             }
         }
     }
@@ -112,9 +113,8 @@ public class GravityObject : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (collision != null && collision.gameObject != null &&
-            (groundMask & 1 << collision.gameObject.layer) > 0) // Checking layer masks sucks -_-
-        // Vector3.Dot((transform.position - collision.gameObject.transform.position, transform.up) > -0.3)
-        // The above is used to check if the player is above the ground, but tends to be buggy since the player's up doesn't immediately change
+            (groundMask & 1 << collision.gameObject.layer) > 0 &&
+            Vector3.Dot((orientation.position - collision.gameObject.transform.position), orientation.up) > -0.3)
         {
             print("On surface");
             _onGround = true;
@@ -124,9 +124,8 @@ public class GravityObject : MonoBehaviour
     private void OnCollisionExit(Collision collision)
     {
         if (collision != null &&
-            (groundMask & 1 << collision.gameObject.layer) > 0)
-        // Vector3.Dot((transform.position - collision.gameObject.transform.position, transform.up) > -0.3)
-        // Again, checks if the player is above the gound object, not below. Also buggy since player up is slerped not immediately changed
+            (groundMask & 1 << collision.gameObject.layer) > 0 &&
+            Vector3.Dot((orientation.position - collision.gameObject.transform.position), orientation.up) > -0.3)
         {
             print("Left surface");
             _onGround = false;
