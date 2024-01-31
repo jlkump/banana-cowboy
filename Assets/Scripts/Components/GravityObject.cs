@@ -52,6 +52,9 @@ public class GravityObject : MonoBehaviour
     public Transform model = null;
     public Transform orientation = null;
 
+    public Transform bottomModelLocation = null;
+    public float heightDetection = 0.1f;
+
     void Awake()
     {
         attractors = new List<GravityAttractor>();
@@ -59,10 +62,12 @@ public class GravityObject : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (highestPrioAttractorIndex != -1 && orientation != null && model != null)
+        if (highestPrioAttractorIndex != -1 && orientation != null && model != null && bottomModelLocation != null)
         {
             GravityAttractor attractor = attractors[highestPrioAttractorIndex];
             attractor.Reorient(orientation, model);
+            _onGround = Physics.Raycast(bottomModelLocation.position, -orientation.up, heightDetection, groundMask);
+            print("On ground: " + _onGround);
             if (!_onGround)
             {
                 attractor.Attract(transform, maxFallSpeed, gravityMult);
@@ -108,29 +113,30 @@ public class GravityObject : MonoBehaviour
     }
 
 
-    // Collision Enter does not detect trigger collision objects, which makes it perfect for
-    // detecting when the player hit the ground.
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision != null && collision.gameObject != null &&
-            (groundMask & 1 << collision.gameObject.layer) > 0 &&
-            Vector3.Dot((orientation.position - collision.gameObject.transform.position), orientation.up) > -0.3)
-        {
-            print("On surface");
-            _onGround = true;
-        }
-    }
+    //// Collision Enter does not detect trigger collision objects, which makes it perfect for
+    //// detecting when the player hit the ground.
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    print("On Collision");
+    //    if (collision != null && collision.gameObject != null &&
+    //        (groundMask & 1 << collision.gameObject.layer) > 0 &&
+    //        Vector3.Dot((orientation.position - collision.gameObject.transform.position), orientation.up) > -0.3)
+    //    {
+    //        print("On surface");
+    //        _onGround = true;
+    //    }
+    //}
 
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision != null &&
-            (groundMask & 1 << collision.gameObject.layer) > 0 &&
-            Vector3.Dot((orientation.position - collision.gameObject.transform.position), orientation.up) > -0.3)
-        {
-            print("Left surface");
-            _onGround = false;
-        }
-    }
+    //private void OnCollisionExit(Collision collision)
+    //{
+    //    if (collision != null &&
+    //        (groundMask & 1 << collision.gameObject.layer) > 0 &&
+    //        Vector3.Dot((orientation.position - collision.gameObject.transform.position), orientation.up) > -0.3)
+    //    {
+    //        print("Left surface");
+    //        _onGround = false;
+    //    }
+    //}
 
     public bool IsOnGround()
     {

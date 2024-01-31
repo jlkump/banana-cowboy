@@ -414,7 +414,7 @@ public class PlayerController : MonoBehaviour
         Vector3 targetVelocity = _moveInput * walkSpeed;
         float targetSpeed = targetVelocity.magnitude;
 
-        velocity_direction_indicator.rotation = Quaternion.LookRotation(targetVelocity, orientation.up);
+        //velocity_direction_indicator.rotation = Quaternion.LookRotation(targetVelocity, orientation.up);
 
         
         if (targetSpeed > 0 && model != null)
@@ -440,8 +440,9 @@ public class PlayerController : MonoBehaviour
             accelRate = 0;
         }
         
-        Vector3 speed_diff = targetVelocity - previousVel;
-        Vector3 movement = speed_diff * accelRate;
+        Vector3 speedDiff = targetVelocity - previousVel;
+        Vector3 movement = speedDiff * accelRate;
+        //print("Speed Difference is: " + speedDiff + "\n Movement vector is: " + movement + "\nAccelRate is: " + accelRate);
         characterController.Move(movement);
         previousVel = movement;
         currentSpeed = movement.magnitude;
