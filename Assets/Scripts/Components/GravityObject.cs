@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,7 @@ using UnityEngine.UI;
  * GravityAttractors, so the object is attracted to the
  * attractor with the highest priority.
  */
-[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Rigidbody))]
 public class GravityObject : MonoBehaviour
 {
     // The list of all attractors having influence on this object
@@ -20,12 +21,6 @@ public class GravityObject : MonoBehaviour
     // only attracted to the highest priority attractor.
     List<GravityAttractor> attractors;
     int highestPrioAttractorIndex = -1;
-
-
-    // Used to determine what is and what is not ground.
-    // It is a LayerMask and not a Tag incase we ever need to
-    // Raycast to detect the ground (which we likely will for enemies).
-    public LayerMask groundMask;
 
     // This determines terminal velocity to prevent gravity
     // from completely taking over and flinging things out into
@@ -39,6 +34,24 @@ public class GravityObject : MonoBehaviour
     // fall faster than if they hold it down.
     public float gravityMult { get; set; } = 1.0f;
 
+    public float gravityIncreaseOnFall = 1.5f;
+
+    [Header("References")]
+    [Tooltip("This is the reference to the transform of the root of the model")]
+    public Transform model = null;
+    [Tooltip("Turn this to false if the 3D model should not be re-oriented to the direction of gravity")]
+    public bool reorientModel = true;
+
+    [Header("Ground Detection")]
+    // Used to determine what is and what is not ground.
+    // It is a LayerMask and not a Tag incase we ever need to
+    // Raycast to detect the ground (which we likely will for enemies).
+    public LayerMask groundMask;
+    public Transform bottomModelLocation = null;
+    [Tooltip("This determines how far we look below bottomModelLocation for the ground")]
+    public float heightDetection = 0.1f;
+    public float heightDetectionRadius = 0.3f;
+
     // Updated whenever the Gravity Object collides with something. If that
     // something has the groundMask layer on it, then this is updated to
     // true (regardless if that ground was the ground the object is being attracted to.
@@ -48,31 +61,68 @@ public class GravityObject : MonoBehaviour
     //     gravity attractor component, so that is another case to keep in mind.
     private bool _onGround = false;
 
-
-    public Transform model = null;
-    public Transform orientation = null;
-
-    public Transform bottomModelLocation = null;
-    public float heightDetection = 0.1f;
+    Rigidbody _rigidBody;
 
     void Awake()
     {
+        _rigidBody = GetComponent<Rigidbody>();
+        _rigidBody.useGravity = false;
+        _rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
         attractors = new List<GravityAttractor>();
     }
 
     void FixedUpdate()
     {
-        if (highestPrioAttractorIndex != -1 && orientation != null && model != null && bottomModelLocation != null)
+        if (highestPrioAttractorIndex != -1 && bottomModelLocation != null)
         {
             GravityAttractor attractor = attractors[highestPrioAttractorIndex];
-            attractor.Reorient(orientation, model);
-            _onGround = Physics.Raycast(bottomModelLocation.position, -orientation.up, heightDetection, groundMask);
-            print("On ground: " + _onGround);
+            RaycastHit hit;
+            _onGround = Physics.SphereCast(transform.position, heightDetectionRadius, -transform.up, out hit, heightDetection, groundMask, QueryTriggerInteraction.Ignore);
+            //print("On ground: " + _onGround);
+            // Reorient transform
+            transform.rotation = Quaternion.FromToRotation(transform.up, attractor.GetGravityDirection(transform)) * transform.rotation;
+            if (model != null && reorientModel)
+            {
+                // Reorient model if we have one (and are not prevented from doing it)
+                Vector3 bodyUp = transform.up;
+                model.rotation = Quaternion.Slerp(model.rotation, Quaternion.FromToRotation(bodyUp, transform.up) * model.rotation, Time.deltaTime * 1.0f);
+            }
+
+            // We are not on the ground yet, so pull to the nearest attractor
+            Vector3 grav = attractor.GetGravityDirection(transform) * attractor.GetGravityForce();
+            Vector3 fallingVec = GetFallingVelocity();
             if (!_onGround)
             {
-                attractor.Attract(transform, maxFallSpeed, gravityMult);
+                //print("Attracting");
+
+                if (fallingVec.magnitude < maxFallSpeed)
+                {
+                    if (transform.InverseTransformDirection(fallingVec).y < 0)
+                    {
+                        // We are falling down, so increase gravity
+                        // Supposed to divide by mass as well
+                        _rigidBody.AddForce(gravityIncreaseOnFall * gravityMult * grav);
+                        //velocity += gravDir * attractor.GetGravityForce() * gravityMult * gravityIncreaseOnFall * Time.fixedDeltaTime; 
+                    } 
+                    else
+                    {
+                        //velocity += gravDir * attractor.GetGravityForce() * gravityMult * Time.fixedDeltaTime;
+                        _rigidBody.AddForce(gravityMult * grav);
+                    }
+                }
+            }
+            else
+            {
+                if (transform.InverseTransformDirection(_rigidBody.velocity).y < 0)
+                {
+                    _rigidBody.velocity = GetMoveVelocity();
+                    print("On Ground!");
+
+                }
             }
         }
+        //GetComponent<Rigidbody>().MovePosition(transform.position + velocity * Time.fixedDeltaTime);
+        //GetComponent<Rigidbody>(). = velocity;
     }
 
     int GetHighestPrioAttractorIndex()
@@ -91,13 +141,41 @@ public class GravityObject : MonoBehaviour
         return index;
     }
 
-    // Trigger collision objects determine the range of influence for the GravityAttractor.
+    /**
+     * Get the vector for the direction the object is falling
+     * in World-Space
+     */
+    public Vector3 GetFallingVelocity()
+    {
+        Vector3 vel = transform.InverseTransformDirection(_rigidBody.velocity);
+        vel.x = 0;
+        vel.z = 0;
+        return transform.TransformDirection(vel);
+    }
+
+    /**
+     * Get the vector for the direction the object is moving
+     * in World-Space
+     */
+    public Vector3 GetMoveVelocity()
+    {
+        Vector3 vel = transform.InverseTransformDirection(_rigidBody.velocity);
+        vel.y = 0;
+        return transform.TransformDirection(vel);
+    }
+
+    public bool IsOnGround()
+    {
+        return _onGround;
+    }
+
     // Whenever a Gravity Object enters one, we add the attractor to the list. Likewise,
     // whenever it leaves, we remove it from the list.
     void OnTriggerEnter(UnityEngine.Collider collision)
     {
         if (collision != null && collision.gameObject != null && collision.gameObject.GetComponent<GravityAttractor>() != null)
         {
+            print("Entered gravity attractor pull");
             attractors.Add(collision.gameObject.GetComponent<GravityAttractor>());
         }
         highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
@@ -107,39 +185,19 @@ public class GravityObject : MonoBehaviour
     {
         if (collision != null && collision.gameObject != null && collision.gameObject.GetComponent<GravityAttractor>() != null)
         {
+            print("Left gravity attractor pull");
             attractors.Remove(collision.gameObject.GetComponent<GravityAttractor>());
         }
         highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
     }
 
-
-    //// Collision Enter does not detect trigger collision objects, which makes it perfect for
-    //// detecting when the player hit the ground.
     //private void OnCollisionEnter(Collision collision)
     //{
-    //    print("On Collision");
-    //    if (collision != null && collision.gameObject != null &&
-    //        (groundMask & 1 << collision.gameObject.layer) > 0 &&
-    //        Vector3.Dot((orientation.position - collision.gameObject.transform.position), orientation.up) > -0.3)
-    //    {
-    //        print("On surface");
-    //        _onGround = true;
-    //    }
+    //    _onGround = true;
     //}
 
     //private void OnCollisionExit(Collision collision)
     //{
-    //    if (collision != null &&
-    //        (groundMask & 1 << collision.gameObject.layer) > 0 &&
-    //        Vector3.Dot((orientation.position - collision.gameObject.transform.position), orientation.up) > -0.3)
-    //    {
-    //        print("Left surface");
-    //        _onGround = false;
-    //    }
+    //    _onGround = false;
     //}
-
-    public bool IsOnGround()
-    {
-        return _onGround;
-    }
 }

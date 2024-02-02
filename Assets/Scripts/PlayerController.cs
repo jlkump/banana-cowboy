@@ -9,35 +9,39 @@ using UnityEngine.Device;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(CharacterController), typeof(GravityObject))]
+[RequireComponent(typeof(GravityObject))]
 public class PlayerController : MonoBehaviour
 {
-    [Header("References")]
-    public Transform cameraTransform;
-    public Transform model;
-    public Transform orientation;
-
     [Header("Debug")]
-    public Transform velocity_direction_indicator;
+
+
+    [Header("References")]
+    public Transform model;
+    // We can find these ourselves
+    Rigidbody _rigidBody;
+    Transform _cameraTransform;
+    GravityObject _gravityObject;
+
 
     [Header("Movement")]
-    CharacterController characterController;
-    private Vector3 _moveInput;
-    private float _lastTimeOnGround = 0.0f;
-
     public float walkSpeed = 8.0f; // The max walk speed
     public float runSpeed = 12.0f; // The max run speed
     public float accelerationRate = (50f * 0.5f) / 8.0f;  // The rate of speed increase
     public float deccelerationRate = (50f * 0.5f) / 8.0f; // The rate of speed decrease (when no input is pressed)
     public float accelAirControlRatio = 0.8f;       // The ability for the player to re-orient themselves in the air while accelerating
     public float deccelAirControlRatio = 0.8f;      // The ability for the player to move themselves while in the air and deccelerating (range [0.0,1.0])
+    public float jumpImpulseForce = 10.0f;
     public bool conserveMomentum = true;
 
-    private float currentSpeed = 0.0f;
-    private Vector3 previousVel = Vector3.zero;
+    //private float _currentSpeed = 0.0f;
+    private Vector3 _previousVel = Vector3.zero;
+    private Vector3 _moveInput;
+    private float _lastTimeOnGround = 0.0f;
+    private bool _isRunning = false;
 
-    bool isRunning = false;
-    public KeyCode runningKey = KeyCode.LeftShift;
+    [Header("Input")]
+    public KeyCode sprintKey = KeyCode.LeftShift;
+    public KeyCode jumpKey = KeyCode.Space;
 
     /*
     public Transform playerRoot;
@@ -144,16 +148,53 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        // Might need to be moved to Start
-        characterController = GetComponent<CharacterController>();
+        _rigidBody = GetComponent<Rigidbody>();
+        _gravityObject = GetComponent<GravityObject>();
+
     }
 
-    void SetupCamera()
+    void Start()
     {
         // Removes cursor from screen and keeps it locked to center
-        cameraTransform = Camera.main.transform;
+        _cameraTransform = Camera.main.transform;
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
+
+        SetupLasso();
+
+
+
+        /*
+        jump_hold_buffer_timer = 0.0f;
+        jump_buffer_timer = 0.0f;
+        */
+
+        /*
+        soundManager = GameObject.Find("Sound Manager").GetComponent<SoundManager>();
+        ui = GameObject.Find("Player UI").GetComponent<UIManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        */
+    }
+    void Update()
+    {
+        GetMoveInput();
+        //GetLassoInput();
+        //GetDashInput();
+        /*
+        jump_hold_buffer_timer -= Time.deltaTime;
+        jump_buffer_timer -= Time.deltaTime;
+        */
+
+    }
+
+    void FixedUpdate()
+    {
+        Run();
+        UpdateLasso();
+    }
+    private void LateUpdate()
+    {
+        DrawRope();
     }
 
     void UpdateState(PlayerState newState)
@@ -167,7 +208,7 @@ public class PlayerController : MonoBehaviour
 
     void UpdateAnimState()
     {
-
+        // This handles the changes to the animimations based on the player state
     }
 
     bool IsValidState(PlayerState newState)
@@ -190,88 +231,72 @@ public class PlayerController : MonoBehaviour
         */
     }
 
-    void Start()
-    {
-        SetupCamera();
-        SetupLasso();
-
-
-        /*
-        jump_hold_buffer_timer = 0.0f;
-        jump_buffer_timer = 0.0f;
-        */
-
-        /*
-        soundManager = GameObject.Find("Sound Manager").GetComponent<SoundManager>();
-        ui = GameObject.Find("Player UI").GetComponent<UIManager>();
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        */
-    }
-
     void GetMoveInput()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         _moveInput = new Vector3(horizontal, 0, vertical).normalized;
 
-        if (Input.GetKeyDown(runningKey))
+        if (Input.GetKeyDown(sprintKey))
         {
-            isRunning = true;
-        }
-        if (Input.GetKeyUp(runningKey))
+            _isRunning = true;
+        } 
+        else if (Input.GetKeyUp(sprintKey))
         {
-            isRunning = false;
+            _isRunning = false;
         }
 
+        // _lastTimeOnGround is used to see whenever the player is considered "in the air"
+        // for movement controls. When in the air, the player has drag on their movement
+        // determined by accelAirControlRatio and deccelAirControlRatio.
+        // When on the ground, _lastTimeOnGround acts as a coyote timer when
+        // we still accept jump input.
         _lastTimeOnGround -= Time.deltaTime;
-        if (GetComponent<GravityObject>().IsOnGround())
+        if (_gravityObject.IsOnGround())
         {
-            _lastTimeOnGround = 0.1f;
+            _lastTimeOnGround = 0.1f; // This might be good to later have a customizable parameter, but 0.1f seems good for now.
             if (_moveInput == Vector3.zero)
             {
                 UpdateState(PlayerState.IDLE);
             } 
-            else if (isRunning)
+            else if (_isRunning)
             {
+                // Important to note, checking isRunning only works here b/c we first check that _moveInput is non-zero
+                // otherwise the player could change to the running state by simply pressing the runningKey. If logic
+                // changes here, make sure this can not happen.
                 UpdateState(PlayerState.RUN);
-            } else
+            } 
+            else
             {
-                UpdateState(PlayerState.RUN);
+                UpdateState(PlayerState.WALK);
             }
         } 
-        else
+        else if (_lastTimeOnGround <= 0)
         {
+            // We are no longer on the ground, change state to air
             UpdateState(PlayerState.AIR);
         }
 
-        /*
-
-        if (Input.GetKeyDown(jumpKey))
+        if (Input.GetKeyDown(jumpKey)) 
         {
-            jump_buffer_timer = jump_buffer;
-        }
-
-        if (GetComponent<GravityObject>().IsOnGround())
-        {
-            wasInAir = false;
-
-            if (Input.GetKeyDown(jumpKey))
+            // Last time on ground acts as a coyote timer for jumping
+            if (_lastTimeOnGround > 0)
             {
                 StartJump();
             }
-            else if (jump_buffer_timer > 0)
+            else if (false)
             {
-                StartJump();
+                // Here we can add logic for jump buffering
             }
-        }
-        else if (LastOnGroundTime <= 0)
+        } 
+        else if (false)
         {
-            player_state = State.AIR;
-            wasInAir = true;
+            // Again, this is here for jump buffering
         }
-        if (Input.GetKeyUp(jumpKey)) { EndJump(); }
-
-        */
+        else if (Input.GetKeyUp(jumpKey))
+        {
+            EndJump();
+        }
     }
 
     void GetLassoInput()
@@ -381,58 +406,31 @@ public class PlayerController : MonoBehaviour
          */
     }
 
-    void Update()
-    {
-        GetMoveInput();
-        GetLassoInput();
-        GetDashInput();
-        /*
-        jump_hold_buffer_timer -= Time.deltaTime;
-        jump_buffer_timer -= Time.deltaTime;
-        */
-
-    }
-
-    void FixedUpdate()
-    {
-        Run();
-        UpdateLasso();
-    }
-    private void LateUpdate()
-    {
-        DrawRope();
-    }
-
     /**
      * Code for running momentum used from https://github.com/DawnosaurDev/platformer-movement/blob/main/Scripts/Run%20Only/PlayerRun.cs#L79
      */
     void Run()
     {
-        //_moveInput = cameraTransform.InverseTransformDirection(_moveInput);
-        _moveInput = _moveInput.z * -cameraTransform.right + _moveInput.x * cameraTransform.forward;
-        _moveInput = Vector3.Dot(orientation.right, _moveInput) * orientation.right + Vector3.Dot(orientation.forward, _moveInput) * orientation.forward;
+        // Transform the move input relative to the camera
+        _moveInput = _cameraTransform.TransformDirection(_moveInput);
+        // Transform the move input relative to the player
+        _moveInput = Vector3.Dot(transform.right, _moveInput) * transform.right + Vector3.Dot(transform.forward, _moveInput) * transform.forward;
         Vector3 targetVelocity = _moveInput * walkSpeed;
         float targetSpeed = targetVelocity.magnitude;
-
-        //velocity_direction_indicator.rotation = Quaternion.LookRotation(targetVelocity, orientation.up);
-
-        
-        if (targetSpeed > 0 && model != null)
-        {
-            model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(_moveInput, model.up), Time.deltaTime * 8);
-        }
 
         float accelRate;
         // Gets an acceleration value based on if we are accelerating (includes turning) 
         // or trying to decelerate (stop). As well as applying a multiplier if we're air borne.
         if (_lastTimeOnGround > 0)
-            accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? accelerationRate : deccelerationRate;
+            accelRate = (Vector3.Dot(targetVelocity, _gravityObject.GetMoveVelocity()) > 0) ? accelerationRate : deccelerationRate;
         else
-            accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? accelerationRate * accelAirControlRatio : deccelerationRate * deccelAirControlRatio;
+            accelRate = (Vector3.Dot(targetVelocity, _gravityObject.GetMoveVelocity()) > 0) ? accelerationRate * accelAirControlRatio : deccelerationRate * deccelAirControlRatio;
+
+
         //We won't slow the player down if they are moving in their desired direction but at a greater speed than their maxSpeed
         if (conserveMomentum &&
-            Mathf.Abs(currentSpeed) > Mathf.Abs(targetSpeed) &&
-            Vector3.Dot(targetVelocity, previousVel) > 0 &&
+            Mathf.Abs(_gravityObject.GetMoveVelocity().magnitude) > Mathf.Abs(targetSpeed) &&
+            Vector3.Dot(targetVelocity, _gravityObject.GetMoveVelocity()) > 0 &&
             Mathf.Abs(targetSpeed) > 0.01f && _lastTimeOnGround < 0)
         {
             //Prevent any deceleration from happening, or in other words conserve are current momentum
@@ -440,12 +438,17 @@ public class PlayerController : MonoBehaviour
             accelRate = 0;
         }
         
-        Vector3 speedDiff = targetVelocity - previousVel;
+        Vector3 speedDiff = targetVelocity - _gravityObject.GetMoveVelocity();
         Vector3 movement = speedDiff * accelRate;
-        //print("Speed Difference is: " + speedDiff + "\n Movement vector is: " + movement + "\nAccelRate is: " + accelRate);
-        characterController.Move(movement);
-        previousVel = movement;
-        currentSpeed = movement.magnitude;
+        print("Move force is " + movement);
+        print("Current velocity" + _rigidBody.velocity);
+        _rigidBody.AddForce(movement);
+
+        // Spin player model and orientation to right direction to face
+        if (_moveInput.magnitude > 0 && model != null)
+        {
+            model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(targetVelocity.normalized, transform.up), Time.deltaTime * 8);
+        }
     }
 
     void StartLassoWindup()
@@ -688,6 +691,8 @@ public class PlayerController : MonoBehaviour
 
     void StartJump()
     {
+        _rigidBody.AddForce(jumpImpulseForce * transform.up, ForceMode.Impulse);
+        _gravityObject.gravityMult = 1.0f;
         /*
         //_is_jumping = true;
         soundManager.PlaySFX(jumpSFX, 1);
@@ -701,6 +706,8 @@ public class PlayerController : MonoBehaviour
 
     void EndJump()
     {
+        print("Jump end");
+        _gravityObject.gravityMult = 3.0f;
         /*
         //_is_jumping = false;
         jump_buffer_timer = 0;
