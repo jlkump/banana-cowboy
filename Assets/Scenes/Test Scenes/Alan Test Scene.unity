@@ -1088,10 +1088,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pause Manager
       objectReference: {fileID: 0}
-    - target: {fileID: 1164616214480741238, guid: f1318dbb621abce438119d6b37bdc15a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6469270873647346907, guid: f1318dbb621abce438119d6b37bdc15a, type: 3}
       propertyPath: m_Pivot.x
       value: 0
