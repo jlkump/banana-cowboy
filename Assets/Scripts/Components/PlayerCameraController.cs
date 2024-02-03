@@ -21,7 +21,9 @@ public class PlayerCameraController : MonoBehaviour
         if (cameraTarget == null) { return; }
         float mouseX = Input.GetAxisRaw("Mouse X");
         float mouseY = Input.GetAxisRaw("Mouse Y");
-        print("Input is horizontal: " + mouseX + ", " + mouseY);
+
+        // This code is used from Unity's tutorial on Cinemachine
+        // https://www.youtube.com/watch?v=537B1kJp9YQ
         cameraTarget.rotation *= Quaternion.AngleAxis(mouseX * horizontalRotationSpeed, Vector3.up);
         cameraTarget.rotation *= Quaternion.AngleAxis(mouseY * verticalRotationSpeed, Vector3.right);
 

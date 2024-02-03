@@ -24,54 +24,38 @@ public class PlayerController : MonoBehaviour
 
 
     [Header("Movement")]
-    public float walkSpeed = 8.0f; // The max walk speed
-    public float runSpeed = 12.0f; // The max run speed
+    [Tooltip("The maximum walk speed.")]
+    public float walkSpeed = 8.0f;
+    [Tooltip("The maximum run speed.")]
+    public float runSpeed = 12.0f;
+    [Tooltip("The maximum swinging speed.")]
+    public float swingSpeed = 15.0f;
+
+    [Tooltip("The rate of speed increase for getting to max walk / run speed")]
     public float accelerationRate = (50f * 0.5f) / 8.0f;  // The rate of speed increase
+    [Tooltip("The rate of speed decrease when slowing the player down to no movement input")]
     public float deccelerationRate = (50f * 0.5f) / 8.0f; // The rate of speed decrease (when no input is pressed)
+    [Tooltip("The ratio for the player to control the player while in the air relative to ground movement. Scale [0, 1.0]. 0.5 means 50% the effective acceleration in the air relative to the ground.")]
     public float accelAirControlRatio = 0.8f;       // The ability for the player to re-orient themselves in the air while accelerating
+    [Tooltip("The ratio for the player to control the player while in the air relative to ground movement, same as Accel Air Control Ratio, but how much is lost when the player is slowing down in the air.")]
     public float deccelAirControlRatio = 0.8f;      // The ability for the player to move themselves while in the air and deccelerating (range [0.0,1.0])
     public float jumpImpulseForce = 10.0f;
+    [Tooltip("If the player somehow achieves speed greater than the maximum allowed, we won't give them any more speed. However, with conserve momentum, we won't reduce it to the maximum either.")]
     public bool conserveMomentum = true;
 
-    //private float _currentSpeed = 0.0f;
-    private Vector3 _previousVel = Vector3.zero;
     private Vector3 _moveInput;
     private float _lastTimeOnGround = 0.0f;
     private bool _isRunning = false;
+    
+    // This tracks the velocity of the player's lateral movement at the time of jumping so we restore it when landing
+    private Vector3 _jumpMoveVelocity; 
+    private bool _detectLanding = false;
 
     [Header("Input")]
     public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode jumpKey = KeyCode.Space;
 
     /*
-    public Transform playerRoot;
-    public Transform modelTransform;
-    public Transform lassoThrowPos;
-    public Animator playerAnimation;
-    public LineRenderer lr;
-    //public LayerMask swingable;
-
-    //public Transform temp;
-
-
-    [Header("Movement")]
-    public float max_walk_speed = 8.0f;
-    public float max_run_speed = 12.0f;
-    public float accel_rate = (50.0f * 0.5f) / 15.0f;
-    public float decel_rate = (100.0f * 0.5f) / 15.0f;
-    public float accel_in_air_rate = 0.8f;
-    public float decel_in_air_rate = 0.8f;
-    public float jump_impulse_force = 10.0f;
-    public float gravity_mult_on_jump_release = 3.0f;
-    public bool conserve_momentum = true;
-    public float dash_force;
-    private bool can_Dash = true;
-    private float dash_Cooldown = 0.6f;
-    private float dash_Timer = 0.0f;
-    private bool wasInAir = false; // Keep track of the previous state
-
-    public float LastOnGroundTime { get; private set; }
-
     [Header("Buffer System")]
     public float jump_hold_buffer = 0.3f;
     private float jump_hold_buffer_timer;
@@ -141,6 +125,7 @@ public class PlayerController : MonoBehaviour
         AIR,
         WALK,
         RUN,
+        SWING,
     };
 
     private PlayerState _state = PlayerState.AIR;
@@ -250,6 +235,12 @@ public class PlayerController : MonoBehaviour
         _lastTimeOnGround -= Time.deltaTime;
         if (_gravityObject.IsOnGround())
         {
+            if (_detectLanding)
+            {
+                // This is how we detect if the player has landed or not.
+                // It is called once, only on landing after falling off a ledge or jumping.
+                OnLand();
+            }
             _lastTimeOnGround = 0.1f; // This might be good to later have a customizable parameter, but 0.1f seems good for now.
             if (_moveInput == Vector3.zero)
             {
@@ -271,6 +262,7 @@ public class PlayerController : MonoBehaviour
         {
             // We are no longer on the ground, change state to air
             UpdateState(PlayerState.AIR);
+            _detectLanding = true;
         }
 
         if (Input.GetKeyDown(jumpKey)) 
@@ -381,27 +373,6 @@ public class PlayerController : MonoBehaviour
         */
     }
 
-    void GetDashInput()
-    {
-        /*
-        if (Input.GetKeyDown(KeyCode.Mouse1) && can_Dash)
-        {
-            Dash();
-            can_Dash = false;
-            dash_Timer = dash_Cooldown;
-        }
-
-        if (!can_Dash)
-        {
-            dash_Timer -= Time.deltaTime;
-            if (dash_Timer <= 0.0f)
-            {
-                can_Dash = true;
-            }
-        }
-         */
-    }
-
     /**
      * Code for running momentum used from https://github.com/DawnosaurDev/platformer-movement/blob/main/Scripts/Run%20Only/PlayerRun.cs#L79
      */
@@ -436,8 +407,6 @@ public class PlayerController : MonoBehaviour
         
         Vector3 speedDiff = targetVelocity - _gravityObject.GetMoveVelocity();
         Vector3 movement = speedDiff * accelRate;
-        //print("Move force is " + movement);
-        //print("Current velocity " + _rigidBody.velocity);
         _rigidBody.AddForce(movement);
 
         // Spin player model and orientation to right direction to face
@@ -689,37 +658,54 @@ public class PlayerController : MonoBehaviour
     {
         _rigidBody.AddForce(jumpImpulseForce * transform.up, ForceMode.Impulse);
         _gravityObject.gravityMult = 1.0f;
-        /*
-        //_is_jumping = true;
-        soundManager.PlaySFX(jumpSFX, 1);
-        GetComponent<GravityObject>().gravity_mult = 1.0f;
-        GetComponent<Rigidbody>().AddForce(transform.up * jump_impulse_force, ForceMode.Impulse);
-        jump_hold_buffer_timer = jump_hold_buffer;
-        jump_buffer_timer = 0;
-        */
-
     }
 
     void EndJump()
     {
         print("Jump end");
         _gravityObject.gravityMult = 3.0f;
-        /*
-        //_is_jumping = false;
-        jump_buffer_timer = 0;
-        //Vector3 velocity = GetComponent<Rigidbody>().velocity;
-        //Vector3 up = Vector3.Project(velocity, transform.up);
-        //float mult = (Vector3.Dot(up, transform.up) > 0 && jump_hold_buffer_timer > 0) ? 0.5f : 1;
-        GetComponent<GravityObject>().gravity_mult = gravity_mult_on_jump_release;
-        */
+    }
+
+    void OnLand()
+    {
+        print("Landed!");
+        _detectLanding = false;
+    }
+
+    /**
+     * I think we decided not to have dash for now, so I've move the logic we had before
+     * down here in case we decide to add it back later.
+     */
+
+    /*
+    void GetDashInput()
+    {
+        
+        if (Input.GetKeyDown(KeyCode.Mouse1) && can_Dash)
+        {
+            Dash();
+            can_Dash = false;
+            dash_Timer = dash_Cooldown;
+        }
+
+        if (!can_Dash)
+        {
+            dash_Timer -= Time.deltaTime;
+            if (dash_Timer <= 0.0f)
+            {
+                can_Dash = true;
+            }
+        }
+         
     }
 
     void Dash()
     {
-        /*
+        
         //GetComponent<Rigidbody>().AddForce(temp.transform.forward * dash_force, ForceMode.Impulse);
         soundManager.PlaySFX(dashSFX, 1);
         GetComponent<Rigidbody>().AddForce(modelTransform.forward * dash_force, ForceMode.Impulse);
-        */
+        
     }
+    */
 }

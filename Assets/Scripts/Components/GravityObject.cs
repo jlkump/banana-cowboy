@@ -116,8 +116,6 @@ public class GravityObject : MonoBehaviour
                 if (transform.InverseTransformDirection(_rigidBody.velocity).y < 0)
                 {
                     _rigidBody.velocity = GetMoveVelocity();
-                    print("On Ground!");
-
                 }
             }
         }
