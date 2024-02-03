@@ -155,11 +155,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        // Removes cursor from screen and keeps it locked to center
         _cameraTransform = Camera.main.transform;
-        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-        UnityEngine.Cursor.visible = false;
-
         SetupLasso();
 
 
@@ -440,8 +436,8 @@ public class PlayerController : MonoBehaviour
         
         Vector3 speedDiff = targetVelocity - _gravityObject.GetMoveVelocity();
         Vector3 movement = speedDiff * accelRate;
-        print("Move force is " + movement);
-        print("Current velocity" + _rigidBody.velocity);
+        //print("Move force is " + movement);
+        //print("Current velocity " + _rigidBody.velocity);
         _rigidBody.AddForce(movement);
 
         // Spin player model and orientation to right direction to face
