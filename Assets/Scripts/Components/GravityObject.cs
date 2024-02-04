@@ -78,7 +78,6 @@ public class GravityObject : MonoBehaviour
             GravityAttractor attractor = attractors[highestPrioAttractorIndex];
             RaycastHit hit;
             _onGround = Physics.SphereCast(transform.position, heightDetectionRadius, -transform.up, out hit, heightDetection, groundMask, QueryTriggerInteraction.Ignore);
-            //print("On ground: " + _onGround);
             // Reorient transform
             transform.rotation = Quaternion.FromToRotation(transform.up, attractor.GetGravityDirection(transform)) * transform.rotation;
             if (model != null && reorientModel)
@@ -93,8 +92,6 @@ public class GravityObject : MonoBehaviour
             Vector3 fallingVec = GetFallingVelocity();
             if (!_onGround)
             {
-                //print("Attracting");
-
                 if (fallingVec.magnitude < maxFallSpeed)
                 {
                     if (transform.InverseTransformDirection(fallingVec).y < 0)
