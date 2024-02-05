@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Device;
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("References")]
     public Transform model;
+    public Transform emptyObjectPrefab;
     // We can find these ourselves
     Rigidbody _rigidBody;
     Transform _cameraTransform;
@@ -28,8 +30,6 @@ public class PlayerController : MonoBehaviour
     public float walkSpeed = 8.0f;
     [Tooltip("The maximum run speed.")]
     public float runSpeed = 12.0f;
-    [Tooltip("The maximum swinging speed.")]
-    public float swingSpeed = 15.0f;
 
     [Tooltip("The rate of speed increase for getting to max walk / run speed")]
     public float accelerationRate = (50f * 0.5f) / 8.0f;  // The rate of speed increase
@@ -63,24 +63,31 @@ public class PlayerController : MonoBehaviour
 
     private RaycastHit _lassoRaycastHit;
     private Vector3 _lassoHitPoint;
-    private bool _aimingLasso = false;
+    //private bool _aimingLasso = false;
 
     [Header("Swinging")]
-    public Transform swingOrientation;
-    public float horizontalSwingForce = 2.0f;
-    public float forwardSwingForce = 2.0f;
-    public float extendSpeed = 2.0f;
-    private SpringJoint _swingJoint;
-    private Vector3 _swingPosition;
+    public float endSwingBoostForce = 5.0f;
+    public float endSwingVerticalBoostForce = 2.0f;
+    public float minSwingRadius = 3.0f;
+    public float maxSwingRadius = 10.0f;
+    public float distanceOfSwing = 0.9f * Mathf.PI; // On the range [0, 2PI]. The amount we cover the circumfrence of the circle.
+    [Tooltip("The maximum swinging speed.")]
+    public float maxSwingSpeed = 3.0f;
+    public float startingSwingSpeed = 1.2f;
+    public float swingAccelRate = 0.4f;
+    public float swingSideRotateSpeed = 1f;
 
+    Transform _swingTransform;
+    private Vector3 _swingPosition;
+    private float _swingRadius;
+    private float _swingVelocity;
+    private float _swingProgress;
 
     [Header("Input")]
     public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode lassoKey = KeyCode.Mouse0;
-    public KeyCode aimLassoKey = KeyCode.Mouse1;
-    public KeyCode lassoReelIn = KeyCode.Space;
-    public KeyCode lassoRollOut = KeyCode.LeftShift;
+    //public KeyCode aimLassoKey = KeyCode.Mouse1;
 
     /*
     [Header("Buffer System")]
@@ -125,6 +132,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _cameraTransform = Camera.main.transform;
+        _swingTransform = Instantiate(emptyObjectPrefab, transform.position, Quaternion.identity).transform;
     }
     void Update()
     {
@@ -135,16 +143,12 @@ public class PlayerController : MonoBehaviour
             if (_state != PlayerState.SWING)
             {
                 GetMoveInput();
+                AimLasso();
                 GetLassoInput();
             } 
             else
             {
                 GetSwingInput();
-            }
-            
-            if (_aimingLasso)
-            {
-                AimLasso();
             }
         }
     }
@@ -153,7 +157,14 @@ public class PlayerController : MonoBehaviour
     {
         if (_state != PlayerState.SWING)
         {
-            Run();
+            if (!_gravityObject.IsInSpace())
+            {
+                Run();
+            }
+        } 
+        else
+        {
+            Swing();
         }
     }
     private void LateUpdate()
@@ -264,8 +275,8 @@ public class PlayerController : MonoBehaviour
     }
 
     /**
- * Code for running momentum used from https://github.com/DawnosaurDev/platformer-movement/blob/main/Scripts/Run%20Only/PlayerRun.cs#L79
- */
+     * Code for running momentum used from https://github.com/DawnosaurDev/platformer-movement/blob/main/Scripts/Run%20Only/PlayerRun.cs#L79
+     */
     void Run()
     {
         // Transform the move input relative to the camera
@@ -308,8 +319,8 @@ public class PlayerController : MonoBehaviour
 
     void GetLassoInput()
     {
-        if (Input.GetKeyDown(aimLassoKey) && _state != PlayerState.SWING) { _aimingLasso = true; }
-        if (Input.GetKeyUp(aimLassoKey)) { _aimingLasso = false; }
+        //if (Input.GetKeyDown(aimLassoKey) && _state != PlayerState.SWING) { _aimingLasso = true; }
+        //if (Input.GetKeyUp(aimLassoKey)) { _aimingLasso = false; }
         if (Input.GetKeyDown(lassoKey)) {
             if (_lassoRaycastHit.point != Vector3.zero)
             {
@@ -326,32 +337,8 @@ public class PlayerController : MonoBehaviour
     {
 
         float horizontal = Input.GetAxisRaw("Horizontal");
-        float forward = Input.GetAxisRaw("Vertical");
-
-        _rigidBody.AddForce(horizontal * horizontalSwingForce * transform.TransformDirection(_cameraTransform.right).normalized);
-        if (forward > 0)
-        {
-            _rigidBody.AddForce(forward * forwardSwingForce * transform.TransformDirection(_cameraTransform.forward).normalized);
-        }
-
-        if (Input.GetKey(lassoReelIn))
-        {
-            Vector3 directionToPoint = (_swingPosition - transform.position).normalized;
-            _rigidBody.AddForce(directionToPoint * forwardSwingForce);
-
-            float distanceFromPoint = Vector3.Distance(transform.position, _swingPosition);
-
-            _swingJoint.maxDistance = distanceFromPoint * 0.8f;
-            _swingJoint.minDistance = distanceFromPoint * 0.2f;
-        }
-
-        if (Input.GetKey(lassoRollOut))
-        {
-            float distanceFromPoint = Mathf.Clamp(Vector3.Distance(transform.position, _swingPosition) + extendSpeed, 0.2f, lassoRange);
-
-            _swingJoint.maxDistance = distanceFromPoint * 0.8f;
-            _swingJoint.minDistance = distanceFromPoint * 0.2f;
-        }
+        float vertical = Input.GetAxisRaw("Vertical");
+        _moveInput = new Vector3(horizontal, 0, vertical).normalized; // Re-using _moveInput, cause why not
 
         if (Input.GetKeyUp(lassoKey)) { EndSwing(); }
     }
@@ -398,30 +385,86 @@ public class PlayerController : MonoBehaviour
 
     void StartSwing()
     {
+        Vector3 dirToPlayer = (transform.position - _lassoRaycastHit.point).normalized;
+        Vector3 axisOfSwing = Vector3.Cross(_cameraTransform.transform.forward, dirToPlayer);
+        if (axisOfSwing.magnitude == 0)
+        {
+            return;
+        }
         UpdateState(PlayerState.SWING);
 
+        _rigidBody.isKinematic = true; // Allows us to directly control the player's position so we can move them in a perfect arc
+        _gravityObject.disabled = true;
+
+        _swingTransform.position = _lassoRaycastHit.point;
         _swingPosition = _lassoRaycastHit.point;
-        _swingJoint = gameObject.AddComponent<SpringJoint>();
-        _swingJoint.autoConfigureConnectedAnchor = false;
-        _swingJoint.connectedAnchor = _swingPosition;
 
-        float distanceFromPoint = Vector3.Distance(transform.position, _swingPosition);
-
-        _swingJoint.maxDistance = distanceFromPoint * 0.8f;
-        _swingJoint.minDistance = distanceFromPoint * 0.2f;
-
-        _swingJoint.spring = 4.5f;
-        _swingJoint.damper = 7.0f;
-        _swingJoint.massScale = 4.5f;
+        _swingRadius = Mathf.Clamp(Vector3.Distance(transform.position, _swingPosition), minSwingRadius, maxSwingRadius);
+        _swingTransform.rotation = Quaternion.FromToRotation(_swingTransform.right, dirToPlayer) * _swingTransform.rotation;
+        _swingTransform.rotation = Quaternion.FromToRotation(_swingTransform.up, axisOfSwing) * _swingTransform.rotation;
 
         lassoLineRenderer.positionCount = 2;
+
+        _swingProgress = 0.0f;
+        _swingVelocity = startingSwingSpeed;
+    }
+
+    void Swing()
+    {
+        // Move along a parametric curve
+        // For now, lock the player right where they need to be.
+        Vector3 prev = transform.position;
+        transform.position = _swingPosition
+                + _swingRadius * Mathf.Cos(_swingProgress) * _swingTransform.right
+                + _swingRadius * Mathf.Sin(_swingProgress) * _swingTransform.forward;
+        _swingProgress += _swingVelocity * Time.deltaTime;
+
+        if (_swingProgress > distanceOfSwing)
+        {
+            EndSwing();
+        }
+        
+        // Move input
+        _swingVelocity = Mathf.Clamp(_swingVelocity + swingAccelRate * _moveInput.z, startingSwingSpeed, maxSwingSpeed);
+        if (_moveInput.x > 0)
+        {
+            _swingTransform.Rotate(new Vector3(-swingSideRotateSpeed, 0, 0), Space.Self);
+        } 
+        else if (_moveInput.x < 0)
+        {
+            _swingTransform.Rotate(new Vector3(swingSideRotateSpeed, 0, 0), Space.Self);
+        }
+
+        // Re-orienting model
+        Vector3 dirToPoint = (_swingPosition - transform.position).normalized;
+        Vector3 newModelForward = (transform.position - prev).normalized;
+
+        if (newModelForward.magnitude > 0)
+        {
+            model.rotation = Quaternion.FromToRotation(model.up, dirToPoint) * model.rotation;
+            model.rotation = Quaternion.FromToRotation(model.forward, newModelForward) * model.rotation;
+        }
+        if (!_gravityObject.IsInSpace())
+        {
+            model.rotation = Quaternion.Slerp(
+                Quaternion.FromToRotation(model.up, _gravityObject.GetGravityDirection()) * model.rotation, 
+                model.rotation, 
+                0.5f
+            );
+        }
+
     }
 
     void EndSwing()
     {
         UpdateState(PlayerState.AIR);
+
+        _rigidBody.isKinematic = false;
+        _gravityObject.disabled = false;
+
         lassoLineRenderer.positionCount = 0;
-        Destroy(_swingJoint);
+
+        _rigidBody.AddForce(endSwingVerticalBoostForce * transform.up + model.transform.forward * endSwingBoostForce * (_swingVelocity / maxSwingSpeed), ForceMode.Impulse);
     }
 
     void DrawRope()
@@ -446,43 +489,6 @@ public class PlayerController : MonoBehaviour
     {
         print("Landed!");
         _detectLanding = false;
-        _aimingLasso = false;
+        //_aimingLasso = false;
     }
-
-    /**
-     * I think we decided not to have dash for now, so I've move the logic we had before
-     * down here in case we decide to add it back later.
-     */
-
-    /*
-    void GetDashInput()
-    {
-        
-        if (Input.GetKeyDown(KeyCode.Mouse1) && can_Dash)
-        {
-            Dash();
-            can_Dash = false;
-            dash_Timer = dash_Cooldown;
-        }
-
-        if (!can_Dash)
-        {
-            dash_Timer -= Time.deltaTime;
-            if (dash_Timer <= 0.0f)
-            {
-                can_Dash = true;
-            }
-        }
-         
-    }
-
-    void Dash()
-    {
-        
-        //GetComponent<Rigidbody>().AddForce(temp.transform.forward * dash_force, ForceMode.Impulse);
-        soundManager.PlaySFX(dashSFX, 1);
-        GetComponent<Rigidbody>().AddForce(modelTransform.forward * dash_force, ForceMode.Impulse);
-        
-    }
-    */
 }

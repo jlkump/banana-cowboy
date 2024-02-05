@@ -560,7 +560,7 @@ Transform:
   m_GameObject: {fileID: 366893681}
   serializedVersion: 2
   m_LocalRotation: {x: 0.18696511, y: -0, z: -0, w: 0.9823666}
-  m_LocalPosition: {x: -16.8, y: 0.01, z: -30.07}
+  m_LocalPosition: {x: -16.8, y: 10.1, z: -26.1}
   m_LocalScale: {x: 50, y: 1, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1403,7 +1403,7 @@ Transform:
   m_GameObject: {fileID: 1735498531}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.3, y: 12.21, z: -8.2}
+  m_LocalPosition: {x: -1.5, y: 11.5199995, z: -8.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1692,15 +1692,47 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8656551153112217477, guid: 1d2394c78f968d6489c8508991faa4e1, type: 3}
       propertyPath: lassoRange
-      value: 50
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8656551153112217477, guid: 1d2394c78f968d6489c8508991faa4e1, type: 3}
+      propertyPath: extendSpeed
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8656551153112217477, guid: 1d2394c78f968d6489c8508991faa4e1, type: 3}
+      propertyPath: maxSwingSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8656551153112217477, guid: 1d2394c78f968d6489c8508991faa4e1, type: 3}
+      propertyPath: distanceOfSwing
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8656551153112217477, guid: 1d2394c78f968d6489c8508991faa4e1, type: 3}
+      propertyPath: endSwingBoostForce
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8656551153112217477, guid: 1d2394c78f968d6489c8508991faa4e1, type: 3}
+      propertyPath: startingSwingSpeed
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8656551153112217477, guid: 1d2394c78f968d6489c8508991faa4e1, type: 3}
+      propertyPath: maxSwingAngleOffset
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8656551153112217477, guid: 1d2394c78f968d6489c8508991faa4e1, type: 3}
+      propertyPath: alterSwingAngleSpeed
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8656551153112217477, guid: 1d2394c78f968d6489c8508991faa4e1, type: 3}
       propertyPath: lassoAimAssistRadius
-      value: 4
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8656551153112217477, guid: 1d2394c78f968d6489c8508991faa4e1, type: 3}
       propertyPath: lassoLayerMask.m_Bits
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8656551153112217477, guid: 1d2394c78f968d6489c8508991faa4e1, type: 3}
+      propertyPath: swingOffsetChangeRate
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8656551153112217477, guid: 1d2394c78f968d6489c8508991faa4e1, type: 3}
       propertyPath: lassoPredictionReticule
@@ -1785,8 +1817,20 @@ PrefabInstance:
       value: Camera Test
       objectReference: {fileID: 0}
     - target: {fileID: 6995609754178673693, guid: 93e093439fcdb744d8c18ca2301ffb9e, type: 3}
+      propertyPath: CameraSide
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6995609754178673693, guid: 93e093439fcdb744d8c18ca2301ffb9e, type: 3}
+      propertyPath: ShoulderOffset.x
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6995609754178673693, guid: 93e093439fcdb744d8c18ca2301ffb9e, type: 3}
+      propertyPath: ShoulderOffset.y
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6995609754178673693, guid: 93e093439fcdb744d8c18ca2301ffb9e, type: 3}
       propertyPath: VerticalArmLength
-      value: 0.99
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6995609754178673693, guid: 93e093439fcdb744d8c18ca2301ffb9e, type: 3}
       propertyPath: CameraCollisionFilter.m_Bits
@@ -1794,11 +1838,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8652546664008834604, guid: 93e093439fcdb744d8c18ca2301ffb9e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.3
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 8652546664008834604, guid: 93e093439fcdb744d8c18ca2301ffb9e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 12.21
+      value: 11.5199995
       objectReference: {fileID: 0}
     - target: {fileID: 8652546664008834604, guid: 93e093439fcdb744d8c18ca2301ffb9e, type: 3}
       propertyPath: m_LocalPosition.z

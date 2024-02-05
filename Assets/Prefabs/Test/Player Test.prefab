@@ -243,6 +243,37 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &5168920261443466727
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 843953588043270003}
+  m_Layer: 0
+  m_Name: Swing Transform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &843953588043270003
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5168920261443466727}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6513842235014023792}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5578479225836513411
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,6 +313,7 @@ Transform:
   - {fileID: 1177660404700975297}
   - {fileID: 5971543141241263323}
   - {fileID: 6819606027852860693}
+  - {fileID: 843953588043270003}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &2660167775598727633
@@ -368,9 +400,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   model: {fileID: 3040152704446949199}
+  emptyObjectPrefab: {fileID: 4070204132712235945, guid: d076296c76109af44991ebf6823031f4, type: 3}
   walkSpeed: 8
   runSpeed: 15
-  swingSpeed: 15
   accelerationRate: 5
   deccelerationRate: 5
   accelAirControlRatio: 0.8
@@ -379,22 +411,24 @@ MonoBehaviour:
   gravIncreaseOnJumpRelease: 2
   conserveMomentum: 1
   lassoThrowPosition: {fileID: 6819606027852860693}
-  lassoRange: 15
+  lassoRange: 11
   lassoAimAssistRadius: 1
   lassoPredictionReticule: {fileID: 632441027646807739, guid: 6205ef04a87b7d446b9520610872130b, type: 3}
   lassoLayerMask:
     serializedVersion: 2
     m_Bits: 8
   lassoLineRenderer: {fileID: 472802104153298261}
-  horizontalSwingForce: 2
-  forwardSwingForce: 2
-  extendSpeed: 2
+  endSwingBoostForce: 5
+  endSwingVerticalBoostForce: 2
+  minSwingRadius: 3
+  maxSwingRadius: 10
+  distanceOfSwing: 1.5707964
+  maxSwingSpeed: 3
+  startingSwingSpeed: 1
+  swingAccelRate: 0.5
   sprintKey: 304
   jumpKey: 32
   lassoKey: 323
-  aimLassoKey: 324
-  lassoReelIn: 32
-  lassoRollOut: 304
 --- !u!114 &5777239325631412614
 MonoBehaviour:
   m_ObjectHideFlags: 0

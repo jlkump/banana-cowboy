@@ -19,8 +19,8 @@ public class GravityObject : MonoBehaviour
     // This is looped through whenever the attractor list is updated
     // to find the highest priority attractor. The Gravity Object is
     // only attracted to the highest priority attractor.
-    List<GravityAttractor> attractors;
-    int highestPrioAttractorIndex = -1;
+    List<GravityAttractor> _attractors;
+    int _highestPrioAttractorIndex = -1;
 
     // This determines terminal velocity to prevent gravity
     // from completely taking over and flinging things out into
@@ -35,6 +35,8 @@ public class GravityObject : MonoBehaviour
     public float gravityMult { get; set; } = 1.0f;
 
     public float gravityIncreaseOnFall = 1.5f;
+
+    public bool disabled { get; set; } = false;
 
     [Header("References")]
     [Tooltip("This is the reference to the transform of the root of the model")]
@@ -68,14 +70,14 @@ public class GravityObject : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody>();
         _rigidBody.useGravity = false;
         _rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
-        attractors = new List<GravityAttractor>();
+        _attractors = new List<GravityAttractor>();
     }
 
     void FixedUpdate()
     {
-        if (highestPrioAttractorIndex != -1 && bottomModelLocation != null)
+        if (_highestPrioAttractorIndex != -1 && bottomModelLocation != null && !disabled)
         {
-            GravityAttractor attractor = attractors[highestPrioAttractorIndex];
+            GravityAttractor attractor = _attractors[_highestPrioAttractorIndex];
             RaycastHit hit;
             _onGround = Physics.SphereCast(transform.position, heightDetectionRadius, -transform.up, out hit, heightDetection, groundMask, QueryTriggerInteraction.Ignore);
             // Reorient transform
@@ -83,8 +85,7 @@ public class GravityObject : MonoBehaviour
             if (model != null && reorientModel)
             {
                 // Reorient model if we have one (and are not prevented from doing it)
-                Vector3 bodyUp = transform.up;
-                model.rotation = Quaternion.Slerp(model.rotation, Quaternion.FromToRotation(bodyUp, transform.up) * model.rotation, Time.deltaTime * 1.0f);
+                model.rotation = Quaternion.Slerp(model.rotation, Quaternion.FromToRotation(model.up, transform.up) * model.rotation, Time.deltaTime * 6.0f);
             }
 
             // We are not on the ground yet, so pull to the nearest attractor
@@ -97,13 +98,10 @@ public class GravityObject : MonoBehaviour
                     if (transform.InverseTransformDirection(fallingVec).y < 0)
                     {
                         // We are falling down, so increase gravity
-                        // Supposed to divide by mass as well
                         _rigidBody.AddForce(gravityIncreaseOnFall * gravityMult * grav);
-                        //velocity += gravDir * attractor.GetGravityForce() * gravityMult * gravityIncreaseOnFall * Time.fixedDeltaTime; 
                     } 
                     else
                     {
-                        //velocity += gravDir * attractor.GetGravityForce() * gravityMult * Time.fixedDeltaTime;
                         _rigidBody.AddForce(gravityMult * grav);
                     }
                 }
@@ -116,19 +114,17 @@ public class GravityObject : MonoBehaviour
                 }
             }
         }
-        //GetComponent<Rigidbody>().MovePosition(transform.position + velocity * Time.fixedDeltaTime);
-        //GetComponent<Rigidbody>(). = velocity;
     }
 
     int GetHighestPrioAttractorIndex()
     {
         int index = -1;
         int highest_prio = int.MinValue;
-        for (int i = 0; i < attractors.Count; i++)
+        for (int i = 0; i < _attractors.Count; i++)
         {
-            if (attractors[i].GetPriority() > highest_prio)
+            if (_attractors[i].GetPriority() > highest_prio)
             {
-                highest_prio = attractors[i].GetPriority();
+                highest_prio = _attractors[i].GetPriority();
                 index = i;
             }
         }
@@ -159,9 +155,23 @@ public class GravityObject : MonoBehaviour
         return transform.TransformDirection(vel);
     }
 
+    public Vector3 GetGravityDirection()
+    {
+        if (_highestPrioAttractorIndex != -1)
+        {
+            return _attractors[_highestPrioAttractorIndex].GetGravityDirection(transform);
+        }
+        return Vector3.zero;
+    }
+
     public bool IsOnGround()
     {
         return _onGround;
+    }
+
+    public bool IsInSpace()
+    {
+        return _attractors.Count <= 0;
     }
 
     // Whenever a Gravity Object enters one, we add the attractor to the list. Likewise,
@@ -171,9 +181,9 @@ public class GravityObject : MonoBehaviour
         if (collision != null && collision.gameObject != null && collision.gameObject.GetComponent<GravityAttractor>() != null)
         {
             print("Entered gravity attractor pull");
-            attractors.Add(collision.gameObject.GetComponent<GravityAttractor>());
+            _attractors.Add(collision.gameObject.GetComponent<GravityAttractor>());
         }
-        highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
+        _highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
     }
 
     void OnTriggerExit(UnityEngine.Collider collision)
@@ -181,18 +191,8 @@ public class GravityObject : MonoBehaviour
         if (collision != null && collision.gameObject != null && collision.gameObject.GetComponent<GravityAttractor>() != null)
         {
             print("Left gravity attractor pull");
-            attractors.Remove(collision.gameObject.GetComponent<GravityAttractor>());
+            _attractors.Remove(collision.gameObject.GetComponent<GravityAttractor>());
         }
-        highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
+        _highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
     }
-
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    _onGround = true;
-    //}
-
-    //private void OnCollisionExit(Collision collision)
-    //{
-    //    _onGround = false;
-    //}
 }

@@ -32,13 +32,13 @@ public class PlayerCameraController : MonoBehaviour
 
         var angle = cameraTarget.localEulerAngles.x;
 
-        if (angle > 180 && angle < 340)
+        if (angle < 180 && angle > 50)
+        {
+            angles.x = 50;
+        } 
+        else if (angle > 50 && angle < 340)
         {
             angles.x = 340;
-        } 
-        else if (angle > 180 && angle < 20)
-        {
-            angles.x = 20;
         }
 
         cameraTarget.localEulerAngles = angles;
