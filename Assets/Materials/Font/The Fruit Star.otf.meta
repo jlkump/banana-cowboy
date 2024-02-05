@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e2fa0af1f7a98dd4bafda61c6fefbd99
+guid: c7bf02272d4215c4a9003a825162be78
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Tokino Kun
+  - The Fruit Star
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

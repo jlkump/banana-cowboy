@@ -818,8 +818,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c4cac097ae897a41b371f7b2937eedc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueText: "Why do blueberries always get together for a picnic? Because it\u2019s
-    berry social!"
+  dialogueText: Why do blueberries always get together for a picnic? Because it's
+    berry social!
   boss: 0
   nameOfCharacter: Billy
   typeOfCharacter: 2

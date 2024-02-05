@@ -23,6 +23,8 @@ public class DialogueManager : MonoBehaviour
     private static DialogueManager s_instance;
     private Coroutine typingCoroutine;
 
+
+
     private void Start()
     {
         s_instance = this;
@@ -45,25 +47,36 @@ public class DialogueManager : MonoBehaviour
         s_instance.nameOfCharacter.text = name;
         // TODO Depending on what the enemy is, put the image here. For now change color and use enum
         Color colorChar;
+        Color colorBox;
         switch (type)
         {
             case TypeOfCharacter.Strawberry:
                 colorChar = Color.red;
+                colorBox = s_instance.ConvertToColor(255, 146, 146);
                 break;
             case TypeOfCharacter.Blueberry:
                 colorChar = Color.blue;
+                colorBox = s_instance.ConvertToColor(106, 201, 255);
                 break;
             case TypeOfCharacter.Orange:
                 colorChar = Color.yellow;
+                colorBox = s_instance.ConvertToColor(211, 166, 0);
                 break;
             default: 
                 colorChar = Color.white;
+                colorBox = Color.white;
                 break;
         }
         s_instance.charPortrait.color = colorChar;
+        s_instance.dialogueHolder.GetComponent<Image>().color = colorBox;
 
         s_instance.dialogueHolder.SetActive(true);
         s_instance.typingCoroutine = s_instance.StartCoroutine(s_instance.Type(sentence));
+    }
+
+    private Color ConvertToColor(int r, int g, int b)
+    {
+        return new Color(r / 255.0f, g / 255.0f, b / 255.0f);
     }
 
     public static void StopText()
