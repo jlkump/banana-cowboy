@@ -180,7 +180,7 @@ public class GravityObject : MonoBehaviour
     {
         if (collision != null && collision.gameObject != null && collision.gameObject.GetComponent<GravityAttractor>() != null)
         {
-            print("Entered gravity attractor pull");
+            //print("Entered gravity attractor pull");
             _attractors.Add(collision.gameObject.GetComponent<GravityAttractor>());
         }
         _highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
@@ -190,7 +190,7 @@ public class GravityObject : MonoBehaviour
     {
         if (collision != null && collision.gameObject != null && collision.gameObject.GetComponent<GravityAttractor>() != null)
         {
-            print("Left gravity attractor pull");
+            //print("Left gravity attractor pull");
             _attractors.Remove(collision.gameObject.GetComponent<GravityAttractor>());
         }
         _highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
