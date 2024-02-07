@@ -197,6 +197,8 @@ public class PlayerController : MonoBehaviour
     {
         if (_state != newState)
         {
+            // NOTE: moved this line into if statement - otherwise, never !=
+            _state = newState;
             // Signal update to animation
             UpdateAnimState();
             if (_state == PlayerState.AIR)
