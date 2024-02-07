@@ -988,7 +988,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 968569965}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: 18607ddf7bcad9e46bb644d05a1a3e91, type: 3}
   m_Controller: {fileID: 9100000, guid: 83ea1c51095b8024883b40da946da6fa, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -1020,9 +1020,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1.126277
-  m_Height: 6.725108
+  m_Height: 6.3590393
   m_Direction: 1
-  m_Center: {x: 0.17689562, y: 3.3303332, z: 0.22201967}
+  m_Center: {x: 0.17689562, y: 3.5133677, z: 0.22201967}
 --- !u!1 &1058435641
 GameObject:
   m_ObjectHideFlags: 0
@@ -1723,7 +1723,7 @@ Transform:
   m_GameObject: {fileID: 4470159640249191070}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.926, z: 0}
+  m_LocalPosition: {x: 0, y: -0.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2143,7 +2143,7 @@ Transform:
   m_GameObject: {fileID: 7706588439820658063}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.48, y: 0.27, z: 0}
+  m_LocalPosition: {x: 2.27, y: 4.52, z: 0.224}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2267,6 +2267,7 @@ MonoBehaviour:
   sprintKey: 304
   jumpKey: 32
   lassoKey: 323
+  playerAnimator: {fileID: 968569967}
 --- !u!1 &8368007086042641366
 GameObject:
   m_ObjectHideFlags: 0

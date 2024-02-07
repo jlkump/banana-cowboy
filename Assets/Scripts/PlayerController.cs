@@ -89,6 +89,9 @@ public class PlayerController : MonoBehaviour
     public KeyCode lassoKey = KeyCode.Mouse0;
     //public KeyCode aimLassoKey = KeyCode.Mouse1;
 
+    [Header("Animations")]
+    public Animator playerAnimator; 
+
     /*
     [Header("Buffer System")]
     public float jump_hold_buffer = 0.3f;
@@ -127,6 +130,7 @@ public class PlayerController : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody>();
         _gravityObject = GetComponent<GravityObject>();
         lassoLineRenderer.positionCount = 0;
+        playerAnimator.SetLayerWeight(1, 0.0f);
     }
 
     void Start()
@@ -177,9 +181,10 @@ public class PlayerController : MonoBehaviour
 
     void UpdateState(PlayerState newState)
     {
-        _state = newState;
         if (_state != newState)
         {
+            // NOTE: moved this line into if statement - otherwise, never !=
+            _state = newState;
             // Signal update to animation
             UpdateAnimState();
             if (_state == PlayerState.AIR)
@@ -192,7 +197,32 @@ public class PlayerController : MonoBehaviour
 
     void UpdateAnimState()
     {
+        print(_state);
         // This handles the changes to the animimations based on the player state
+        if (_state == PlayerState.IDLE)
+        {
+            playerAnimator.Play("Base Layer.BC_Idle");
+            playerAnimator.SetLayerWeight(1, 0.0f);
+        }
+        if (_state == PlayerState.WALK)
+        {
+            playerAnimator.Play("Base Layer.BC_Walk");
+            playerAnimator.SetLayerWeight(1, 0.0f);
+        }
+        if (_state == PlayerState.RUN)
+        {
+            playerAnimator.Play("Base Layer.BC_Walk");
+            playerAnimator.SetLayerWeight(1, 0.0f);
+        }
+        if (_state == PlayerState.SWING)
+        {
+            playerAnimator.SetLayerWeight(1, 1.0f);
+        }
+        if (_state == PlayerState.AIR)
+        {
+            playerAnimator.Play("Base Layer.BC_Walk");
+            playerAnimator.SetLayerWeight(1, 0.0f);
+        }
     }
 
     bool IsValidState(PlayerState newState)
