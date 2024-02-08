@@ -58,7 +58,12 @@ public class PlayerController : MonoBehaviour
     [Header("Lasso")]
     public Transform lassoThrowPosition;
     public float lassoRange = 10.0f;
-    public float lassoAimAssistRadius = 10.0f;
+    [Tooltip("Determines the radius of the smallest sphere cast from the cursor pos. Must be less than lassoAimAssistMaxRadius")]
+    public float lassoAimAssistMinRadius = 1.0f;
+    [Tooltip("Determines the radius of the smallest sphere cast from the cursor pos. Must be greater than lassoAimAssistMinRadius")]
+    public float lassoAimAssistMaxRadius = 15.0f;
+    [Tooltip("The number of sphere-cast iterations for aim assist. Higher number means more fine grain aim assist. Must be at least 2")]
+    public int lassoAimAssistNumIter = 5;
     public float lassoTimeToHit = 0.3f;
     public Transform lassoPredictionReticule;
     public LayerMask lassoLayerMask;
@@ -396,10 +401,27 @@ public class PlayerController : MonoBehaviour
         // Aim prediction from the following video:
         // https://www.youtube.com/watch?v=HPjuTK91MA8&list=PLh9SS5jRVLAleXEcDTWxBF39UjyrFc6Nb&index=15
 
-        Vector3 aimDirection = _cameraTransform.forward * 0.9f + transform.up * 0.1f;
+        float radius = lassoAimAssistMinRadius;
+        float delta = (lassoAimAssistMaxRadius - radius) / ((float) lassoAimAssistNumIter - 1.0f);
+
+        Vector3 aimDirection = _cameraTransform.forward;
         RaycastHit sphereCastHit;
-        Physics.SphereCast(_cameraTransform.position, lassoAimAssistRadius, aimDirection, 
-            out sphereCastHit, lassoRange, lassoLayerMask, QueryTriggerInteraction.Ignore);
+        // This 'if' statement is here b/c C# doesn't like unassigned variables
+        // so sphereCastHit needs a garaunteed value :/
+        if (!Physics.SphereCast(_cameraTransform.position, radius, aimDirection,
+            out sphereCastHit, lassoRange, lassoLayerMask, QueryTriggerInteraction.Ignore))
+        {
+            for (int i = 1; i < lassoAimAssistNumIter; i++)
+            {
+                float curRadius = radius + delta * i;
+                if (Physics.SphereCast(_cameraTransform.position, curRadius, aimDirection, 
+                    out sphereCastHit, lassoRange, lassoLayerMask, QueryTriggerInteraction.Ignore))
+                {
+                    break;
+                }
+
+            }
+        }
 
         RaycastHit raycastHit;
         Physics.Raycast(_cameraTransform.position, aimDirection, 
@@ -675,6 +697,7 @@ public class LassoRenderer
         Vector3 center = swingObjectTransform.position;
         Vector3 forward = (_target.position - center).normalized;
         Vector3 up = Vector3.Cross(Vector3.Cross(forward, playerTransform.up).normalized, forward).normalized;
+        float dist = (_target.position - center).magnitude * 0.2f;
 
         for (int i = 0; i < lassoLoopSegments; i++)
         {
@@ -690,14 +713,14 @@ public class LassoRenderer
             if (i == 0 || i + 1 == lassoLoopSegments)
             {
                 pos = _target.position 
-                    + Mathf.Cos(0) * 0.5f * forward
-                    + Mathf.Sin(0) * 0.5f * up;
+                    + Mathf.Cos(0) * dist * forward
+                    + Mathf.Sin(0) * dist * up;
             } 
             else if (Physics.Raycast(exteriorPos, toCenter, out hit, 20.0f, swingLayerMask, QueryTriggerInteraction.Ignore))
             {
                 pos = hit.point
-                    + Mathf.Cos(theta) * 0.5f * forward
-                    + Mathf.Sin(theta) * 0.5f * up;
+                    + Mathf.Cos(theta) * dist * forward
+                    + Mathf.Sin(theta) * dist * up;
             }
 
             lineRenderer.SetPosition(i + lassoRopeSegments, pos);
