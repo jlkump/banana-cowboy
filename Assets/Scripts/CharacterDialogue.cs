@@ -15,7 +15,7 @@ public class CharacterDialogue : MonoBehaviour
     public TypeOfCharacter typeOfCharacter;
     public enum TypeOfCharacter
     {
-        None,Strawberry,Blueberry,Orange
+        None,Strawberry,Blueberry,Orange,Banana
     };
 
     private void OnTriggerEnter(Collider collision)
