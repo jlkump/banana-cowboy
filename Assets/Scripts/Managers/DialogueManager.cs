@@ -59,6 +59,10 @@ public class DialogueManager : MonoBehaviour
                 colorBox = s_instance.ConvertToColor(106, 201, 255);
                 break;
             case TypeOfCharacter.Orange:
+                colorChar = s_instance.ConvertToColor(255, 93, 0);
+                colorBox = s_instance.ConvertToColor(168, 93, 50);
+                break;
+            case TypeOfCharacter.Banana:
                 colorChar = Color.yellow;
                 colorBox = s_instance.ConvertToColor(211, 166, 0);
                 break;
