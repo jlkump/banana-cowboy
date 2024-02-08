@@ -4,28 +4,38 @@ using UnityEngine;
 
 public class CircularMovement : MonoBehaviour
 {
+    [Header("Orange Slice Orbit")]
     public Transform target;
     public int direction = 1;
-    public float _angle = 0f;
+    public float angle = 0f;
+    public float speed = 2f;
+    public float radius = 5f;
 
-    [SerializeField]
-    private float _speed = 2f;
-    public float _radius = 2f;
+    [Header ("Orange Slice Boomerang Animation")]
+    public bool ifRotateY;
+    public float rotationSpeedY;
 
     private float x = 0f;
-    private float y = 0f;
     private float z = 0f;
 
     // Update is called once per frame
     void Update()
     {
-        x = Mathf.Cos(_angle);
-        z = Mathf.Sin(_angle); 
+        x = Mathf.Cos(angle);
+        z = Mathf.Sin(angle); 
 
-        Vector3 offset = new Vector3(x, 0, z) * _radius;
+        Vector3 offset = new Vector3(x, 0, z) * radius;
 
         transform.position = target.position + offset;
-        _angle += _speed * Time.deltaTime * direction;
+        angle += speed * Time.deltaTime * direction;
+
+        if (ifRotateY)
+        {
+            float rotationAngle = rotationSpeedY * Time.deltaTime * direction;
+
+            // Rotate the object around the y-axis of the target
+            transform.RotateAround(target.position, Vector3.up, rotationAngle);
+        }
     }
 
 }

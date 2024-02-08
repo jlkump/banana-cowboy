@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,29 +6,87 @@ using UnityEngine;
 public class OrangeBoss : MonoBehaviour
 {
     public GameObject orangeSliceBoomerangs;
-    public float spawnDistance = 2f;
+    public BossStates state;
 
-    public GameObject temp;
-    void Update()
+    public float boomerangCooldown = 8f;
+    private float cooldownTimer;
+    public enum BossStates
     {
-        if (Input.GetKeyDown(KeyCode.Space)) // Change the condition as needed
+        IDLE,BOOMERANG,PEEL,SPAWN,COOLDOWN
+    };
+
+    private void Start()
+    {
+        state = BossStates.IDLE;
+    }
+
+/*    void Update()
+    {
+        if (state == BossStates.IDLE) // Change the condition as needed
         {
-            SpawnBoomerangs();
+            Debug.Log("STARTING ATTACK");
+            state = BossStates.BOOMERANG;
+        }
+    }*/
+
+    private void Update()
+    {
+        switch (state)
+        {
+            case BossStates.IDLE:
+                state = BossStates.BOOMERANG;
+                break;
+            case BossStates.BOOMERANG:
+                SpawnBoomerangs();
+                break; 
+            case BossStates.PEEL:
+                break;
+            case BossStates.SPAWN:
+                break;
+            case BossStates.COOLDOWN:
+                Cooldown();
+                break;
+            default:
+                break;
         }
     }
 
     void SpawnBoomerangs()
     {
-        // Spawn boomerang to the right
-        Vector3 spawnPositionRight = transform.position + transform.right * spawnDistance;
-        GameObject boomerangRight = Instantiate(orangeSliceBoomerangs, spawnPositionRight, Quaternion.identity);
-        boomerangRight.GetComponent<CircularMovement>().target = transform;
+        // Add animation here
 
-        // Spawn boomerang to the left
-        Vector3 spawnPositionLeft = transform.position - transform.right * spawnDistance;
-        GameObject boomerangLeft = Instantiate(orangeSliceBoomerangs, spawnPositionLeft, Quaternion.identity);
-        boomerangLeft.GetComponent<CircularMovement>().direction = -1;
-        boomerangLeft.GetComponent<CircularMovement>().target = transform;
-        boomerangLeft.GetComponent<CircularMovement>()._angle = 180.0f * Mathf.Deg2Rad;
+        // Spawn boomerang to the right
+        Vector3 spawnPosition = transform.position;
+        GameObject boomerangRight = SpawnBoomerang(spawnPosition + transform.right );
+        GameObject boomerangLeft = SpawnBoomerang(spawnPosition - transform.right );
+        StartCoroutine(DestroyBoomerangs(boomerangRight, boomerangLeft));
+        cooldownTimer = 5f;
+        state = BossStates.COOLDOWN;
+    }
+
+    private GameObject SpawnBoomerang(Vector3 position)
+    {
+        GameObject boomerang = Instantiate(orangeSliceBoomerangs, position, Quaternion.identity);
+        CircularMovement circularMovement = boomerang.GetComponent<CircularMovement>();
+        circularMovement.target = transform;
+        circularMovement.direction = position.x > transform.position.x ? -1 : 1;
+        circularMovement.angle = (position.x < transform.position.x ? 180f : 0f) * Mathf.Deg2Rad;
+        return boomerang;
+    }
+
+    void Cooldown()
+    {
+        cooldownTimer -= Time.deltaTime;
+        if (cooldownTimer <= 0)
+        {
+            state = BossStates.IDLE;
+        }
+    }
+
+    IEnumerator DestroyBoomerangs(GameObject x, GameObject y)
+    {
+        yield return new WaitForSeconds(boomerangCooldown);
+        Destroy(x);
+        Destroy(y);
     }
 }
