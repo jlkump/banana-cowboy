@@ -3709,6 +3709,14 @@ PrefabInstance:
       value: Player Prefab
       objectReference: {fileID: 0}
     - target: {fileID: 9187660138696086715, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: holdHeight
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 9187660138696086715, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: holdSwingSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9187660138696086715, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
       propertyPath: tossUpwardImpulse
       value: 10
       objectReference: {fileID: 0}
