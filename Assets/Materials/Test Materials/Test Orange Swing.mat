@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Test Swingable
+  m_Name: Test Orange Swing
   m_Shader: {fileID: 4800000, guid: 51aeb2c5568bfea4799f7fc0a07e2a62, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -66,23 +66,23 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0
+    - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _RimAmount: 0.61
-    - _RimThreshold: 0.1
+    - _RimAmount: 0.716
+    - _RimThreshold: 0.19
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _AmbientColor: {r: 0.18921869, g: 0.2679245, b: 0.09250976, a: 1}
-    - _Color: {r: 0.63529414, g: 0.89019614, b: 0.4039216, a: 1}
+    - _AmbientColor: {r: 0.509434, g: 0.28739765, b: 0.28739765, a: 1}
+    - _Color: {r: 0.9150943, g: 0.4552951, b: 0.15970986, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RimColor: {r: 0.3207547, g: 0.023647655, b: 0, a: 1}
-    - _SpecularColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 0, g: 0, b: 0, a: 1}
+    - _SpecularColor: {r: 0.23773581, g: 0.039024547, b: 0.039024547, a: 1}
   m_BuildTextureStacks: []
