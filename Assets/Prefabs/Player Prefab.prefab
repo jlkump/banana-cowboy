@@ -233,7 +233,7 @@ Transform:
   m_GameObject: {fileID: 3050070285637734061}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.31, z: 0}
+  m_LocalPosition: {x: 0, y: -0.42, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -402,6 +402,16 @@ MonoBehaviour:
   startingSwingSpeed: 1.2
   swingAccelRate: 0.5
   swingSideRotateSpeed: 1
+  holdHeight: 4
+  tossForwardImpulse: 30
+  tossUpwardImpulse: 10
+  timeToPullObject: 0.3
+  timeToToss: 0.1
+  percentageFarThrow: 0.2
+  percentageMidThow: 0.3
+  throwCycleTime: 0.6
+  holdSwingRadius: 4
+  holdSwingSpeed: 1
   sprintKey: 304
   jumpKey: 32
   lassoKey: 323

@@ -111,7 +111,7 @@ public class PlayerController : MonoBehaviour
     private float _swingProgress;
 
     [Header("Lasso Holding")]
-    public float holdHeight = 10.0f;
+    public float holdHeight = 4.0f;
     public float tossForwardImpulse = 30.0f;
     public float tossUpwardImpulse = 10.0f;
     public float timeToPullObject = 0.3f;
@@ -121,9 +121,11 @@ public class PlayerController : MonoBehaviour
     [Tooltip("The time it takes for the throwing mini-game to start over. A shorter time makes the throwing mini-game harder.")]
     public float throwCycleTime = 0.6f;
 
+    public float holdSwingRadius = 4.0f;
+    public float holdSwingSpeed = 1.0f;
+
     private float _accumPullTime;
     private float _accumHoldTime;
-    private float _accumTossTime;
 
 
 
@@ -206,7 +208,7 @@ public class PlayerController : MonoBehaviour
                     GetHoldInput();
                     break;
                 case PlayerState.TOSS:
-                    GetTossInput();
+                    GetMoveInput();
                     break;
                 default:
                     GetMoveInput();
@@ -214,7 +216,6 @@ public class PlayerController : MonoBehaviour
                     GetLassoInput();
                     break;
             }
-            //print("Player State: " + _state);
         }
     }
 
@@ -231,9 +232,6 @@ public class PlayerController : MonoBehaviour
             case PlayerState.HOLD:
                 Hold();
                 Run();
-                break;
-            case PlayerState.TOSS:
-                Toss();
                 break;
             default:
                 if (!_gravityObject.IsInSpace())
@@ -486,9 +484,6 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(lassoKey)) {
             _hitLassoTarget = HitLassoTarget.NONE;
-            print("Conditions for starting throw: \n hit point: " 
-                + (_lassoRaycastHit.point != Vector3.zero) + " Hit object " 
-                + (_lassoRaycastHit.collider.gameObject.GetComponent<LassoObject>() != null));
             if (_lassoRaycastHit.point != Vector3.zero && _lassoRaycastHit.collider.gameObject.GetComponent<LassoObject>() != null)
             {
                 // Move lassoHit to the location of the lasso hitpoint
@@ -688,7 +683,15 @@ public class PlayerController : MonoBehaviour
 
     void GetPullInput()
     {
-
+        if (Input.GetKeyUp(lassoKey))
+        {
+            _cancelLassoAction = true;
+            _hitObjectTransform.GetComponent<Rigidbody>().isKinematic = false;
+            _hitObjectTransform.GetComponent<Rigidbody>()
+                .AddForce((transform.position - _lassoHitTransform.position).normalized * tossForwardImpulse * 0.5f,
+                ForceMode.Impulse);
+            UpdateState(PlayerState.IDLE);
+        }
     }
 
     void StartHold()
@@ -702,7 +705,11 @@ public class PlayerController : MonoBehaviour
     void Hold()
     {
         // Display UI rectangle for variable throw range
-        _hitObjectTransform.position = transform.position + transform.up * holdHeight;
+        _accumHoldTime += Time.deltaTime;
+        _hitObjectTransform.position = transform.position 
+            + transform.right * Mathf.Cos(_accumHoldTime * holdSwingSpeed) * holdSwingRadius
+            + transform.forward * Mathf.Sin(_accumHoldTime * holdSwingSpeed) * holdSwingRadius
+            + transform.up * holdHeight;
     }
 
     void GetHoldInput()
@@ -719,28 +726,17 @@ public class PlayerController : MonoBehaviour
 
     void StartToss()
     {
-        UpdateState(PlayerState.TOSS);
-        Invoke("EndToss", timeToToss);
-
-        _accumTossTime = 0.0f;
-    }
-
-    void Toss()
-    {
-
-    }
-
-    void GetTossInput()
-    {
-
-    }
-
-    void EndToss()
-    {
         _hitObjectTransform.GetComponent<Rigidbody>().isKinematic = false;
         _hitObjectTransform.GetComponent<Rigidbody>()
             .AddForce(_cameraTransform.forward * tossForwardImpulse + transform.up * tossUpwardImpulse,
             ForceMode.Impulse);
+
+        UpdateState(PlayerState.TOSS);
+        Invoke("EndToss", timeToToss);
+    }
+
+    void EndToss()
+    {
         UpdateState(PlayerState.IDLE);
     }
 
@@ -883,15 +879,60 @@ public class LassoRenderer
 
         Vector3 center = swingObjectTransform.position;
         Vector3 forward = (_target.position - center).normalized;
-        Vector3 up = Vector3.Cross(Vector3.Cross(forward, playerTransform.up).normalized, forward).normalized;
+        Vector3 right = Vector3.Cross(Vector3.Cross(forward, playerTransform.up).normalized, forward).normalized;
         float dist = (_target.position - center).magnitude * 0.2f;
+
+        WrapAroundObject(center, forward, right, dist);
+    }
+
+    public void Pullin(Transform start, Transform target)
+    {
+        _start = start;
+        _target = target;
+    }
+
+    public void RenderPullin(Transform pulledObject)
+    {
+        float length = Vector3.Distance(_start.position, pulledObject.position);
+        Vector3 dir = (pulledObject.position - _start.position).normalized;
+        for (int i = 0; i < lassoRopeSegments; i++)
+        {
+            float percentageAlongRope = ((float)i / (float)lassoRopeSegments);
+            Vector3 pos = percentageAlongRope * length * dir + _start.position;
+            lineRenderer.SetPosition(i, pos);
+        }
+
+        WrapAroundObject(pulledObject.position, pulledObject.forward, pulledObject.right, 0.1f);
+    }
+
+    public void RenderHoldObject(Transform heldObject)
+    {
+        float length = Vector3.Distance(_start.position, heldObject.position);
+        Vector3 dir = (heldObject.position - _start.position).normalized;
+        for (int i = 0; i < lassoRopeSegments; i++)
+        {
+            float percentageAlongRope = ((float)i / (float)lassoRopeSegments);
+            Vector3 pos = percentageAlongRope * length * dir + _start.position;
+            lineRenderer.SetPosition(i, pos);
+        }
+
+        WrapAroundObject(heldObject.position, heldObject.forward, heldObject.right, 0.1f);
+    }
+
+    public void RenderTossEnemy()
+    {
+        // ?
+    }
+
+    void WrapAroundObject(Vector3 center, Vector3 forward, Vector3 right, float dist)
+    {
 
         for (int i = 0; i < lassoLoopSegments; i++)
         {
             float theta = ((float)i / (float)lassoLoopSegments) * Mathf.PI * 2;
             Vector3 exteriorPos = center
                     + Mathf.Cos(theta) * 5f * forward
-                    + Mathf.Sin(theta) * 5f * up;
+                    + Mathf.Sin(theta) * 5f * right;
 
             Vector3 toCenter = (center - exteriorPos).normalized;
             Vector3 pos = exteriorPos;
@@ -899,40 +940,19 @@ public class LassoRenderer
 
             if (i == 0 || i + 1 == lassoLoopSegments)
             {
-                pos = _target.position 
+                pos = center
                     + Mathf.Cos(0) * dist * forward
-                    + Mathf.Sin(0) * dist * up;
-            } 
+                    + Mathf.Sin(0) * dist * right;
+            }
             else if (Physics.Raycast(exteriorPos, toCenter, out hit, 20.0f, swingLayerMask, QueryTriggerInteraction.Ignore))
             {
                 pos = hit.point
                     + Mathf.Cos(theta) * dist * forward
-                    + Mathf.Sin(theta) * dist * up;
+                    + Mathf.Sin(theta) * dist * right;
             }
 
             lineRenderer.SetPosition(i + lassoRopeSegments, pos);
         }
-    }
-
-    public void Pullin(Transform start, Transform targetToPullTowards)
-    {
-        _start = start;
-        _target = targetToPullTowards;
-    }
-
-    public void RenderPullin(Transform pulledObject)
-    {
-
-    }
-
-    public void RenderHoldObject(Transform heldObject)
-    {
-
-    }
-
-    public void RenderTossEnemy()
-    {
-        // ?
     }
 
     public void StopRendering()
