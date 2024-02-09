@@ -1972,27 +1972,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 01aab607eaebe5b4f9a35817888e892b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.493182
+      value: -8.51
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 01aab607eaebe5b4f9a35817888e892b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.36
+      value: 0.09
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 01aab607eaebe5b4f9a35817888e892b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 19.574749
+      value: 23.95
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 01aab607eaebe5b4f9a35817888e892b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9869782
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 01aab607eaebe5b4f9a35817888e892b, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 01aab607eaebe5b4f9a35817888e892b, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.16085446
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 01aab607eaebe5b4f9a35817888e892b, type: 3}
       propertyPath: m_LocalRotation.z
@@ -2004,7 +2004,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 01aab607eaebe5b4f9a35817888e892b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 18.513
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 01aab607eaebe5b4f9a35817888e892b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -2644,6 +2644,8 @@ MonoBehaviour:
   percentageFarThrow: 0.2
   percentageMidThow: 0.3
   throwCycleTime: 0.6
+  holdSwingRadius: 4
+  holdSwingSpeed: 1
   sprintKey: 304
   jumpKey: 32
   lassoKey: 323
