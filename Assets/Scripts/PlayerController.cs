@@ -738,6 +738,9 @@ public class PlayerController : MonoBehaviour
     void EndToss()
     {
         UpdateState(PlayerState.IDLE);
+
+        // change enemies state different so it hurts the boss
+        _hitObjectTransform.GetComponent<LassoableEnemy>().thrown = true;
     }
 
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LassoableEnemy : LassoObject
 {
+    public bool thrown = false;
     // Start is called before the first frame update
     void Start()
     {

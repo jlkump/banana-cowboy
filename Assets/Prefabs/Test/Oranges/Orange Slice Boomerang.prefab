@@ -133,9 +133,10 @@ MonoBehaviour:
   direction: 1
   angle: 0
   speed: 2
-  radius: 30
+  radius: 15
   ifRotateY: 1
   rotationSpeedY: 180
+  flatKnockBack: 6
 --- !u!65 &4342363316536806847
 BoxCollider:
   m_ObjectHideFlags: 0

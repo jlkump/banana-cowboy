@@ -8,6 +8,8 @@ using UnityEngine.UI;
 public class PauseManager : MonoBehaviour
 {
     public GameObject pauseMenu;
+    public GameObject settingScreen;
+    public static bool pauseActive;
 
     // Update is called once per frame
     void Update()
@@ -17,6 +19,8 @@ public class PauseManager : MonoBehaviour
             if (pauseMenu.activeSelf)
             {
                 pauseMenu.SetActive(false);
+                settingScreen.SetActive(false);
+                pauseActive = true;
                 Time.timeScale = 1.0f;
                 UnityEngine.Cursor.lockState = CursorLockMode.Locked;
                 UnityEngine.Cursor.visible = false;
@@ -24,6 +28,7 @@ public class PauseManager : MonoBehaviour
             else
             {
                 pauseMenu.SetActive(true);
+                pauseActive = false;
                 Time.timeScale = 0f;
                 Cursor.lockState = CursorLockMode.None;
                 UnityEngine.Cursor.visible = true;
@@ -46,8 +51,14 @@ public class PauseManager : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 break;
             case "Settings":
+                settingScreen.SetActive(true);
+                break;
+            case "Back":
+                settingScreen.SetActive(false);
                 break;
             case "Restart":
+                Time.timeScale = 1.0f;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 break;
             case "Quit":
                 Time.timeScale = 1.0f;

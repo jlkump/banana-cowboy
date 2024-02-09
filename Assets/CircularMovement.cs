@@ -9,7 +9,7 @@ public class CircularMovement : MonoBehaviour
     public int direction = 1;
     public float angle = 0f;
     public float speed = 2f;
-    public float radius = 5f;
+    public float radius = 15f;
 
     [Header ("Orange Slice Boomerang Animation")]
     public bool ifRotateY;
@@ -20,10 +20,11 @@ public class CircularMovement : MonoBehaviour
 
     [Header ("Knockback")]
     Vector3 knockback = Vector3.zero;
+    public int flatKnockBack;
 
     private void Start()
     {
-        knockback = 15 * ((transform.position - target.position).normalized + Vector3.up);
+        knockback = flatKnockBack * ((transform.position - target.position).normalized + Vector3.up);
     }
     // Update is called once per frame
     void Update()

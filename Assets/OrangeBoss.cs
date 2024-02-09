@@ -2,15 +2,30 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OrangeBoss : MonoBehaviour
 {
+    [Header("Atacks")]
     public GameObject orangeSliceBoomerangs;
     public GameObject minions;
+    public int numberOfEnemies;
+    public float boomerangCooldown;
+    private float cooldownTimer;
+    private readonly int moves = 3;
+    private int currMove;
+
+    public GameObject[] spawnPoints;
+    public GameObject origin;
+
+    //public float sizeOfArena;
     public BossStates state;
 
-    public float boomerangCooldown = 8f;
-    private float cooldownTimer;
+    [Header("Damage")]
+    public int maxHealth;
+    private int health;
+    public Image healthUI;
+
     public enum BossStates
     {
         IDLE,BOOMERANG,PEEL,SPAWN,COOLDOWN
@@ -18,29 +33,36 @@ public class OrangeBoss : MonoBehaviour
 
     private void Start()
     {
-        state = BossStates.IDLE;
-    }
+        //state = BossStates.IDLE;
+        state = BossStates.BOOMERANG;
 
-/*    void Update()
-    {
-        if (state == BossStates.IDLE) // Change the condition as needed
-        {
-            Debug.Log("STARTING ATTACK");
-            state = BossStates.BOOMERANG;
-        }
-    }*/
+        health = maxHealth;
+        currMove = 0;
+    }
 
     private void Update()
     {
         switch (state)
         {
             case BossStates.IDLE:
-                state = BossStates.BOOMERANG;
+                if (currMove%moves == 0)
+                {
+                    state = BossStates.BOOMERANG;
+                }
+                else if (currMove%moves == 1)
+                {
+                    state = BossStates.SPAWN;
+                }
+                else if (currMove % moves == 2)
+                {
+                    state = BossStates.PEEL;
+                }
                 break;
             case BossStates.BOOMERANG:
                 SpawnBoomerangs();
                 break; 
             case BossStates.PEEL:
+                PeelSlam();
                 break;
             case BossStates.SPAWN:
                 SpawnEnemies();
@@ -51,6 +73,11 @@ public class OrangeBoss : MonoBehaviour
             default:
                 break;
         }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Damage(1);
+        }
     }
 
     void SpawnBoomerangs()
@@ -59,7 +86,7 @@ public class OrangeBoss : MonoBehaviour
 
         // Spawn boomerang to the right
         Vector3 spawnPosition = transform.position;
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
         {
             GameObject boomerangRight = SpawnBoomerang(spawnPosition + transform.right, i);
             GameObject boomerangLeft = SpawnBoomerang(spawnPosition - transform.right, i);
@@ -73,24 +100,41 @@ public class OrangeBoss : MonoBehaviour
     {
         // Add animation here
 
-        // Spawn boomerang to the right
-        Vector3 spawnPosition = transform.position;
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < numberOfEnemies; i++)
         {
-            Instantiate(minions);
+            /*Vector3 temp = UnityEngine.Random.onUnitSphere;
+            Vector3 spawnPosition = transform.position + temp * UnityEngine.Random.Range(60, sizeOfArena);
+            print(temp+", "+spawnPosition);
+            spawnPosition.y = 0;*/
+
+            int rand = UnityEngine.Random.Range(0, 2);
+            Vector3 spawnPosition = spawnPoints[rand].transform.position;
+            Instantiate(minions, spawnPosition, Quaternion.identity);
         }
         cooldownTimer = 10f;
         state = BossStates.COOLDOWN;
+    }
+
+    void PeelSlam()
+    {
+        // add animation here
+        cooldownTimer = 10f;
+        state = BossStates.COOLDOWN;
+    }
+
+    void PeelSlamCooldown()
+    {
+        // add animation here
     }
 
     private GameObject SpawnBoomerang(Vector3 position, int radiusAdd)
     {
         GameObject boomerang = Instantiate(orangeSliceBoomerangs, position, Quaternion.identity);
         CircularMovement circularMovement = boomerang.GetComponent<CircularMovement>();
-        circularMovement.target = transform;
+        circularMovement.target = origin.transform;
         circularMovement.direction = position.x > transform.position.x ? -1 : 1;
         circularMovement.angle = (position.x < transform.position.x ? 180f : 0f) * Mathf.Deg2Rad;
-        circularMovement.radius += (radiusAdd * 5);
+        circularMovement.radius += (radiusAdd * 7);
         return boomerang;
     }
 
@@ -99,6 +143,7 @@ public class OrangeBoss : MonoBehaviour
         cooldownTimer -= Time.deltaTime;
         if (cooldownTimer <= 0)
         {
+            currMove++;
             state = BossStates.IDLE;
         }
     }
@@ -108,5 +153,31 @@ public class OrangeBoss : MonoBehaviour
         yield return new WaitForSeconds(boomerangCooldown);
         Destroy(x);
         Destroy(y);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Enemy"))
+        {
+            if (collision.gameObject.GetComponent<LassoableEnemy>().thrown)
+            {
+                Damage(1);
+                Destroy(collision.gameObject);
+            }
+            else
+            {
+                Destroy(collision.gameObject);
+            }
+        }
+    }
+
+    private void Damage(int dmg)
+    {
+        health -= dmg;
+        healthUI.fillAmount = health / (1.0f * maxHealth);
+        if (health == 0)
+        {
+            print("BOSS DEFEATED");
+        }
     }
 }
