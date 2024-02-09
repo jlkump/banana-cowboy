@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviour
@@ -41,6 +42,8 @@ public class PauseManager : MonoBehaviour
                 UnityEngine.Cursor.visible = false;
                 break;
             case "Checkpoint Restart":
+                Time.timeScale = 1.0f;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 break;
             case "Settings":
                 break;

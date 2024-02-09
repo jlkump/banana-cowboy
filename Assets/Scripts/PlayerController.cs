@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     public Transform model;
     public Transform emptyObjectPrefab;
     public Animator playerAnimator = null;
+    public UIManager playerUI;
     // We can find these ourselves
     Rigidbody _rigidBody;
     Transform _cameraTransform;
@@ -111,6 +112,11 @@ public class PlayerController : MonoBehaviour
     public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode lassoKey = KeyCode.Mouse0;
+
+    [Header("Health")]
+    public static int maxHealth = 3;
+    public int health;
+    public bool canTakeDamage; // Invincibilty frames
     
     enum PlayerState
     {
@@ -154,6 +160,10 @@ public class PlayerController : MonoBehaviour
         _lassoRenderer.swingLayerMask = lassoLayerMask;
         _lassoRenderer.playerTransform = transform;
         _lassoRenderer.StopRendering();
+
+        health = maxHealth;
+        canTakeDamage = true;
+        playerUI.ChangeHealthImage(health);
     }
     void Update()
     {
@@ -602,6 +612,36 @@ public class PlayerController : MonoBehaviour
     {
         print("Landed!");
         _detectLanding = false;
+    }
+
+    public void Damage(int damageAmount, Vector3 knockback)
+    {
+        if (health > 0 && canTakeDamage)
+        {
+            health -= damageAmount;
+            playerUI.ChangeHealthImage(health);
+            ApplyKnockback(knockback);
+            if (health <= 0)
+            {
+                print("Dead");
+            }
+            else
+            {
+                StartCoroutine(Invincibility());
+            }
+        }
+    }
+
+    IEnumerator Invincibility()
+    {
+        canTakeDamage = false;
+        yield return new WaitForSeconds(3f);
+        canTakeDamage = true;
+    }
+
+    public void ApplyKnockback(Vector3 knockback)
+    {
+        GetComponent<Rigidbody>().AddForce(knockback, ForceMode.Impulse);
     }
 }
 public class LassoRenderer

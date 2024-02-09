@@ -18,6 +18,13 @@ public class CircularMovement : MonoBehaviour
     private float x = 0f;
     private float z = 0f;
 
+    [Header ("Knockback")]
+    Vector3 knockback = Vector3.zero;
+
+    private void Start()
+    {
+        knockback = 15 * ((transform.position - target.position).normalized + Vector3.up);
+    }
     // Update is called once per frame
     void Update()
     {
@@ -35,6 +42,14 @@ public class CircularMovement : MonoBehaviour
 
             // Rotate the object around the y-axis of the target
             transform.RotateAround(target.position, Vector3.up, rotationAngle);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            other.GetComponent<PlayerController>().Damage(1, knockback);
         }
     }
 
