@@ -20,7 +20,6 @@ public class CharacterDialogue : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        print("here");
         if (collision.CompareTag("Player"))
         {
             DialogueManager.StartText(dialogueText, nameOfCharacter, typeOfCharacter);

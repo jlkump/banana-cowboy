@@ -75,7 +75,7 @@ public class GravityObject : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (_highestPrioAttractorIndex != -1 && bottomModelLocation != null && !disabled)
+        if (_highestPrioAttractorIndex != -1 && bottomModelLocation != null && !disabled && !_rigidBody.isKinematic)
         {
             GravityAttractor attractor = _attractors[_highestPrioAttractorIndex];
             RaycastHit hit;

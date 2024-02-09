@@ -5,8 +5,10 @@ using System.ComponentModel;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.Device;
+using UnityEngine.Pool;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -83,7 +85,7 @@ public class PlayerController : MonoBehaviour
     private Transform _hitObjectTransform; // The transform of the object actually hit
     private RaycastHit _lassoRaycastHit;
     private HitLassoTarget _hitLassoTarget;
-    private bool _cancelLassoThrow;
+    private bool _cancelLassoAction;
     enum HitLassoTarget
     {
         NONE,
@@ -108,6 +110,23 @@ public class PlayerController : MonoBehaviour
     private float _swingVelocity;
     private float _swingProgress;
 
+    [Header("Lasso Holding")]
+    public float holdHeight = 10.0f;
+    public float tossForwardImpulse = 30.0f;
+    public float tossUpwardImpulse = 10.0f;
+    public float timeToPullObject = 0.3f;
+    public float timeToToss = 0.1f;
+    public float percentageFarThrow = 0.2f;
+    public float percentageMidThow = 0.3f;
+    [Tooltip("The time it takes for the throwing mini-game to start over. A shorter time makes the throwing mini-game harder.")]
+    public float throwCycleTime = 0.6f;
+
+    private float _accumPullTime;
+    private float _accumHoldTime;
+    private float _accumTossTime;
+
+
+
     [Header("Input")]
     public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode jumpKey = KeyCode.Space;
@@ -124,10 +143,11 @@ public class PlayerController : MonoBehaviour
         AIR,
         WALK,
         RUN,
-        THROWING_LASSO,
+        THROW_LASSO,
         SWING,
-        THROWING_ENEMY,
-        THROWING_OBJECT
+        PULL,
+        HOLD,
+        TOSS,
     };
 
     private PlayerState _state = PlayerState.AIR;
@@ -171,36 +191,56 @@ public class PlayerController : MonoBehaviour
         // when in the UI or when in cutscenes
         if (true)
         {
-            if (_state == PlayerState.SWING)
+            switch(_state)
             {
-                GetSwingInput();
-            } 
-            else if (_state == PlayerState.THROWING_LASSO)
-            {
-                // Allow for cancel throw if the player inputs anything
-                print("Lasso target to throw at is: " + _lassoHitTransform.position);
+                case PlayerState.THROW_LASSO:
+                    GetThrowingLassoInput();
+                    break;
+                case PlayerState.SWING:
+                    GetSwingInput();
+                    break;
+                case PlayerState.PULL:
+                    GetPullInput();
+                    break;
+                case PlayerState.HOLD:
+                    GetHoldInput();
+                    break;
+                case PlayerState.TOSS:
+                    GetTossInput();
+                    break;
+                default:
+                    GetMoveInput();
+                    AimLasso();
+                    GetLassoInput();
+                    break;
             }
-            else // if (_state != PlayerState.THROWING_LASSO)
-            {
-                GetMoveInput();
-                AimLasso();
-                GetLassoInput();
-            }
+            //print("Player State: " + _state);
         }
     }
 
     void FixedUpdate()
     {
-        if (_state == PlayerState.SWING)
+        switch(_state)
         {
-            Swing();
-        } 
-        else
-        {
-            if (!_gravityObject.IsInSpace())
-            {
+            case PlayerState.SWING:
+                Swing();
+                break;
+            case PlayerState.PULL:
+                Pull();
+                break;
+            case PlayerState.HOLD:
+                Hold();
                 Run();
-            }
+                break;
+            case PlayerState.TOSS:
+                Toss();
+                break;
+            default:
+                if (!_gravityObject.IsInSpace())
+                {
+                    Run();
+                }
+                break;
         }
     }
     private void LateUpdate()
@@ -382,42 +422,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void GetLassoInput()
-    {
-        if (Input.GetKeyDown(lassoKey)) {
-            _hitLassoTarget = HitLassoTarget.NONE;
-            if (_lassoRaycastHit.point != Vector3.zero)
-            {
-                // Move lassoHit to the location of the lasso hitpoint
-                _lassoHitTransform.position = _lassoRaycastHit.point;
-                _hitObjectTransform = _lassoRaycastHit.collider.gameObject.transform;
-                if (_lassoRaycastHit.collider.gameObject.GetComponent<SwingableObject>() != null)
-                {
-                    _hitLassoTarget = HitLassoTarget.SWINGABLE;
-                }
-                ThrowLasso();
-            }
-        }
-
-    }
-
-    void GetSwingInput()
-    {
-
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-        _moveInput = new Vector3(horizontal, 0, vertical).normalized; // Re-using _moveInput, cause why not
-
-        if (Input.GetKeyUp(lassoKey)) { EndSwing(); }
-    }
-
     void AimLasso()
     {
         // Aim prediction from the following video:
         // https://www.youtube.com/watch?v=HPjuTK91MA8&list=PLh9SS5jRVLAleXEcDTWxBF39UjyrFc6Nb&index=15
 
         float radius = lassoAimAssistMinRadius;
-        float delta = (lassoAimAssistMaxRadius - radius) / ((float) lassoAimAssistNumIter - 1.0f);
+        float delta = (lassoAimAssistMaxRadius - radius) / ((float)lassoAimAssistNumIter - 1.0f);
 
         Vector3 aimDirection = _cameraTransform.forward;
         RaycastHit sphereCastHit;
@@ -429,8 +440,9 @@ public class PlayerController : MonoBehaviour
             for (int i = 1; i < lassoAimAssistNumIter; i++)
             {
                 float curRadius = radius + delta * i;
-                if (Physics.SphereCast(_cameraTransform.position, curRadius, aimDirection, 
-                    out sphereCastHit, lassoRange, lassoLayerMask, QueryTriggerInteraction.Ignore))
+                if (Physics.SphereCast(_cameraTransform.position, curRadius, aimDirection,
+                    out sphereCastHit, lassoRange, lassoLayerMask, QueryTriggerInteraction.Ignore)
+                    && sphereCastHit.collider.gameObject.GetComponent<LassoObject>() != null)
                 {
                     break;
                 }
@@ -439,19 +451,19 @@ public class PlayerController : MonoBehaviour
         }
 
         RaycastHit raycastHit;
-        Physics.Raycast(_cameraTransform.position, aimDirection, 
+        Physics.Raycast(_cameraTransform.position, aimDirection,
             out raycastHit, lassoRange, lassoLayerMask, QueryTriggerInteraction.Ignore);
 
         Vector3 hitPoint;
 
-        if (raycastHit.point != Vector3.zero)
+        if (raycastHit.point != Vector3.zero && raycastHit.collider.gameObject.GetComponent<LassoObject>() != null)
         {
             hitPoint = raycastHit.point;
-        } 
-        else if (sphereCastHit.point != Vector3.zero)
+        }
+        else if (sphereCastHit.point != Vector3.zero && sphereCastHit.collider.gameObject.GetComponent<LassoObject>() != null)
         {
             hitPoint = sphereCastHit.point;
-        } 
+        }
         else
         {
             hitPoint = Vector3.zero;
@@ -461,7 +473,7 @@ public class PlayerController : MonoBehaviour
         {
             lassoPredictionReticule.gameObject.SetActive(true);
             lassoPredictionReticule.position = hitPoint;
-        } 
+        }
         else
         {
             lassoPredictionReticule.gameObject.SetActive(false);
@@ -470,29 +482,53 @@ public class PlayerController : MonoBehaviour
         _lassoRaycastHit = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
     }
 
+    void GetLassoInput()
+    {
+        if (Input.GetKeyDown(lassoKey)) {
+            _hitLassoTarget = HitLassoTarget.NONE;
+            print("Conditions for starting throw: \n hit point: " 
+                + (_lassoRaycastHit.point != Vector3.zero) + " Hit object " 
+                + (_lassoRaycastHit.collider.gameObject.GetComponent<LassoObject>() != null));
+            if (_lassoRaycastHit.point != Vector3.zero && _lassoRaycastHit.collider.gameObject.GetComponent<LassoObject>() != null)
+            {
+                // Move lassoHit to the location of the lasso hitpoint
+                _lassoHitTransform.position = _lassoRaycastHit.point;
+                _hitObjectTransform = _lassoRaycastHit.collider.gameObject.transform;
+                if (_lassoRaycastHit.collider.gameObject.GetComponent<SwingableObject>() != null)
+                {
+                    _hitLassoTarget = HitLassoTarget.SWINGABLE;
+                } 
+                else if (_lassoRaycastHit.collider.gameObject.GetComponent<LassoableEnemy>() != null)
+                {
+                    _hitLassoTarget = HitLassoTarget.ENEMY;
+                }
+                ThrowLasso();
+            }
+        }
+
+    }
+
     void ThrowLasso()
     {
-        UpdateState(PlayerState.THROWING_LASSO);
+        UpdateState(PlayerState.THROW_LASSO);
 
         _lassoRenderer.Throw(lassoThrowPosition, _lassoHitTransform, lassoTimeToHit);
         if (_hitLassoTarget == HitLassoTarget.SWINGABLE)
         {
             Invoke("StartSwing", lassoTimeToHit);
         } 
+        else if (_hitLassoTarget == HitLassoTarget.ENEMY)
+        {
+            Invoke("StartPull", lassoTimeToHit);
+        }
         else
         {
             Invoke("HitNothing", lassoTimeToHit);
         }
-        _cancelLassoThrow = false;
+        _cancelLassoAction = false;
     }
 
-    void HitNothing()
-    {
-        UpdateState(PlayerState.IDLE);
-        _lassoRenderer.StopRendering();
-    }
-
-    void ThrowLassoInput()
+    void GetThrowingLassoInput()
     {
         // Here we detect input if the player wants to cancel a throw while it is happening.
         // This may require fiddling with numbers to get it feeling right.
@@ -500,28 +536,46 @@ public class PlayerController : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
         _moveInput = new Vector3(horizontal, 0, vertical).normalized; // Update move input so it carries over to the next input
 
-        // I think WASD canceling might feel wrong, so maybe cancel on jump?
-        if (Input.GetKeyDown(jumpKey)) { 
-            _cancelLassoThrow = true;
+        // Cancel on lift lmb
+        if (Input.GetKeyUp(lassoKey)) { 
+            _cancelLassoAction = true;
             UpdateState(PlayerState.IDLE); // Will be corrected next update, just get the player out of the throwing state
         }
     }
 
+    void HitNothing()
+    {
+        UpdateState(PlayerState.IDLE);
+    }
+
     void DrawLasso()
     {
-        if (_state == PlayerState.THROWING_LASSO)
+        switch(_state)
         {
-            _lassoRenderer.RenderThrow();
-        } 
-        else if (_state == PlayerState.SWING)
-        {
-            _lassoRenderer.RenderSwing(_hitObjectTransform);
+            case PlayerState.THROW_LASSO:
+                _lassoRenderer.RenderThrow();
+                break;
+            case PlayerState.SWING:
+                _lassoRenderer.RenderSwing(_hitObjectTransform);
+                break;
+            case PlayerState.PULL:
+                _lassoRenderer.RenderPullin(_hitObjectTransform);
+                break;
+            case PlayerState.HOLD:
+                _lassoRenderer.RenderHoldObject(_hitObjectTransform);
+                break;
+            case PlayerState.TOSS:
+                _lassoRenderer.RenderTossEnemy();
+                break;
+            default:
+                _lassoRenderer.StopRendering();
+                break;
         }
     }
 
     void StartSwing()
     {
-        if (_cancelLassoThrow) { return; }
+        if (_cancelLassoAction) { return; }
 
         Vector3 dirToPlayer = (transform.position - _lassoRaycastHit.point).normalized;
         Vector3 axisOfSwing = Vector3.Cross(_cameraTransform.transform.forward, dirToPlayer);
@@ -532,7 +586,6 @@ public class PlayerController : MonoBehaviour
         UpdateState(PlayerState.SWING);
 
         _rigidBody.isKinematic = true; // Allows us to directly control the player's position so we can move them in a perfect arc
-        _gravityObject.disabled = true;
 
         _swingRadius = Mathf.Clamp(Vector3.Distance(transform.position, _lassoHitTransform.position), minSwingRadius, maxSwingRadius);
         _lassoHitTransform.rotation = Quaternion.FromToRotation(_lassoHitTransform.right, dirToPlayer) * _lassoHitTransform.rotation;
@@ -601,6 +654,98 @@ public class PlayerController : MonoBehaviour
         _rigidBody.AddForce(endSwingVerticalBoostForce * transform.up + model.transform.forward * endSwingBoostForce * (_swingVelocity / maxSwingSpeed), ForceMode.Impulse);
     }
 
+    void GetSwingInput()
+    {
+
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        _moveInput = new Vector3(horizontal, 0, vertical).normalized; // Re-using _moveInput, cause why not
+
+        if (Input.GetKeyUp(lassoKey)) { EndSwing(); }
+    }
+
+    void StartPull()
+    {
+        if (_cancelLassoAction) { return; }
+        UpdateState(PlayerState.PULL);
+
+        _lassoHitTransform.position = _hitObjectTransform.position;
+        _hitObjectTransform.GetComponent<Rigidbody>().isKinematic = true;
+
+        _lassoRenderer.Pullin(lassoThrowPosition, _lassoHitTransform);
+        Invoke("StartHold", timeToPullObject);
+
+        _accumPullTime = 0.0f;
+    }
+    void Pull()
+    {
+        _accumPullTime += Time.deltaTime;
+        float percentageComplete = Mathf.Clamp(_accumPullTime / timeToPullObject, 0.0f, 1.0f);
+        _hitObjectTransform.position = percentageComplete
+            * Vector3.Distance(transform.position + transform.up * holdHeight, _lassoHitTransform.position)
+            * (transform.position + transform.up * holdHeight - _lassoHitTransform.position).normalized + _lassoHitTransform.position;
+    }
+
+    void GetPullInput()
+    {
+
+    }
+
+    void StartHold()
+    {
+        if (_cancelLassoAction) { return; }
+        UpdateState(PlayerState.HOLD);
+
+        _accumHoldTime = 0.0f;
+    }
+
+    void Hold()
+    {
+        // Display UI rectangle for variable throw range
+        _hitObjectTransform.position = transform.position + transform.up * holdHeight;
+    }
+
+    void GetHoldInput()
+    {
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        _moveInput = new Vector3(horizontal, 0, vertical).normalized;
+        // Start the toss of the enemy based on the UI rectangle power ended on
+        if (Input.GetKeyUp(lassoKey))
+        {
+            StartToss();
+        }
+    }
+
+    void StartToss()
+    {
+        UpdateState(PlayerState.TOSS);
+        Invoke("EndToss", timeToToss);
+
+        _accumTossTime = 0.0f;
+    }
+
+    void Toss()
+    {
+
+    }
+
+    void GetTossInput()
+    {
+
+    }
+
+    void EndToss()
+    {
+        _hitObjectTransform.GetComponent<Rigidbody>().isKinematic = false;
+        _hitObjectTransform.GetComponent<Rigidbody>()
+            .AddForce(_cameraTransform.forward * tossForwardImpulse + transform.up * tossUpwardImpulse,
+            ForceMode.Impulse);
+        UpdateState(PlayerState.IDLE);
+    }
+
+
+
     void StartJump()
     {
         _rigidBody.AddForce(jumpImpulseForce * transform.up, ForceMode.Impulse);
@@ -663,10 +808,7 @@ public class LassoRenderer
     private Transform _start;
     private Transform _target;
     private float _timeToHitTarget;
-    private float _accumTime;
-    private Vector3 _up;
-    private Vector3 _forward; // Tthe direction the rope is being thrown
-    private Vector3 _right;
+    private float _accumThrowTime;
 
     public void Throw(Transform start, Transform target, float timeToHitTarget)
     {
@@ -674,7 +816,7 @@ public class LassoRenderer
         _target = target;
         _timeToHitTarget = timeToHitTarget;
         lineRenderer.positionCount = lassoLoopSegments + lassoRopeSegments;
-        _accumTime = 0;
+        _accumThrowTime = 0;
     }
 
     public void RenderThrow()
@@ -682,8 +824,8 @@ public class LassoRenderer
         if (lineRenderer.positionCount == 0) { return; }
 
         // Calculations for current rope length and basis for rope
-        _accumTime += Time.deltaTime;
-        float currentLength = (_accumTime / _timeToHitTarget) * Vector3.Distance(_start.position, _target.position);
+        _accumThrowTime += Time.deltaTime;
+        float currentLength = (_accumThrowTime / _timeToHitTarget) * Vector3.Distance(_start.position, _target.position);
         Vector3 _forward = (_target.position - _start.position).normalized;
         Vector3 _up = Vector3.Cross(_forward, _start.forward).normalized;
         Vector3 _right = Vector3.Cross(_forward, _up).normalized;
@@ -695,7 +837,7 @@ public class LassoRenderer
             Vector3 pos = percentAlongLine * currentLength * _forward + _start.position;
             if (i != 0)
             {
-                pos += Mathf.Sin(_accumTime * wiggleSpeed * percentAlongLine * 0.5f) * amplitude * percentAlongLine * _up;
+                pos += Mathf.Sin(_accumThrowTime * wiggleSpeed * percentAlongLine * 0.5f) * amplitude * percentAlongLine * _up;
             }
             lineRenderer.SetPosition(i, pos);
         }
@@ -707,11 +849,11 @@ public class LassoRenderer
         {
             float theta = ((float) i /  (float) lassoLoopSegments) * Mathf.PI * 2;
             Vector3 pos = lassoCenterPos
-                + Mathf.Cos(theta) * -lassoRadius * (_accumTime / _timeToHitTarget) * _forward
-                + Mathf.Sin(theta) * lassoRadius * (_accumTime / _timeToHitTarget) * _right
-                + Mathf.Cos(_accumTime * wiggleSpeed) * 0.2f * _right
-                + Mathf.Sin(_accumTime * wiggleSpeed) * 0.2f * _forward
-                + Mathf.Cos((_accumTime / _timeToHitTarget) * wiggleSpeed * theta / 10) * 0.5f * _up;
+                + Mathf.Cos(theta) * -lassoRadius * (_accumThrowTime / _timeToHitTarget) * _forward
+                + Mathf.Sin(theta) * lassoRadius * (_accumThrowTime / _timeToHitTarget) * _right
+                + Mathf.Cos(_accumThrowTime * wiggleSpeed) * 0.2f * _right
+                + Mathf.Sin(_accumThrowTime * wiggleSpeed) * 0.2f * _forward
+                + Mathf.Cos((_accumThrowTime / _timeToHitTarget) * wiggleSpeed * theta / 10) * 0.5f * _up;
 
             if (i + 1 == lassoLoopSegments || i == 0)
             {
@@ -734,7 +876,7 @@ public class LassoRenderer
         // Render the lasso rope
         for (int i = 0; i < lassoRopeSegments; i++)
         {
-            float percentageAlongRope = ((float)i / (float)lassoRopeSegments);
+            float percentageAlongRope = ((float) i / (float) lassoRopeSegments);
             Vector3 pos = percentageAlongRope * length * dir + _start.position;
             lineRenderer.SetPosition(i, pos);
         }
@@ -770,6 +912,27 @@ public class LassoRenderer
 
             lineRenderer.SetPosition(i + lassoRopeSegments, pos);
         }
+    }
+
+    public void Pullin(Transform start, Transform targetToPullTowards)
+    {
+        _start = start;
+        _target = targetToPullTowards;
+    }
+
+    public void RenderPullin(Transform pulledObject)
+    {
+
+    }
+
+    public void RenderHoldObject(Transform heldObject)
+    {
+
+    }
+
+    public void RenderTossEnemy()
+    {
+        // ?
     }
 
     public void StopRendering()
