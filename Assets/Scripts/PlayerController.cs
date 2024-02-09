@@ -540,6 +540,7 @@ public class PlayerController : MonoBehaviour
 
     void HitNothing()
     {
+        SoundManager.S_Instance().Play("LassoMiss");
         UpdateState(PlayerState.IDLE);
     }
 
@@ -571,6 +572,7 @@ public class PlayerController : MonoBehaviour
     void StartSwing()
     {
         if (_cancelLassoAction) { return; }
+        SoundManager.S_Instance().Play("LassoHit");
 
         Vector3 dirToPlayer = (transform.position - _lassoRaycastHit.point).normalized;
         Vector3 axisOfSwing = Vector3.Cross(_cameraTransform.transform.forward, dirToPlayer);
