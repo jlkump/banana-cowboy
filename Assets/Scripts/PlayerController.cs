@@ -232,25 +232,30 @@ public class PlayerController : MonoBehaviour
         if (_state == PlayerState.IDLE)
         {
             playerAnimator.Play("Base Layer.BC_Idle");
+            playerAnimator.speed = 1.0f;
             playerAnimator.SetLayerWeight(1, 0.0f);
         }
         if (_state == PlayerState.WALK)
         {
             playerAnimator.Play("Base Layer.BC_Walk");
+            playerAnimator.speed = 1.0f;
             playerAnimator.SetLayerWeight(1, 0.0f);
         }
         if (_state == PlayerState.RUN)
         {
             playerAnimator.Play("Base Layer.BC_Run");
+            playerAnimator.speed = 1.0f;
             playerAnimator.SetLayerWeight(1, 0.0f);
         }
         if (_state == PlayerState.SWING)
         {
             playerAnimator.SetLayerWeight(1, 1.0f);
+
         }
         if (_state == PlayerState.AIR)
         {
-            playerAnimator.Play("Base Layer.BC_Walk");
+            playerAnimator.Play("Base Layer.BC_Fall");
+            playerAnimator.speed = 1.5f;
             playerAnimator.SetLayerWeight(1, 0.0f);
         }
     }
