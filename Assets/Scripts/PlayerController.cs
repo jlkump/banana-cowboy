@@ -241,7 +241,7 @@ public class PlayerController : MonoBehaviour
         }
         if (_state == PlayerState.RUN)
         {
-            playerAnimator.Play("Base Layer.BC_Walk");
+            playerAnimator.Play("Base Layer.BC_Run");
             playerAnimator.SetLayerWeight(1, 0.0f);
         }
         if (_state == PlayerState.SWING)

@@ -372,16 +372,16 @@ MonoBehaviour:
   walkSpeed: 12
   runSpeed: 19
   accelerationRate: 5
-  deccelerationRate: 5
+  deccelerationRate: 10
   accelAirControlRatio: 0.8
   deccelAirControlRatio: 0.8
   jumpImpulseForce: 10
   gravIncreaseOnJumpRelease: 2
   conserveMomentum: 1
   lassoThrowPosition: {fileID: 8925892245031520248}
-  lassoRange: 10
+  lassoRange: 30
   lassoAimAssistMinRadius: 1
-  lassoAimAssistMaxRadius: 15
+  lassoAimAssistMaxRadius: 10
   lassoAimAssistNumIter: 5
   lassoTimeToHit: 0.3
   lassoPredictionReticule: {fileID: 0}
@@ -606,7 +606,7 @@ Transform:
   m_GameObject: {fileID: 5016804911169280025}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.13, z: 0}
+  m_LocalPosition: {x: 0, y: 6.13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
