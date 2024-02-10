@@ -32,7 +32,11 @@ public class SoundManager : MonoBehaviour
         print("Found sound " + s.name);
         print("Found clip " + s.audioClip);
         print("Found volume " + s.volume);
-        s.src.Play();
+        if (!s.src.isPlaying)
+        {
+            s.src.Play();
+
+        }
     }
 
     // Update is called once per frame
@@ -52,9 +56,9 @@ public class Sound
     public string name;
     public AudioClip audioClip;
     [Range(0, 1)]
-    public float volume;
+    public float volume = 1.0f;
     [Range(0.1f, 3)]
-    public float pitch;
+    public float pitch = 1.0f;
     public enum Type
     {
         SFX,
