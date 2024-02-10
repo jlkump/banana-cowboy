@@ -17,6 +17,7 @@ public class OrangeBoss : MonoBehaviour
 
     public GameObject[] spawnPoints;
     public GameObject origin;
+    public GameObject player;
 
     //public float sizeOfArena;
     public BossStates state;
@@ -38,10 +39,17 @@ public class OrangeBoss : MonoBehaviour
 
         health = maxHealth;
         currMove = 0;
+
+        player = GameObject.FindWithTag("Player");
     }
 
     private void Update()
     {
+        if (player != null)
+        {
+            transform.LookAt(new Vector3 (player.transform.position.x, transform.position.y, player.transform.position.z));
+        }
+
         switch (state)
         {
             case BossStates.IDLE:
@@ -100,16 +108,17 @@ public class OrangeBoss : MonoBehaviour
     {
         // Add animation here
 
-        for (int i = 0; i < numberOfEnemies; i++)
+        for (int i = 0; i < 2; i++)
         {
             /*Vector3 temp = UnityEngine.Random.onUnitSphere;
             Vector3 spawnPosition = transform.position + temp * UnityEngine.Random.Range(60, sizeOfArena);
             print(temp+", "+spawnPosition);
             spawnPosition.y = 0;*/
 
-            int rand = UnityEngine.Random.Range(0, 2);
-            Vector3 spawnPosition = spawnPoints[rand].transform.position;
-            Instantiate(minions, spawnPosition, Quaternion.identity);
+/*            int rand = UnityEngine.Random.Range(0, 2);
+*/            
+            Vector3 spawnPosition = spawnPoints[i].transform.position;
+            Instantiate(minions, spawnPosition, transform.rotation);
         }
         cooldownTimer = 10f;
         state = BossStates.COOLDOWN;
@@ -132,8 +141,8 @@ public class OrangeBoss : MonoBehaviour
         GameObject boomerang = Instantiate(orangeSliceBoomerangs, position, Quaternion.identity);
         CircularMovement circularMovement = boomerang.GetComponent<CircularMovement>();
         circularMovement.target = origin.transform;
-        circularMovement.direction = position.x > transform.position.x ? -1 : 1;
-        circularMovement.angle = (position.x < transform.position.x ? 180f : 0f) * Mathf.Deg2Rad;
+        circularMovement.direction = position.x > transform.position.x ? 1 : -1;
+        circularMovement.angle = (position.x < transform.position.x ? 180f + transform.eulerAngles.y : 0f + transform.eulerAngles.y) * Mathf.Deg2Rad;
         circularMovement.radius += (radiusAdd * 7);
         return boomerang;
     }
