@@ -443,34 +443,56 @@ public class PlayerController : MonoBehaviour
         float startingOffsetX = deltaX / 2;
         float startingOffsetY = deltaY / 2;
 
-        RaycastHit hit = new RaycastHit();
-        hit.point = Vector3.zero;
-        float closestDist = float.MaxValue;
-        //Vector3 targetViewportPoint = new Vector3(0.5f, 0.5f, Camera.main.nearClipPlane);
-        //targetViewportPoint = Camera.main.ViewportToWorldPoint(transform.position);
-        //targetViewportPoint.z = Camera.main.nearClipPlane; // Ignore z
-
-        for (int i = 0; i < lassoHorizontalRaycasts; i++)
+        RaycastHit hit;
+        if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, 
+            out hit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) && 
+            hit.collider.gameObject.GetComponent<LassoObject>() != null &&
+            Vector3.Distance(hit.point, _cameraTransform.position) > lassoIgnoreDist) {
+            // Hit directly in the middle
+            print("hit at center");
+        } 
+        else
         {
-            for (int j = 0; j < lassoVertRaycasts; j++)
+            // I know it looks like this else should replace the following if,
+            // but the logic will cause null pointer exceptions for GetComponent<LassoObject>()
+            // so do not change.
+            hit.point = Vector3.zero;
+        }
+
+        if (hit.point == Vector3.zero)
+        {
+            // We are not directly looking at anything
+            float closestDist = float.MaxValue;
+            //Vector3 targetViewportPoint = new Vector3(0.5f, 0.5f, Camera.main.nearClipPlane);
+            //targetViewportPoint = Camera.main.ViewportToWorldPoint(transform.position);
+            //targetViewportPoint.z = Camera.main.nearClipPlane; // Ignore z
+            print("Testing outside");
+
+
+            for (int i = 0; i < lassoHorizontalRaycasts; i++)
             {
-                Vector3 viewportPoint = new Vector3(i * deltaX + startingOffsetX, j * deltaY + startingOffsetY, Camera.main.nearClipPlane);
-                Vector3 startPoint = Camera.main.ViewportToWorldPoint(viewportPoint);
-                Vector3 dir = (startPoint - _cameraTransform.position).normalized;
-                RaycastHit raycastHit;
-                
-                if (Physics.SphereCast(startPoint, raycastRadius, dir, out raycastHit, lassoReachRange, lassoLayerMask, QueryTriggerInteraction.Ignore) &&
-                    raycastHit.collider.gameObject.GetComponent<LassoObject>() != null &&
-                    Vector3.Distance(raycastHit.point, transform.position) < closestDist &&
-                    Vector3.Distance(raycastHit.point, _cameraTransform.position) > lassoIgnoreDist)
+                for (int j = 0; j < lassoVertRaycasts; j++)
                 {
-                    closestDist = Vector3.Distance(raycastHit.point, transform.position);
-                    hit = raycastHit;
+                    Vector3 viewportPoint = new Vector3(i * deltaX + startingOffsetX, j * deltaY + startingOffsetY, Camera.main.nearClipPlane);
+                    Vector3 startPoint = Camera.main.ViewportToWorldPoint(viewportPoint);
+                    Vector3 dir = (startPoint - _cameraTransform.position).normalized;
+                    // dir = _cameraTransform.forward;
+                    RaycastHit raycastHit;
+
+                    if (Physics.SphereCast(startPoint, raycastRadius, dir, out raycastHit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) &&
+                        raycastHit.collider.gameObject.GetComponent<LassoObject>() != null &&
+                        Vector3.Distance(raycastHit.point, transform.position) < closestDist &&
+                        Camera.main.WorldToViewportPoint(raycastHit.point).z > lassoIgnoreDist)
+                    {
+                        closestDist = Vector3.Distance(raycastHit.point, transform.position);
+                        hit = raycastHit;
+                    }
                 }
             }
         }
+
         // We found an actual hit
-        if (closestDist != float.MaxValue)
+        if (hit.point != Vector3.zero)
         {
             if (_lassoSelectedObject != null && hit.collider.gameObject.GetComponent<LassoObject>() != _lassoSelectedObject)
             {
