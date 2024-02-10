@@ -14,6 +14,9 @@ public class SoundManager : MonoBehaviour
 
     private static SoundManager s_Instance = null;
 
+    // This should be on a range [0, 1] (representing the 0% to 100%)
+    public float SFXVolume { get; set; } = 1.0f;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -29,14 +32,20 @@ public class SoundManager : MonoBehaviour
     public void Play(string name)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
-        print("Found sound " + s.name);
-        print("Found clip " + s.audioClip);
-        print("Found volume " + s.volume);
+        if (s.type == Sound.Type.SFX)
+        {
+            s.src.volume = s.volume * SFXVolume;
+        }
+        s.src.Play();
         if (!s.src.isPlaying)
         {
-            s.src.Play();
 
         }
+    }
+
+    public Sound GetSound(string name)
+    {
+        return Array.Find(sounds, sound => sound.name == name);
     }
 
     // Update is called once per frame
