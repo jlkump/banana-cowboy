@@ -448,7 +448,7 @@ public class PlayerController : MonoBehaviour
             out hit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) && 
             hit.collider.gameObject.GetComponent<LassoObject>() != null &&
             Vector3.Distance(hit.point, _cameraTransform.position) > lassoIgnoreDist) {
-            // Hit directly in the middle
+            // Looking directly at an object
             playerUI.ReticleOverLassoable();
         }
         else
@@ -461,11 +461,6 @@ public class PlayerController : MonoBehaviour
         {
             // We are not directly looking at anything
             float closestDist = float.MaxValue;
-            //Vector3 targetViewportPoint = new Vector3(0.5f, 0.5f, Camera.main.nearClipPlane);
-            //targetViewportPoint = Camera.main.ViewportToWorldPoint(transform.position);
-            //targetViewportPoint.z = Camera.main.nearClipPlane; // Ignore z
-
-
             for (int i = 0; i < lassoHorizontalRaycasts; i++)
             {
                 for (int j = 0; j < lassoVertRaycasts; j++)
@@ -473,9 +468,8 @@ public class PlayerController : MonoBehaviour
                     Vector3 viewportPoint = new Vector3(i * deltaX + startingOffsetX, j * deltaY + startingOffsetY, Camera.main.nearClipPlane);
                     Vector3 startPoint = Camera.main.ViewportToWorldPoint(viewportPoint);
                     Vector3 dir = (startPoint - _cameraTransform.position).normalized;
-                    // dir = _cameraTransform.forward;
-                    RaycastHit raycastHit;
 
+                    RaycastHit raycastHit;
                     if (Physics.SphereCast(startPoint, raycastRadius, dir, out raycastHit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) &&
                         raycastHit.collider.gameObject.GetComponent<LassoObject>() != null &&
                         Vector3.Distance(raycastHit.point, transform.position) < closestDist &&

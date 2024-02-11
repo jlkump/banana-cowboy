@@ -8,31 +8,30 @@ using UnityEngine;
  */
 public class LassoObject : MonoBehaviour
 {
+    public Renderer materialRenderer;
     public Material originalMaterial;
     public Material selectedMaterial;
-    // Start is called before the first frame update
-    void Start()
-    {
-        //renderer = gameObject.GetComponent<MeshRenderer>();
-    }
 
-    // Update is called once per frame
-    void Update()
+    public void Start()
     {
-        
+        if (materialRenderer == null)
+        {
+            materialRenderer = GetComponent<Renderer>();
+        }
     }
-
     public void Select()
     {
-        if (GetComponent<Renderer>() != null && GetComponent<Renderer>().material != selectedMaterial)
+        if (materialRenderer != null && materialRenderer.material != selectedMaterial)
         {
-            GetComponent<Renderer>().material = selectedMaterial;
+            materialRenderer.material = selectedMaterial;
         }
     }
 
     public void Deselect()
     {
-        if (GetComponent<Renderer>() != null && GetComponent<Renderer>().material != originalMaterial)
-            GetComponent<Renderer>().material = originalMaterial;
+        if (materialRenderer != null && materialRenderer.material != originalMaterial)
+        {
+            materialRenderer.material = originalMaterial;
+        }
     }
 }
