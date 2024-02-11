@@ -19,27 +19,43 @@ Shader "BananaCowboyCustom/Soda"
         _SurfaceDistortion("Surface Distortion", 2D) = "white" {}	
         _SurfaceDistortionAmount("Surface Distortion Amount", Range(0, 1)) = 0.27
         
-        _FoamDistance("Foam Distance", Float) = 0.4
+        // foam variables
+        _FoamColor("Foam Color", Color) = (1,1,1,1)
+        _FoamMaxDistance("Foam Maximum Distance", Float) = 0.4
+        _FoamMinDistance("Foam Minimum Distance", Float) = 0.04
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "Queue" = "Transparent" }
         LOD 100
 
         Pass
         {
+            Blend SrcAlpha OneMinusSrcAlpha
+            ZWrite Off
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
             // make fog work
             #pragma multi_compile_fog
 
+            #define SMOOTHSTEP_EPSILON 0.01
+
             #include "UnityCG.cginc"
+
+            // simple normal blending
+            float4 alphaBlend(float4 top, float4 bottom) {
+                float3 color = (top.rgb * top.a) + (bottom.rgb * (1 - top.a));
+                float alpha = top.a + bottom.a * (1 - top.a);
+
+                return float4(color, alpha);
+            }
 
             struct appdata
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                float3 normal : NORMAL;
             };
 
             struct v2f
@@ -56,6 +72,7 @@ Shader "BananaCowboyCustom/Soda"
             float _DepthMaxDistance;
 
             sampler2D _CameraDepthTexture;
+            sampler2D _CameraNormalsTexture;
 
             sampler2D _SurfaceNoise;
             float4 _SurfaceNoise_ST;
@@ -66,7 +83,9 @@ Shader "BananaCowboyCustom/Soda"
             float4 _SurfaceDistortion_ST;
             float _SurfaceDistortionAmount;
 
-            float _FoamDistance;
+            float4 _FoamColor;
+            float _FoamMaxDistance;
+            float _FoamMinDistance;
 
             v2f vert (appdata v)
             {
@@ -75,6 +94,7 @@ Shader "BananaCowboyCustom/Soda"
                 o.screenPos = ComputeScreenPos(o.pos);
                 o.noiseUV = TRANSFORM_TEX(v.uv, _SurfaceNoise);
                 o.distortUV = TRANSFORM_TEX(v.uv, _SurfaceDistortion);
+                o.viewNormal = COMPUTE_VIEW_NORMAL;
                 UNITY_TRANSFER_FOG(o,o.pos);
                 return o;
             }
@@ -94,13 +114,20 @@ Shader "BananaCowboyCustom/Soda"
                 float2 noiseUV = float2((i.noiseUV.x + _Time.y * _SurfaceNoiseScroll.x) + distortSample.x, (i.noiseUV.y + _Time.y * _SurfaceNoiseScroll.y) + distortSample.y);
                 // sample surface noise texture
                 float surfaceNoiseSample = tex2D(_SurfaceNoise, noiseUV).r;
+                // sample view normals texture
+                float3 existingNormal = tex2Dproj(_CameraNormalsTexture, UNITY_PROJ_COORD(i.screenPos));
+                float3 normalDot = saturate(dot(existingNormal, i.viewNormal));
                 // calculate depth cutoffs for foam
-                float foamDepthDifference = saturate(depthDifference / _FoamDistance);
+                float foamDistance = lerp(_FoamMaxDistance, _FoamMinDistance, normalDot);
+                float foamDepthDifference = saturate(depthDifference / foamDistance);
                 // cutoff surface noise so it works
                 float surfaceNoiseCutoff = foamDepthDifference * _SurfaceNoiseCutoff;
                 // calculate if this pixel is affected by the noise sample
-                float surfaceNoise = surfaceNoiseSample > surfaceNoiseCutoff ? 1 : 0;
-                return waterColor + surfaceNoise;
+                float surfaceNoise = smoothstep(surfaceNoiseCutoff - SMOOTHSTEP_EPSILON, surfaceNoiseCutoff + SMOOTHSTEP_EPSILON, surfaceNoiseSample);
+                float4 surfaceNoiseColor = _FoamColor;
+                surfaceNoiseColor.a *= surfaceNoise;
+
+                return alphaBlend(surfaceNoiseColor, waterColor);
             }
             ENDCG
         }
