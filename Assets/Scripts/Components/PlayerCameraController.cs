@@ -6,8 +6,20 @@ public class PlayerCameraController : MonoBehaviour
 {
     [Header("References")]
     public Transform cameraTarget;
-    public float horizontalRotationSpeed = 1.0f;
-    public float verticalRotationSpeed = 1.0f;
+    public float orbitRotationSpeed = 10.0f;
+    public float tiltRotationSpeed = 10.0f;
+    [Range(-10.0f, 10.0f)]
+    public float targetHeight = 3.0f;
+
+    public float reorientTime = 0.4f;
+    private float _accumReorientTime = 0.0f;
+    private Vector3 _reorientUp = Vector3.up;
+
+    private Vector3 _camUp = Vector3.up;
+    private Vector3 _camForward = Vector3.forward;
+    private float _tiltDegrees = 0.0f;
+    private float _orbitDegrees = 0.0f;
+
 
     void Start()
     {
@@ -19,28 +31,68 @@ public class PlayerCameraController : MonoBehaviour
     void Update()
     {
         if (cameraTarget == null) { return; }
+        if (_accumReorientTime < reorientTime)
+        {
+            _accumReorientTime += Time.deltaTime;
+            float t = Mathf.Clamp(_accumReorientTime / reorientTime, 0.0f, 1.0f);
+            cameraTarget.rotation = Quaternion.Slerp(
+                cameraTarget.rotation, 
+                Quaternion.FromToRotation(cameraTarget.up, _reorientUp) * cameraTarget.rotation, 
+                t
+            );
+            cameraTarget.position = Vector3.Lerp(cameraTarget.position, transform.position + _camUp * targetHeight, t);
+        } 
+        else
+        {
+            GetRotationInput();
+        }
+    }
+
+    void GetRotationInput()
+    {
         float mouseX = Input.GetAxisRaw("Mouse X");
         float mouseY = Input.GetAxisRaw("Mouse Y");
 
-        // This code is used from Unity's tutorial on Cinemachine
-        // https://www.youtube.com/watch?v=537B1kJp9YQ
-        cameraTarget.rotation *= Quaternion.AngleAxis(mouseX * horizontalRotationSpeed, Vector3.up);
-        cameraTarget.rotation *= Quaternion.AngleAxis(mouseY * verticalRotationSpeed, Vector3.right);
+        _orbitDegrees = (_orbitDegrees + mouseX * orbitRotationSpeed) % 360;
 
-        var angles = cameraTarget.localEulerAngles;
-        angles.z = 0;
+        cameraTarget.rotation = Quaternion.AngleAxis(_orbitDegrees, _camUp) * Quaternion.LookRotation(_camForward, _camUp);
+    }
 
-        var angle = cameraTarget.localEulerAngles.x;
+    //void GetRotationInput()
+    //{
+    //    float mouseX = Input.GetAxisRaw("Mouse X");
+    //    float mouseY = Input.GetAxisRaw("Mouse Y");
 
-        if (angle < 180 && angle > 50)
+    //    // This code is used from Unity's tutorial on Cinemachine
+    //    // https://www.youtube.com/watch?v=537B1kJp9YQ
+    //    cameraTarget.rotation *= Quaternion.AngleAxis(mouseX * horizontalRotationSpeed, cameraTarget.up);
+    //    cameraTarget.rotation *= Quaternion.AngleAxis(mouseY * verticalRotationSpeed, cameraTarget.right);
+
+    //    var angles = cameraTarget.localEulerAngles;
+    //    angles.z = 0;
+
+    //    var angle = cameraTarget.localEulerAngles.x;
+
+    //    if (angle < 180 && angle > 50)
+    //    {
+    //        angles.x = 50;
+    //    }
+    //    else if (angle > 50 && angle < 340)
+    //    {
+    //        angles.x = 340;
+    //    }
+
+    //    cameraTarget.localEulerAngles = angles;
+    //}
+
+    public void SetNewUp(Vector3 up)
+    {
+        if (Vector3.Distance(cameraTarget.up, up) > 0.1f)
         {
-            angles.x = 50;
-        } 
-        else if (angle > 50 && angle < 340)
-        {
-            angles.x = 340;
+            _accumReorientTime = 0.0f;
+            _reorientUp = up;
+            _camUp = up;
+            _camForward = Vector3.Cross(up, Vector3.Cross(_camForward, up).normalized).normalized;
         }
-
-        cameraTarget.localEulerAngles = angles;
     }
 }
