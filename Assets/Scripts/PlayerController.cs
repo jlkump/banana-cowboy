@@ -60,9 +60,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Lasso Throw")]
     public Transform lassoThrowPosition;
-    [Tooltip("The distance that the lasso can aim to. The player will be pulled to the max distance the lasso can reach.")]
-    public float lassoAimRange = 10.0f;
-    public float lassoReachRange = 10.0f;
+    [Tooltip("The distance that the lasso can aim to. The player will be pulled to the max distance the lasso can reach for the action.")]
+    public float lassoAimRange = 40.0f;
     public float lassoTimeToHit = 0.3f;
     [Range(1, 100)]
     public int lassoVertRaycasts = 25;
@@ -95,6 +94,7 @@ public class PlayerController : MonoBehaviour
     private float _lassoThrowCooldown; // Is the length of the throw SFX (at minimum)
 
 
+
     [Header("Lasso Rendering")]
     public int numberOfLassoLoopSegments = 15;
     public int numberOfLassoRopeSegments = 15;
@@ -105,11 +105,18 @@ public class PlayerController : MonoBehaviour
 
     private LassoRenderer _lassoRenderer;
 
+    [Header("Lasso Grappling")]
+    public float lassoTimeToGrapple = 0.2f;
+    private Vector3 _grappleStartingPoint;
+    private float _accumLassoGrappleTime;
+
 
     [Header("Lasso Swinging")]
     public float endSwingBoostForce = 5.0f;
     public float endSwingVerticalBoostForce = 2.0f;
+    [Range(1.0f, 100.0f)]
     public float minSwingRadius = 3.0f;
+    [Range(1.0f, 100.0f)]
     public float maxSwingRadius = 10.0f;
     public float distanceOfSwing = 0.9f * Mathf.PI; // On the range [0, 2PI]. The amount we cover the circumfrence of the arc.
     [Tooltip("The maximum swinging speed.")]
@@ -140,7 +147,6 @@ public class PlayerController : MonoBehaviour
     private float _accumHoldTime;
 
 
-
     [Header("Input")]
     public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode jumpKey = KeyCode.Space;
@@ -158,6 +164,7 @@ public class PlayerController : MonoBehaviour
         WALK,
         RUN,
         THROW_LASSO,
+        GRAPPLE,
         SWING,
         PULL,
         HOLD,
@@ -211,7 +218,10 @@ public class PlayerController : MonoBehaviour
             switch(_state)
             {
                 case PlayerState.THROW_LASSO:
-                    GetThrowingLassoInput();
+                    GetThrowLassoInput();
+                    break;
+                case PlayerState.GRAPPLE:
+                    GetGrappleInput();
                     break;
                 case PlayerState.SWING:
                     GetSwingInput();
@@ -238,6 +248,9 @@ public class PlayerController : MonoBehaviour
     {
         switch(_state)
         {
+            case PlayerState.GRAPPLE:
+                Grapple(); 
+                break;
             case PlayerState.SWING:
                 Swing();
                 break;
@@ -542,7 +555,7 @@ public class PlayerController : MonoBehaviour
 
             if (_hitLassoTarget == HitLassoTarget.SWINGABLE)
             {
-                Invoke("StartSwing", lassoTimeToHit);
+                Invoke("StartGrapple", lassoTimeToHit);
             } 
             else if (_hitLassoTarget == HitLassoTarget.ENEMY)
             {
@@ -562,7 +575,7 @@ public class PlayerController : MonoBehaviour
         _canThrowLasso = true;
     }
 
-    void GetThrowingLassoInput()
+    void GetThrowLassoInput()
     {
         // Here we detect input if the player wants to cancel a throw while it is happening.
         // This may require fiddling with numbers to get it feeling right.
@@ -587,6 +600,9 @@ public class PlayerController : MonoBehaviour
     {
         switch(_state)
         {
+            case PlayerState.GRAPPLE:
+                _lassoRenderer.RenderSwing(_lassoHitObjectTransform); // Might make a RenderGrapple later
+                break;
             case PlayerState.THROW_LASSO:
                 _lassoRenderer.RenderThrow();
                 break;
@@ -608,6 +624,56 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void StartGrapple()
+    {
+        if (_cancelLassoAction) { return; }
+        _rigidBody.isKinematic = true; // Allows us to directly control the player's position so we can move them in a perfect arc
+        // We grapple if we are outside the current max-range of a swing
+        // pulling the player to the swing object
+        if (Vector3.Distance(_lassoHitPointTransform.position, transform.position) > maxSwingRadius || 
+            Vector3.Distance(_lassoHitPointTransform.position, transform.position) < minSwingRadius)
+        {
+            _accumLassoGrappleTime = 0.0f;
+            _grappleStartingPoint = transform.position;
+            UpdateState(PlayerState.GRAPPLE);
+        } 
+        else
+        {
+            StartSwing();
+        }
+    }
+
+    void Grapple()
+    {
+        _accumLassoGrappleTime += Time.deltaTime;
+
+        Vector3 targetPoint = (_grappleStartingPoint - _lassoHitPointTransform.position).normalized * maxSwingRadius + _lassoHitPointTransform.position;
+        float t = 1 - Mathf.Cos(((_accumLassoGrappleTime / lassoTimeToGrapple) * Mathf.PI) / 2);
+
+        if (t > 1.0f)
+        {
+            EndGrapple();
+        } 
+        else
+        {
+            transform.position = Vector3.Lerp(_grappleStartingPoint, targetPoint, t);
+        }
+    }
+
+    void EndGrapple()
+    {
+        StartSwing();
+    }
+    void GetGrappleInput()
+    {
+        if (Input.GetKeyUp(lassoKey)) {
+            UpdateState(PlayerState.AIR); // Will be updated next update
+            _cancelLassoAction = true;
+            _rigidBody.isKinematic = false;
+            _rigidBody.AddForce((_lassoHitPointTransform.position - transform.position).normalized * 10.0f, ForceMode.Impulse);
+        }
+    }
+
     void StartSwing()
     {
         if (_cancelLassoAction) { return; }
@@ -621,7 +687,6 @@ public class PlayerController : MonoBehaviour
         }
         UpdateState(PlayerState.SWING);
 
-        _rigidBody.isKinematic = true; // Allows us to directly control the player's position so we can move them in a perfect arc
 
         _swingRadius = Mathf.Clamp(Vector3.Distance(transform.position, _lassoHitPointTransform.position), minSwingRadius, maxSwingRadius);
         _lassoHitPointTransform.rotation = Quaternion.FromToRotation(_lassoHitPointTransform.right, dirToPlayer) * _lassoHitPointTransform.rotation;
@@ -705,10 +770,9 @@ public class PlayerController : MonoBehaviour
         if (_cancelLassoAction) { return; }
         UpdateState(PlayerState.PULL);
 
-        _lassoHitPointTransform.position = _lassoHitObjectTransform.position;
         _lassoHitObjectTransform.GetComponent<Rigidbody>().isKinematic = true;
 
-        _lassoRenderer.Pullin(lassoThrowPosition, _lassoHitPointTransform);
+        _lassoRenderer.Pullin(lassoThrowPosition, _lassoHitObjectTransform);
         Invoke("StartHold", timeToPullObject);
 
         _accumPullTime = 0.0f;
@@ -992,17 +1056,21 @@ public class LassoRenderer
 
     public void RenderHoldObject(Transform heldObject)
     {
+        Vector3 knotPoint;
+        WrapAroundObject(heldObject.position, heldObject.forward, heldObject.right, 0.1f, out knotPoint);
+
         float length = Vector3.Distance(_start.position, heldObject.position);
-        Vector3 dir = (heldObject.position - _start.position).normalized;
+        Vector3 dir = (knotPoint - _start.position).normalized;
+        Vector3 right = (knotPoint - heldObject.position).normalized;
         for (int i = 0; i < lassoRopeSegments; i++)
         {
             float percentageAlongRope = ((float)i / (float)lassoRopeSegments);
             Vector3 pos = percentageAlongRope * length * dir + _start.position 
-                + heldObject.right * EaseInElastic(percentageAlongRope) * 5.0f * Mathf.Sin(_accumHoldTime);
+                + right * EaseInElastic(percentageAlongRope) * 5.0f * Mathf.Sin(_accumHoldTime);
             lineRenderer.SetPosition(i, pos);
         }
 
-        WrapAroundObject(heldObject.position, heldObject.forward, heldObject.right, 0.1f);
+        
         _accumHoldTime += Time.deltaTime;
     }
 
