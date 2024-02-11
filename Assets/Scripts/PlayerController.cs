@@ -444,19 +444,17 @@ public class PlayerController : MonoBehaviour
         float startingOffsetY = deltaY / 2;
 
         RaycastHit hit;
-        if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, 
+        if (Physics.SphereCast(_cameraTransform.position, 0.04f, _cameraTransform.forward, 
             out hit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) && 
             hit.collider.gameObject.GetComponent<LassoObject>() != null &&
             Vector3.Distance(hit.point, _cameraTransform.position) > lassoIgnoreDist) {
             // Hit directly in the middle
-            print("hit at center");
-        } 
+            playerUI.ReticleOverLassoable();
+        }
         else
         {
-            // I know it looks like this else should replace the following if,
-            // but the logic will cause null pointer exceptions for GetComponent<LassoObject>()
-            // so do not change.
             hit.point = Vector3.zero;
+            playerUI.ReticleReset();
         }
 
         if (hit.point == Vector3.zero)
@@ -466,7 +464,6 @@ public class PlayerController : MonoBehaviour
             //Vector3 targetViewportPoint = new Vector3(0.5f, 0.5f, Camera.main.nearClipPlane);
             //targetViewportPoint = Camera.main.ViewportToWorldPoint(transform.position);
             //targetViewportPoint.z = Camera.main.nearClipPlane; // Ignore z
-            print("Testing outside");
 
 
             for (int i = 0; i < lassoHorizontalRaycasts; i++)
@@ -501,7 +498,7 @@ public class PlayerController : MonoBehaviour
             _lassoSelectedObject = hit.collider.gameObject.GetComponent<LassoObject>();
             _lassoSelectedObject.Select();
             _lassoRaycastHit = hit;
-        } 
+        }
         else
         {
             _lassoRaycastHit.point = Vector3.zero;
