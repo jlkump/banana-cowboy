@@ -423,7 +423,9 @@ public class PlayerController : MonoBehaviour
         // Transform the move input relative to the camera
         _moveInput = _cameraTransform.TransformDirection(_moveInput);
         // Transform the move input relative to the player
-        _moveInput = Vector3.Dot(transform.right, _moveInput) * transform.right + Vector3.Dot(transform.forward, _moveInput) * transform.forward;
+        _moveInput = 
+            Vector3.Dot(_gravityObject.gravityOrientation.right, _moveInput) * _gravityObject.gravityOrientation.right 
+            + Vector3.Dot(_gravityObject.gravityOrientation.forward, _moveInput) * _gravityObject.gravityOrientation.forward;
         Vector3 targetVelocity = _moveInput * walkSpeed;
         float targetSpeed = targetVelocity.magnitude;
 
@@ -454,7 +456,7 @@ public class PlayerController : MonoBehaviour
         // Spin player model and orientation to right direction to face
         if (_moveInput.magnitude > 0 && model != null)
         {
-            model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(targetVelocity.normalized, transform.up), Time.deltaTime * 8);
+            model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(targetVelocity.normalized, _gravityObject.gravityOrientation.up), Time.deltaTime * 8);
         }
     }
 
@@ -690,7 +692,7 @@ public class PlayerController : MonoBehaviour
         SoundManager.S_Instance().Play("LassoSwing");
 
         Vector3 dirToPlayer = (transform.position - _lassoRaycastHit.point).normalized;
-        Vector3 axisOfSwing = Vector3.Cross(_cameraTransform.transform.forward, dirToPlayer);
+        Vector3 axisOfSwing = Vector3.Cross(_cameraTransform.forward, dirToPlayer);
         if (axisOfSwing.magnitude == 0)
         {
             return;
@@ -762,7 +764,7 @@ public class PlayerController : MonoBehaviour
 
         _lassoRenderer.StopRendering();
 
-        _rigidBody.AddForce(endSwingVerticalBoostForce * transform.up + model.transform.forward * endSwingBoostForce * (_swingVelocity / maxSwingSpeed), ForceMode.Impulse);
+        _rigidBody.AddForce(endSwingVerticalBoostForce * _gravityObject.gravityOrientation.up + model.transform.forward * endSwingBoostForce * (_swingVelocity / maxSwingSpeed), ForceMode.Impulse);
     }
 
     void GetSwingInput()
@@ -843,7 +845,7 @@ public class PlayerController : MonoBehaviour
     {
         _lassoHitObjectTransform.GetComponent<Rigidbody>().isKinematic = false;
         _lassoHitObjectTransform.GetComponent<Rigidbody>()
-            .AddForce(_cameraTransform.forward * tossForwardImpulse + transform.up * tossUpwardImpulse,
+            .AddForce(_cameraTransform.forward * tossForwardImpulse + _gravityObject.gravityOrientation.up * tossUpwardImpulse,
             ForceMode.Impulse);
 
         UpdateState(PlayerState.TOSS);
@@ -862,7 +864,7 @@ public class PlayerController : MonoBehaviour
 
     void StartJump()
     {
-        _rigidBody.AddForce(jumpImpulseForce * transform.up, ForceMode.Impulse);
+        _rigidBody.AddForce(jumpImpulseForce * _gravityObject.gravityOrientation.up, ForceMode.Impulse);
         _gravityObject.gravityMult = 1.0f;
         jump_buffer_timer = 0;
     }

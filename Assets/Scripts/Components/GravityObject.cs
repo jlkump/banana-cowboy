@@ -44,6 +44,9 @@ public class GravityObject : MonoBehaviour
     [Tooltip("Turn this to false if the 3D model should not be re-oriented to the direction of gravity")]
     public bool reorientModel = true;
 
+    public Transform gravityOrientation = null;
+    PlayerCameraController _camController;
+
     [Header("Ground Detection")]
     // Used to determine what is and what is not ground.
     // It is a LayerMask and not a Tag incase we ever need to
@@ -71,6 +74,13 @@ public class GravityObject : MonoBehaviour
         _rigidBody.useGravity = false;
         _rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
         _attractors = new List<GravityAttractor>();
+
+        _camController = GetComponent<PlayerCameraController>();
+
+        if (gravityOrientation == null)
+        {
+            gravityOrientation = transform;
+        }
     }
 
     void FixedUpdate()
@@ -79,23 +89,29 @@ public class GravityObject : MonoBehaviour
         {
             GravityAttractor attractor = _attractors[_highestPrioAttractorIndex];
             RaycastHit hit;
-            _onGround = Physics.SphereCast(transform.position, heightDetectionRadius, -transform.up, out hit, heightDetection, groundMask, QueryTriggerInteraction.Ignore);
+            _onGround = Physics.SphereCast(bottomModelLocation.position, heightDetectionRadius, -transform.up, out hit, heightDetection, groundMask, QueryTriggerInteraction.Ignore);
+            Vector3 targetGravUp = attractor.GetGravityDirection(gravityOrientation);
             // Reorient transform
-            transform.rotation = Quaternion.FromToRotation(transform.up, attractor.GetGravityDirection(transform)) * transform.rotation;
             if (model != null && reorientModel)
             {
                 // Reorient model if we have one (and are not prevented from doing it)
-                model.rotation = Quaternion.Slerp(model.rotation, Quaternion.FromToRotation(model.up, transform.up) * model.rotation, Time.deltaTime * 6.0f);
+                model.rotation = Quaternion.Slerp(model.rotation, Quaternion.FromToRotation(model.up, targetGravUp) * model.rotation, Time.deltaTime);
             }
+            if (_camController != null && gravityOrientation.up != targetGravUp)
+            {
+                _camController.SetNewUp(targetGravUp);
+            }
+            gravityOrientation.rotation = Quaternion.FromToRotation(gravityOrientation.up, targetGravUp) * gravityOrientation.rotation;
+
 
             // We are not on the ground yet, so pull to the nearest attractor
-            Vector3 grav = attractor.GetGravityDirection(transform) * attractor.GetGravityForce();
+            Vector3 grav = attractor.GetGravityDirection(gravityOrientation) * attractor.GetGravityForce();
             Vector3 fallingVec = GetFallingVelocity();
             if (!_onGround)
             {
                 if (fallingVec.magnitude < maxFallSpeed)
                 {
-                    if (transform.InverseTransformDirection(fallingVec).y < 0)
+                    if (gravityOrientation.InverseTransformDirection(fallingVec).y < 0)
                     {
                         // We are falling down, so increase gravity
                         _rigidBody.AddForce(gravityIncreaseOnFall * gravityMult * grav);
@@ -108,7 +124,7 @@ public class GravityObject : MonoBehaviour
             }
             else
             {
-                if (transform.InverseTransformDirection(_rigidBody.velocity).y < 0)
+                if (gravityOrientation.InverseTransformDirection(_rigidBody.velocity).y < 0)
                 {
                     _rigidBody.velocity = GetMoveVelocity();
                 }
@@ -138,10 +154,10 @@ public class GravityObject : MonoBehaviour
      */
     public Vector3 GetFallingVelocity()
     {
-        Vector3 vel = transform.InverseTransformDirection(_rigidBody.velocity);
+        Vector3 vel = gravityOrientation.InverseTransformDirection(_rigidBody.velocity);
         vel.x = 0;
         vel.z = 0;
-        return transform.TransformDirection(vel);
+        return gravityOrientation.TransformDirection(vel);
     }
 
     /**
@@ -150,16 +166,16 @@ public class GravityObject : MonoBehaviour
      */
     public Vector3 GetMoveVelocity()
     {
-        Vector3 vel = transform.InverseTransformDirection(_rigidBody.velocity);
+        Vector3 vel = gravityOrientation.InverseTransformDirection(_rigidBody.velocity);
         vel.y = 0;
-        return transform.TransformDirection(vel);
+        return gravityOrientation.TransformDirection(vel);
     }
 
     public Vector3 GetGravityDirection()
     {
         if (_highestPrioAttractorIndex != -1)
         {
-            return _attractors[_highestPrioAttractorIndex].GetGravityDirection(transform);
+            return _attractors[_highestPrioAttractorIndex].GetGravityDirection(gravityOrientation);
         }
         return Vector3.zero;
     }
