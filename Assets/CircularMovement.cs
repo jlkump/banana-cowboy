@@ -35,7 +35,10 @@ public class CircularMovement : MonoBehaviour
         Vector3 offset = new Vector3(x, 0, z) * radius;
 
         transform.position = target.position + offset;
-        angle += speed * Time.deltaTime * direction;
+        if (!target.GetComponentInParent<OrangeBoss>().boomerangIndicating)
+        {
+            angle += speed * Time.deltaTime * direction;
+        }
 
         if (ifRotateY)
         {

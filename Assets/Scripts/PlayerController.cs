@@ -317,6 +317,8 @@ public class PlayerController : MonoBehaviour
     {
         return true;
     }
+    public float jump_buffer_timer = 0;
+    public float jump_buffer = 0.1f;
 
     void GetMoveInput()
     {
@@ -346,6 +348,12 @@ public class PlayerController : MonoBehaviour
                 // This is how we detect if the player has landed or not.
                 // It is called once, only on landing after falling off a ledge or jumping.
                 OnLand();
+
+                // Jump buffering goes here(?)
+                if (jump_buffer_timer > 0)
+                {
+                    StartJump();
+                }
             }
             _lastTimeOnGround = 0.1f; // This might be good to later have a customizable parameter, but 0.1f seems good for now.
             if (_moveInput == Vector3.zero)
@@ -369,9 +377,10 @@ public class PlayerController : MonoBehaviour
             // We are no longer on the ground, change state to air
             UpdateState(PlayerState.AIR);
         }
-
+        jump_buffer_timer -= Time.deltaTime;
         if (Input.GetKeyDown(jumpKey)) 
         {
+            jump_buffer_timer = jump_buffer;
             // Last time on ground acts as a coyote timer for jumping
             if (_lastTimeOnGround > 0)
             {
@@ -379,8 +388,9 @@ public class PlayerController : MonoBehaviour
             }
             else if (false)
             {
-                // Here we can add logic for jump buffering
+                // this is here for jump buffering
             }
+
         } 
         else if (false)
         {
@@ -796,12 +806,14 @@ public class PlayerController : MonoBehaviour
     {
         _rigidBody.AddForce(jumpImpulseForce * transform.up, ForceMode.Impulse);
         _gravityObject.gravityMult = 1.0f;
+        jump_buffer_timer = 0;
     }
 
     void EndJump()
     {
         print("Jump end");
         _gravityObject.gravityMult = gravIncreaseOnJumpRelease;
+        jump_buffer_timer = 0;
     }
 
     void OnLand()
@@ -820,6 +832,8 @@ public class PlayerController : MonoBehaviour
             if (health <= 0)
             {
                 print("Dead");
+                // TODO: for now reload the scene, it should be reload to checkpoint
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
             else
             {

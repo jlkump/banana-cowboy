@@ -239,7 +239,8 @@ MonoBehaviour:
   orangeSliceBoomerangs: {fileID: 7387894852522414964, guid: 21b1232b40c759b44890163f6bd4551e, type: 3}
   minions: {fileID: 3406329834922141317, guid: ff552be70d20c574298cc4bc1e637942, type: 3}
   numberOfEnemies: 5
-  boomerangCooldown: 8
+  boomerangCooldown: 10
+  boomerangIndicating: 0
   spawnPoints:
   - {fileID: 6825876845152104811}
   - {fileID: 3490203331848200127}
