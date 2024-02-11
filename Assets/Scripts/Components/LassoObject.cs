@@ -12,6 +12,8 @@ public class LassoObject : MonoBehaviour
     public Material originalMaterial;
     public Material selectedMaterial;
 
+    public bool isLassoable { get; set; } = true;
+
     public void Start()
     {
         if (materialRenderer == null)

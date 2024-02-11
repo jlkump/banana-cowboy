@@ -470,6 +470,7 @@ public class PlayerController : MonoBehaviour
         if (Physics.SphereCast(_cameraTransform.position, 0.04f, _cameraTransform.forward, 
             out hit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) && 
             hit.collider.gameObject.GetComponent<LassoObject>() != null &&
+            hit.collider.gameObject.GetComponent<LassoObject>().isLassoable &&
             Vector3.Distance(hit.point, _cameraTransform.position) > lassoIgnoreDist) {
             // Looking directly at an object
             playerUI.ReticleOverLassoable();
@@ -495,6 +496,7 @@ public class PlayerController : MonoBehaviour
                     RaycastHit raycastHit;
                     if (Physics.SphereCast(startPoint, raycastRadius, dir, out raycastHit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) &&
                         raycastHit.collider.gameObject.GetComponent<LassoObject>() != null &&
+                        raycastHit.collider.gameObject.GetComponent<LassoObject>().isLassoable &&
                         Vector3.Distance(raycastHit.point, transform.position) < closestDist &&
                         Camera.main.WorldToViewportPoint(raycastHit.point).z > lassoIgnoreDist)
                     {
