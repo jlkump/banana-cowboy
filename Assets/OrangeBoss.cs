@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class OrangeBoss : MonoBehaviour
@@ -14,6 +15,7 @@ public class OrangeBoss : MonoBehaviour
     private float cooldownTimer;
     private readonly int moves = 3;
     private int currMove;
+    public bool boomerangIndicating = false;
 
     public GameObject[] spawnPoints;
     public GameObject origin;
@@ -41,6 +43,7 @@ public class OrangeBoss : MonoBehaviour
         currMove = 0;
 
         player = GameObject.FindWithTag("Player");
+        boomerangIndicating = false;
     }
 
     private void Update()
@@ -92,7 +95,7 @@ public class OrangeBoss : MonoBehaviour
     {
         // Add animation here
 
-        // Spawn boomerang to the right
+        
         Vector3 spawnPosition = transform.position;
         for (int i = 0; i < 5; i++)
         {
@@ -102,6 +105,14 @@ public class OrangeBoss : MonoBehaviour
         }
         cooldownTimer = 5f + boomerangCooldown;
         state = BossStates.COOLDOWN;
+        boomerangIndicating = true;
+        StartCoroutine(BoomerangStartup());
+    }
+
+    IEnumerator BoomerangStartup()
+    {
+        yield return new WaitForSeconds(2);
+        boomerangIndicating = false;
     }
 
     void SpawnEnemies()
@@ -187,6 +198,8 @@ public class OrangeBoss : MonoBehaviour
         if (health == 0)
         {
             print("BOSS DEFEATED");
+            // TODO: GO TO SOME SORT OF WIN SCREEN. FOR NOW GO TO MAIN MENU
+            SceneManager.LoadScene(0);
         }
     }
 }
