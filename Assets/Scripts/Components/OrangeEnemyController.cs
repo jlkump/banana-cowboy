@@ -47,6 +47,7 @@ public class OrangeEnemyController : EnemyController
         {
             case OrangeState.REV_UP:
                 _chargeDirection = (_spottedPlayerTransform.position - transform.position);
+                _gravObject.model.rotation = Quaternion.LookRotation(_chargeDirection, _gravObject.gravityOrientation.up);
                 break;
             case OrangeState.PLAYER_SPOTTED: 
 
