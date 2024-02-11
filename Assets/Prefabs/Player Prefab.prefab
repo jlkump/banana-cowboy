@@ -455,21 +455,21 @@ MonoBehaviour:
   gravIncreaseOnJumpRelease: 2
   conserveMomentum: 1
   lassoThrowPosition: {fileID: 8925892245031520248}
-  lassoAimRange: 10
+  lassoAimRange: 40
   lassoTimeToHit: 0.3
-  lassoVertRaycasts: 25
-  lassoHorizontalRaycasts: 25
+  lassoVertRaycasts: 20
+  lassoHorizontalRaycasts: 20
   raycastRadius: 0.1
-  lassoIgnoreDist: 10
+  lassoIgnoreDist: 7
   lassoLayerMask:
     serializedVersion: 2
     m_Bits: 8
   numberOfLassoLoopSegments: 40
   numberOfLassoRopeSegments: 40
   lassoRadius: 4
-  lassoWiggleSpeed: 40
-  lassoWiggleAmplitude: 0.7
-  lassoWiggle: 50
+  lassoWiggleSpeed: 20
+  lassoWiggleAmplitude: 1
+  lassoWiggle: 25
   lassoTimeToGrapple: 0.2
   endSwingBoostForce: 30
   endSwingVerticalBoostForce: 2
@@ -480,7 +480,7 @@ MonoBehaviour:
   startingSwingSpeed: 1.2
   swingAccelRate: 0.5
   swingSideRotateSpeed: 1
-  holdHeight: 4
+  holdHeight: 9
   tossForwardImpulse: 30
   tossUpwardImpulse: 10
   timeToPullObject: 0.3
@@ -495,6 +495,8 @@ MonoBehaviour:
   lassoKey: 323
   health: 0
   canTakeDamage: 0
+  jump_buffer_timer: 0
+  jump_buffer: 0.1
 --- !u!114 &5577803411208878517
 MonoBehaviour:
   m_ObjectHideFlags: 0

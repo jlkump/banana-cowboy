@@ -117,7 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 1164616214480741238}
   settingScreen: {fileID: 5442833815722529470}
-  confirmationScreen: {fileID: 0}
+  confirmationScreen: {fileID: 7649959880861027915}
 --- !u!1 &1006607086198158359
 GameObject:
   m_ObjectHideFlags: 0
@@ -1298,7 +1298,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9128767852651237538}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3424626278668691176}
+        m_TargetAssemblyTypeName: PauseManager, Assembly-CSharp
+        m_MethodName: ChangeScreen
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2927163721173309078}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3903899034678439467
 GameObject:
   m_ObjectHideFlags: 0
@@ -2227,7 +2239,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2039075908159956597}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3424626278668691176}
+        m_TargetAssemblyTypeName: PauseManager, Assembly-CSharp
+        m_MethodName: ChangeScreen
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8904491375510275540}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6540355324340645912
 GameObject:
   m_ObjectHideFlags: 0
@@ -2731,7 +2755,7 @@ GameObject:
   - component: {fileID: 1118907379087293368}
   - component: {fileID: 1769168372592237264}
   m_Layer: 5
-  m_Name: Confirmation
+  m_Name: Confirmation Screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

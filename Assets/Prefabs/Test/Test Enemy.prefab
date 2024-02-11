@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2015605424399070328}
   - component: {fileID: 7361499133308550972}
   - component: {fileID: 8232684372033130698}
+  - component: {fileID: 685693327765292842}
   m_Layer: 3
   m_Name: Test Enemy
   m_TagString: Enemy
@@ -97,8 +98,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0019960c9a94a504fa2baf81bd1901f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originalMaterial: {fileID: 0}
-  selectedMaterial: {fileID: 0}
+  materialRenderer: {fileID: 685693327765292842}
+  originalMaterial: {fileID: 2100000, guid: 7ad597bca595df14d9c8f51e719d8195, type: 2}
+  selectedMaterial: {fileID: 2100000, guid: 0240dbccde0e1124c8d13b726e8acb97, type: 2}
   thrown: 0
 --- !u!135 &8232684372033130698
 SphereCollider:
@@ -121,6 +123,48 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.7154124
   m_Center: {x: 0, y: 2.49, z: 0}
+--- !u!23 &685693327765292842
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2728974614632552856}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &8328807485644566853
 GameObject:
   m_ObjectHideFlags: 0
