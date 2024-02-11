@@ -456,7 +456,6 @@ MonoBehaviour:
   conserveMomentum: 1
   lassoThrowPosition: {fileID: 8925892245031520248}
   lassoAimRange: 10
-  lassoReachRange: 10
   lassoTimeToHit: 0.3
   lassoVertRaycasts: 25
   lassoHorizontalRaycasts: 25
@@ -471,9 +470,10 @@ MonoBehaviour:
   lassoWiggleSpeed: 40
   lassoWiggleAmplitude: 0.7
   lassoWiggle: 50
+  lassoTimeToGrapple: 0.2
   endSwingBoostForce: 30
   endSwingVerticalBoostForce: 2
-  minSwingRadius: 3
+  minSwingRadius: 4
   maxSwingRadius: 10
   distanceOfSwing: 1.7
   maxSwingSpeed: 3

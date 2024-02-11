@@ -118,6 +118,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f3e6474bbab3ff4c8783abe4c860046, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  materialRenderer: {fileID: 499642400738929519}
   originalMaterial: {fileID: 2100000, guid: 02e0d6f41de3cd04cadc7bd78ca75deb, type: 2}
   selectedMaterial: {fileID: 2100000, guid: 772e5a7763637fe42aba9e07c6976cab, type: 2}
-  renderer: {fileID: 499642400738929519}
