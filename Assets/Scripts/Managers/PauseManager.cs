@@ -9,6 +9,7 @@ public class PauseManager : MonoBehaviour
 {
     public GameObject pauseMenu;
     public GameObject settingScreen;
+    public GameObject confirmationScreen;
     public static bool pauseActive;
 
     // Update is called once per frame
@@ -54,14 +55,20 @@ public class PauseManager : MonoBehaviour
                 settingScreen.SetActive(true);
                 break;
             case "Back":
+            case "Cancel":
                 settingScreen.SetActive(false);
+                confirmationScreen.SetActive(false);
                 break;
             case "Restart":
                 Time.timeScale = 1.0f;
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 break;
             case "Quit":
+                confirmationScreen.SetActive(true);
+                break;
+            case "Confirm":
                 Time.timeScale = 1.0f;
+                SceneManager.LoadScene(0);
                 break;
         }
     }
