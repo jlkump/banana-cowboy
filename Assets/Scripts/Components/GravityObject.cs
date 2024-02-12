@@ -89,7 +89,7 @@ public class GravityObject : MonoBehaviour
         {
             GravityAttractor attractor = _attractors[_highestPrioAttractorIndex];
             RaycastHit hit;
-            _onGround = Physics.SphereCast(bottomModelLocation.position, heightDetectionRadius, -transform.up, out hit, heightDetection, groundMask, QueryTriggerInteraction.Ignore);
+            _onGround = Physics.SphereCast(bottomModelLocation.position, heightDetectionRadius, -gravityOrientation.up, out hit, heightDetection, groundMask, QueryTriggerInteraction.Ignore);
             Vector3 targetGravUp = attractor.GetGravityDirection(gravityOrientation);
             // Reorient transform
             if (model != null && reorientModel)
