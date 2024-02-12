@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    // When an enemy orange hits an obstacle, this method is called
+    // Might be nice to have obstacles jiggle or flash different materials
+    public void Hit()
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
