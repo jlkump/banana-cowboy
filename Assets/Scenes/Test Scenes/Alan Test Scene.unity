@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3224,6 +3224,10 @@ PrefabInstance:
     - target: {fileID: 6369561918749010671, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
       propertyPath: m_Name
       value: Orange Boss
+      objectReference: {fileID: 0}
+    - target: {fileID: 6369561918749010671, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
+      propertyPath: m_TagString
+      value: Boss
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

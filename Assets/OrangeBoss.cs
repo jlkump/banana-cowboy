@@ -175,23 +175,7 @@ public class OrangeBoss : MonoBehaviour
         Destroy(y);
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.CompareTag("Enemy"))
-        {
-            if (collision.gameObject.GetComponent<LassoableEnemy>().thrown)
-            {
-                Damage(1);
-                Destroy(collision.gameObject);
-            }
-            else
-            {
-                Destroy(collision.gameObject);
-            }
-        }
-    }
-
-    private void Damage(int dmg)
+    public void Damage(int dmg)
     {
         health -= dmg;
         healthUI.fillAmount = health / (1.0f * maxHealth);
