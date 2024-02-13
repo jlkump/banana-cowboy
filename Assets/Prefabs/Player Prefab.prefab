@@ -135,7 +135,7 @@ Transform:
   m_GameObject: {fileID: 1217146964242234490}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.3000002, z: 0}
+  m_LocalPosition: {x: 0, y: 0.19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -408,7 +408,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2628326583575476359}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -847,17 +847,15 @@ MonoBehaviour:
   percentageMidThow: 0.3
   throwCycleTime: 0.6
   holdSwingRadius: 4
-  holdSwingSpeed: 1
+  holdSwingSpeed: 6
   sprintKey: 304
   jumpKey: 32
   lassoKey: 323
   health: 0
-  canTakeDamage: 0
   characterRender: {fileID: 3079352835464209697}
   normalColor: {fileID: 2100000, guid: 440df321c3383b8489f44353b7295e38, type: 2}
   damageColor: {fileID: 2100000, guid: 33ca21ca645622b45b84877f9000cac3, type: 2}
-  jump_buffer_timer: 0
-  jump_buffer: 0.1
+  jumpBuffer: 0.1
 --- !u!114 &5577803411208878517
 MonoBehaviour:
   m_ObjectHideFlags: 0

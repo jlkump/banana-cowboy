@@ -95,7 +95,7 @@ public class GravityObject : MonoBehaviour
             if (model != null && reorientModel)
             {
                 // Reorient model if we have one (and are not prevented from doing it)
-                model.rotation = Quaternion.Slerp(model.rotation, Quaternion.FromToRotation(model.up, targetGravUp) * model.rotation, Time.deltaTime);
+                model.rotation = Quaternion.Slerp(model.rotation, Quaternion.FromToRotation(model.up, targetGravUp) * model.rotation, Time.deltaTime * 6.0f);
             }
             if (_camController != null && gravityOrientation.up != targetGravUp)
             {
