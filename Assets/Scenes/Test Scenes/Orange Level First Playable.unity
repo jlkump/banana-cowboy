@@ -9157,6 +9157,8 @@ GameObject:
   - component: {fileID: 1735498533}
   - component: {fileID: 1735498532}
   - component: {fileID: 1735498535}
+  - component: {fileID: 1735498537}
+  - component: {fileID: 1735498536}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -9232,7 +9234,7 @@ Transform:
   m_GameObject: {fileID: 1735498531}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -41.100002, y: 28.33, z: 33}
+  m_LocalPosition: {x: -41.100002, y: 27.199999, z: 33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9272,6 +9274,32 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1735498536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735498531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f1f74afa842d4241958910c59c3caac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  depthTextureMode: 0
+--- !u!114 &1735498537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735498531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b31071515fd215242b54c2dbb09b6044, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  normalsShader: {fileID: 4800000, guid: 4d09b97dc942daa4b950c9d48d83c8f0, type: 3}
 --- !u!1 &1746998565
 GameObject:
   m_ObjectHideFlags: 0
@@ -11252,7 +11280,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8652546664008834604, guid: 93e093439fcdb744d8c18ca2301ffb9e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 28.33
+      value: 27.199999
       objectReference: {fileID: 0}
     - target: {fileID: 8652546664008834604, guid: 93e093439fcdb744d8c18ca2301ffb9e, type: 3}
       propertyPath: m_LocalPosition.z
