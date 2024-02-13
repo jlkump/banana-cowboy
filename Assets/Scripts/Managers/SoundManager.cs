@@ -30,7 +30,6 @@ public class SoundManager : MonoBehaviour
             s.src.clip = s.audioClip;
             s.src.volume = s.volume;
             s.src.pitch = s.pitch;
-            s.src.loop = s.loop;
             s.type = Sound.Type.SFX;
         }
 
@@ -48,7 +47,6 @@ public class SoundManager : MonoBehaviour
     {
         foreach (Sound s in _loopedSounds.ToArray())
         {
-            print("Playing " + s.name);
             if (!s.src.isPlaying)
             {
                 s.src.volume = s.volume * SFXVolume;
@@ -72,9 +70,7 @@ public class SoundManager : MonoBehaviour
             {
                 if (Array.Find(_loopedSounds.ToArray(), sound => sound.name == name) == null)
                 {
-                    print("Looping " + s.name);
-                    _loopedSounds.Append(s);
-                    print(_loopedSounds.Count());
+                    _loopedSounds.Add(s);
                 }
             } 
             else
@@ -93,13 +89,13 @@ public class SoundManager : MonoBehaviour
     {
         Sound s = Array.Find(sfxs, sound => sound.name == name);
         if (s == null) { return; }
-        if (s.src.isPlaying)
-        {
-            s.src.Stop();
-        }
         if (s.loop && Array.Find(_loopedSounds.ToArray(), sound => sound.name == name) != null)
         {
             _loopedSounds.Remove(s);
+        }
+        else if (s.src.isPlaying)
+        {
+            s.src.Stop();
         }
     }
 

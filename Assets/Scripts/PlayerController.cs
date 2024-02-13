@@ -920,13 +920,11 @@ public class PlayerController : MonoBehaviour
 
     void EndJump()
     {
-        print("Jump end");
         _gravityObject.gravityMult = gravIncreaseOnJumpRelease;
     }
 
     void OnLand()
     {
-        print("Landed!");
         _detectLanding = false;
     }
 
