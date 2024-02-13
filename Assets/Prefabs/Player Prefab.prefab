@@ -135,7 +135,7 @@ Transform:
   m_GameObject: {fileID: 1217146964242234490}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.19, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -809,7 +809,7 @@ MonoBehaviour:
   deccelerationRate: 10
   accelAirControlRatio: 0.8
   deccelAirControlRatio: 0.8
-  jumpImpulseForce: 10
+  jumpImpulseForce: 25
   gravIncreaseOnJumpRelease: 2
   conserveMomentum: 1
   lassoThrowPosition: {fileID: 8925892245031520248}

@@ -1969,6 +1969,7 @@ MonoBehaviour:
   timeSpentCharging: 1
   dizzyTime: 1
   timeSpentRunningAway: 1
+  orangeEnemyAnimator: {fileID: 0}
 --- !u!1 &828178722
 GameObject:
   m_ObjectHideFlags: 0
@@ -4357,6 +4358,14 @@ PrefabInstance:
     - target: {fileID: 7183610922977414858, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 9187660138696086715, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: runAnimSpeed
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9187660138696086715, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: walkAnimSpeed
+      value: 1.6
       objectReference: {fileID: 0}
     - target: {fileID: 9187660138696086715, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
       propertyPath: holdSwingSpeed

@@ -90,7 +90,7 @@ public class GravityObject : MonoBehaviour
             RaycastHit hit;
             _onGround = Physics.SphereCast(bottomModelLocation.position, heightDetectionRadius, -gravityOrientation.up, out hit, heightDetection, groundMask, QueryTriggerInteraction.Ignore);
             Vector3 targetGravUp = attractor.GetGravityDirection(gravityOrientation);
-            print("On ground " + _onGround);
+            //print("On ground " + _onGround);
             // Reorient transform
             if (model != null && reorientModel)
             {
@@ -196,7 +196,7 @@ public class GravityObject : MonoBehaviour
     {
         if (collision != null && collision.gameObject != null && collision.gameObject.GetComponentInParent<GravityAttractor>() != null)
         {
-            print("Entered gravity attractor pull");
+            //print("Entered gravity attractor pull");
             _attractors.Add(collision.gameObject.GetComponentInParent<GravityAttractor>());
         }
         _highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
@@ -206,7 +206,7 @@ public class GravityObject : MonoBehaviour
     {
         if (collision != null && collision.gameObject != null && collision.gameObject.GetComponentInParent<GravityAttractor>() != null)
         {
-            print("Left gravity attractor pull");
+            //print("Left gravity attractor pull");
             _attractors.Remove(collision.gameObject.GetComponentInParent<GravityAttractor>());
         }
         _highestPrioAttractorIndex = GetHighestPrioAttractorIndex();

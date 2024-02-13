@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using System.Linq;
 
 /**
  * This SoundManager class will be used in casses where sfx
@@ -14,6 +15,7 @@ public class SoundManager : MonoBehaviour
     public Sound[] music;
 
     private static SoundManager s_Instance = null;
+    private List<Sound> _loopedSounds = new List<Sound>();
 
     // This should be on a range [0, 1] (representing the 0% to 100%)
     public float SFXVolume { get; set; } = 1.0f;
@@ -38,8 +40,21 @@ public class SoundManager : MonoBehaviour
             s.src.clip = s.audioClip;
             s.src.volume = s.volume;
             s.src.pitch = s.pitch;
-            s.src.loop = s.loop;
             s.type = Sound.Type.MUSIC;
+        }
+    }
+
+    void Update()
+    {
+        foreach (Sound s in _loopedSounds.ToArray())
+        {
+            print("Playing " + s.name);
+            if (!s.src.isPlaying)
+            {
+                s.src.volume = s.volume * SFXVolume;
+                s.src.pitch = s.pitch + UnityEngine.Random.Range(0.0f, s.pitchVariance);
+                s.src.Play();
+            }
         }
     }
 
@@ -53,13 +68,39 @@ public class SoundManager : MonoBehaviour
 
         if (!s.src.isPlaying && !PauseManager.pauseActive)
         {
-            s.src.Play();
+            if (s.loop)
+            {
+                if (Array.Find(_loopedSounds.ToArray(), sound => sound.name == name) == null)
+                {
+                    print("Looping " + s.name);
+                    _loopedSounds.Append(s);
+                    print(_loopedSounds.Count());
+                }
+            } 
+            else
+            {
+                s.src.Play();
+            }
         }
     }
 
     public Sound GetSFX(string name)
     {
         return Array.Find(sfxs, sound => sound.name == name);
+    }
+
+    public void StopSFX(string name)
+    {
+        Sound s = Array.Find(sfxs, sound => sound.name == name);
+        if (s == null) { return; }
+        if (s.src.isPlaying)
+        {
+            s.src.Stop();
+        }
+        if (s.loop && Array.Find(_loopedSounds.ToArray(), sound => sound.name == name) != null)
+        {
+            _loopedSounds.Remove(s);
+        }
     }
 
     public void PlayMusic(string name)

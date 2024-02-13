@@ -51,6 +51,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("If the player somehow achieves speed greater than the maximum allowed, we won't give them any more speed. However, with conserve momentum, we won't reduce their speed either.")]
     public bool conserveMomentum = true;
 
+    public float walkAnimSpeed = 1.0f;
+    public float runAnimSpeed = 1.0f;
+
     private Vector3 _moveInput;
     private float _lastTimeOnGround = 0.0f;
     private bool _isRunning = false;
@@ -291,12 +294,23 @@ public class PlayerController : MonoBehaviour
         {
             // NOTE: moved this line into if statement - otherwise, never !=
             _state = newState;
+            SoundManager.Instance().StopSFX("PlayerRun");
+            SoundManager.Instance().StopSFX("PlayerWalk");
+
             // Signal update to animation
             UpdateAnimState();
-            if (_state == PlayerState.AIR)
+            switch (_state)
             {
-                // Whenever we enter the AIR state, we should detect the next time we land on the ground.
-                _detectLanding = true;
+                case PlayerState.AIR:
+                    // Whenever we enter the AIR state, we should detect the next time we land on the ground.
+                    _detectLanding = true;
+                    break;
+                case PlayerState.WALK:
+                    SoundManager.Instance().PlaySFX("PlayerWalk");
+                    break;
+                case PlayerState.RUN:
+                    SoundManager.Instance().PlaySFX("PlayerRun");
+                    break;
             }
         }
         _state = newState;
@@ -315,13 +329,13 @@ public class PlayerController : MonoBehaviour
         if (_state == PlayerState.WALK)
         {
             playerAnimator.Play("Base Layer.BC_Walk");
-            playerAnimator.speed = 1.0f;
+            playerAnimator.speed = walkAnimSpeed;
             playerAnimator.SetLayerWeight(1, 0.0f);
         }
         if (_state == PlayerState.RUN)
         {
             playerAnimator.Play("Base Layer.BC_Run");
-            playerAnimator.speed = 1.0f;
+            playerAnimator.speed = runAnimSpeed;
             playerAnimator.SetLayerWeight(1, 0.0f);
         }
         if (_state == PlayerState.SWING)
@@ -382,12 +396,10 @@ public class PlayerController : MonoBehaviour
                 // otherwise the player could change to the running state by simply pressing the runningKey. If logic
                 // changes here, make sure this can not happen.
                 UpdateState(PlayerState.RUN);
-                SoundManager.Instance().PlaySFX("PlayerRun");
             }
             else
             {
                 UpdateState(PlayerState.WALK);
-                SoundManager.Instance().PlaySFX("PlayerWalk");
             }
         } 
         else if (_lastTimeOnGround <= 0)
@@ -772,6 +784,9 @@ public class PlayerController : MonoBehaviour
         _gravityObject.disabled = false;
 
         _lassoRenderer.StopRendering();
+
+        SoundManager.Instance().StopSFX("LassoSwing");
+
 
         _rigidBody.AddForce(endSwingVerticalBoostForce * _gravityObject.gravityOrientation.up + model.transform.forward * endSwingBoostForce * (_swingVelocity / maxSwingSpeed), ForceMode.Impulse);
     }
