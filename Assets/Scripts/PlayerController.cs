@@ -341,8 +341,6 @@ public class PlayerController : MonoBehaviour
     {
         return true;
     }
-    private float _jumpBufferTimer = 0;
-    public float jumpBuffer = 0.1f;
 
     void GetMoveInput()
     {
@@ -372,12 +370,6 @@ public class PlayerController : MonoBehaviour
                 // This is how we detect if the player has landed or not.
                 // It is called once, only on landing after falling off a ledge or jumping.
                 OnLand();
-
-                // Jump buffering goes here(?)
-                if (_jumpBufferTimer > 0)
-                {
-                    StartJump();
-                }
             }
             _lastTimeOnGround = 0.1f; // This might be good to later have a customizable parameter, but 0.1f seems good for now.
             if (_moveInput == Vector3.zero)
@@ -403,10 +395,8 @@ public class PlayerController : MonoBehaviour
             // We are no longer on the ground, change state to air
             UpdateState(PlayerState.AIR);
         }
-        _jumpBufferTimer -= Time.deltaTime;
         if (Input.GetKeyDown(jumpKey)) 
         {
-            _jumpBufferTimer = jumpBuffer;
             // Last time on ground acts as a coyote timer for jumping
             if (_lastTimeOnGround > 0)
             {
@@ -910,7 +900,6 @@ public class PlayerController : MonoBehaviour
     {
         _rigidBody.AddForce(jumpImpulseForce * _gravityObject.gravityOrientation.up, ForceMode.Impulse);
         _gravityObject.gravityMult = 1.0f;
-        _jumpBufferTimer = 0;
         SoundManager.S_Instance().Play("PlayerJump");
     }
 
@@ -918,7 +907,6 @@ public class PlayerController : MonoBehaviour
     {
         print("Jump end");
         _gravityObject.gravityMult = gravIncreaseOnJumpRelease;
-        _jumpBufferTimer = 0;
     }
 
     void OnLand()

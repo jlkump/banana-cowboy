@@ -32,6 +32,7 @@ public class SoundManager : MonoBehaviour
     public void Play(string name)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
+        if (s == null) { return; }
         if (s.type == Sound.Type.SFX)
         {
             s.src.volume = s.volume * SFXVolume;
