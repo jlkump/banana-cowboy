@@ -224,7 +224,7 @@ public class PlayerController : MonoBehaviour
     {
         // Later, we will need to ignore input to the player controller
         // when in the UI or when in cutscenes
-        if (true)
+        if (!PauseManager.pauseActive)
         {
             switch(_state)
             {

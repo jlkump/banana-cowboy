@@ -21,7 +21,7 @@ public class PauseManager : MonoBehaviour
             {
                 pauseMenu.SetActive(false);
                 settingScreen.SetActive(false);
-                pauseActive = true;
+                pauseActive = false;
                 Time.timeScale = 1.0f;
                 UnityEngine.Cursor.lockState = CursorLockMode.Locked;
                 UnityEngine.Cursor.visible = false;
@@ -29,7 +29,7 @@ public class PauseManager : MonoBehaviour
             else
             {
                 pauseMenu.SetActive(true);
-                pauseActive = false;
+                pauseActive = true;
                 Time.timeScale = 0f;
                 Cursor.lockState = CursorLockMode.None;
                 UnityEngine.Cursor.visible = true;
@@ -43,11 +43,13 @@ public class PauseManager : MonoBehaviour
         {
             case "Continue":
                 pauseMenu.SetActive(false);
+                pauseActive = false;
                 Time.timeScale = 1.0f;
                 UnityEngine.Cursor.lockState = CursorLockMode.Locked;
                 UnityEngine.Cursor.visible = false;
                 break;
             case "Checkpoint Restart":
+                pauseActive = false;
                 Time.timeScale = 1.0f;
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 break;
@@ -60,6 +62,7 @@ public class PauseManager : MonoBehaviour
                 confirmationScreen.SetActive(false);
                 break;
             case "Restart":
+                pauseActive = false;
                 Time.timeScale = 1.0f;
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 break;
@@ -67,6 +70,7 @@ public class PauseManager : MonoBehaviour
                 confirmationScreen.SetActive(true);
                 break;
             case "Confirm":
+                pauseActive = false;
                 Time.timeScale = 1.0f;
                 SceneManager.LoadScene(0);
                 break;

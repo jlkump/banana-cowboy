@@ -15,9 +15,10 @@ public class OrangeBoss : MonoBehaviour
     private float cooldownTimer;
     private readonly int moves = 3;
     private int currMove;
-    public bool boomerangIndicating = false;
+    public bool indicating = false;
     public bool boomerangSpinning = false;
 
+    public Animator animator;
 
     public GameObject[] spawnPoints;
     public GameObject origin;
@@ -38,14 +39,14 @@ public class OrangeBoss : MonoBehaviour
 
     private void Start()
     {
-        //state = BossStates.IDLE;
-        state = BossStates.BOOMERANG;
+        state = BossStates.IDLE;
+        //state = BossStates.PEEL;
 
         health = maxHealth;
         currMove = 0;
 
         player = GameObject.FindWithTag("Player");
-        boomerangIndicating = false;
+        indicating = false;
         boomerangSpinning = false;
 
     }
@@ -107,9 +108,9 @@ public class OrangeBoss : MonoBehaviour
             GameObject boomerangLeft = SpawnBoomerang(spawnPosition - transform.right, i);
             StartCoroutine(DestroyBoomerangs(boomerangRight, boomerangLeft));
         }
-        cooldownTimer = 5f + boomerangCooldown;
+        cooldownTimer =  3f + boomerangCooldown;
         state = BossStates.COOLDOWN;
-        boomerangIndicating = true;
+        indicating = true;
         StartCoroutine(BoomerangStartup());
     }
 
@@ -125,7 +126,7 @@ public class OrangeBoss : MonoBehaviour
     IEnumerator BoomerangStartup()
     {
         yield return new WaitForSeconds(2);
-        boomerangIndicating = false;
+        indicating = false;
         boomerangSpinning = true;
         StartCoroutine(SpinningBoomerangs());
     }
@@ -136,7 +137,7 @@ public class OrangeBoss : MonoBehaviour
 
         SoundManager.S_Instance().Play("OrangeBossSummon");
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < spawnPoints.Length; i++)
         {
             /*Vector3 temp = UnityEngine.Random.onUnitSphere;
             Vector3 spawnPosition = transform.position + temp * UnityEngine.Random.Range(60, sizeOfArena);
@@ -148,15 +149,29 @@ public class OrangeBoss : MonoBehaviour
             Vector3 spawnPosition = spawnPoints[i].transform.position;
             Instantiate(minions, spawnPosition, transform.rotation);
         }
-        cooldownTimer = 10f;
+        cooldownTimer = 5f;
         state = BossStates.COOLDOWN;
     }
 
     void PeelSlam()
     {
         // add animation here
+        //StartCoroutine(PeelSlamAnimation());
         cooldownTimer = 10f;
         state = BossStates.COOLDOWN;
+    }
+
+    IEnumerator PeelSlamAnimation()
+    {
+        /*        animator.Play("Windup");
+                yield return new WaitForSeconds(1); 
+                animator.Play("Shake");
+                yield return new WaitForSeconds(1);
+                animator.Play("Drop");
+                yield return new WaitForSeconds(1);
+                animator.Play("Reset");*/
+        animator.SetTrigger("Peel Attack");
+        yield return new WaitForSeconds(0.1f);
     }
 
     void PeelSlamCooldown()
