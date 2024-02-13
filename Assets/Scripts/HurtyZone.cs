@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class HurtyZone : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    // in-editor variables
+    [Header("References")]
+    public PlayerController player;
+    [Header("Other")]
+    public bool kill;
+    public Vector3 knockback;
+    public int damage;
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        // check if the collided entity is the player
+        if (other.CompareTag("Player"))
+        {
+            if (kill)
+            {
+                // kill the player
+                // hopefully doesnt bug out lmao
+                player.Damage(999, Vector3.zero);
+            }
+            else
+            {
+                // damage the player
+                player.Damage(damage, knockback);
+            }
+        }
+
     }
 }
