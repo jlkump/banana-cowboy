@@ -71,7 +71,7 @@ Material:
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
-    - _DepthMaxDistance: 1.5
+    - _DepthMaxDistance: 2
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _FoamDistance: 0.4
@@ -96,10 +96,10 @@ Material:
     m_Colors:
     - _AmbientColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DepthGradientDeep: {r: 0.98490566, g: 0.5228755, b: 0.020441417, a: 0.9098039}
-    - _DepthGradientShallow: {r: 0.59191346, g: 0.96862745, b: 0.5529412, a: 0.725}
+    - _DepthGradientDeep: {r: 0.94716984, g: 0.49498883, b: 0.026806531, a: 0.9098039}
+    - _DepthGradientShallow: {r: 0.93962264, g: 0.82004064, b: 0.5088145, a: 0.725}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FoamColor: {r: 0.79622644, g: 0.7496547, b: 0.7496547, a: 1}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecularColor: {r: 0.9, g: 0.9, b: 0.9, a: 1}
     - _SurfaceNoiseScroll: {r: 0.03, g: 0.03, b: 0, a: 0}

@@ -8,16 +8,33 @@ public class LassoableEnemy : LassoObject
 
 
     // Just using to test if the enemy is looking at player correctly
-/*    private GameObject target;
-    // Start is called before the first frame update
-    void Start()
-    {
-        target = GameObject.FindGameObjectWithTag("Player");
-    }
+    /*    private GameObject target;
+        // Start is called before the first frame update
+        void Start()
+        {
+            target = GameObject.FindGameObjectWithTag("Player");
+        }
 
-    // Update is called once per frame
-    void Update()
+        // Update is called once per frame
+        void Update()
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 10 * Time.deltaTime);
+        }*/
+
+    private void OnCollisionStay(Collision collision)
     {
-        transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 10 * Time.deltaTime);
-    }*/
+        // TODO: Handle orange, blueberry, strawberry enemies and bosses, and blender
+        if (collision.collider.CompareTag("Boss"))
+        {
+            if (thrown)
+            {
+                // Will fix to handle more bosses (for orange, handle weak spots too)
+                if (collision.transform.name == "Orange Boss") {
+                    // if (weak spot){ DoMoreDmg(); } else{
+                    collision.gameObject.GetComponent<OrangeBoss>().Damage(1);
+                }
+                Destroy(gameObject);
+            }
+        }
+    }
 }
