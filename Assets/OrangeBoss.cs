@@ -11,18 +11,24 @@ public class OrangeBoss : MonoBehaviour
     public GameObject orangeSliceBoomerangs;
     public GameObject minions;
     public int numberOfEnemies;
-    public float boomerangCooldown;
-    private float cooldownTimer;
     private readonly int moves = 3;
     private int currMove;
     public bool indicating = false;
     public bool boomerangSpinning = false;
+
+    [Header("Cooldown")]
+    public float boomerangCooldown;
+    public float spawnCooldown;
+    public float peelCooldown;
+    public float peelAnimationTime;
+    private float cooldownTimer;
 
     public Animator animator;
 
     public GameObject[] spawnPoints;
     public GameObject origin;
     public GameObject player;
+    public List<GameObject> boomerangObjects;
 
     //public float sizeOfArena;
     public BossStates state;
@@ -34,7 +40,7 @@ public class OrangeBoss : MonoBehaviour
 
     public enum BossStates
     {
-        IDLE,BOOMERANG,PEEL,SPAWN,COOLDOWN
+        IDLE, BOOMERANG, PEEL, SPAWN, COOLDOWN
     };
 
     private void Start()
@@ -53,19 +59,19 @@ public class OrangeBoss : MonoBehaviour
 
     private void Update()
     {
-        if (player != null)
+        if (player != null && !indicating)
         {
-            transform.LookAt(new Vector3 (player.transform.position.x, transform.position.y, player.transform.position.z));
+            transform.LookAt(new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z));
         }
 
         switch (state)
         {
             case BossStates.IDLE:
-                if (currMove%moves == 0)
+                if (currMove % moves == 0)
                 {
                     state = BossStates.BOOMERANG;
                 }
-                else if (currMove%moves == 1)
+                else if (currMove % moves == 1)
                 {
                     state = BossStates.SPAWN;
                 }
@@ -76,7 +82,7 @@ public class OrangeBoss : MonoBehaviour
                 break;
             case BossStates.BOOMERANG:
                 SpawnBoomerangs();
-                break; 
+                break;
             case BossStates.PEEL:
                 PeelSlam();
                 break;
@@ -99,18 +105,8 @@ public class OrangeBoss : MonoBehaviour
     void SpawnBoomerangs()
     {
         // Add animation here
-
-        
-        Vector3 spawnPosition = transform.position;
-        for (int i = 0; i < 5; i++)
-        {
-            GameObject boomerangRight = SpawnBoomerang(spawnPosition + transform.right, i);
-            GameObject boomerangLeft = SpawnBoomerang(spawnPosition - transform.right, i);
-            StartCoroutine(DestroyBoomerangs(boomerangRight, boomerangLeft));
-        }
-        cooldownTimer =  3f + boomerangCooldown;
+        cooldownTimer = 5f + boomerangCooldown;
         state = BossStates.COOLDOWN;
-        indicating = true;
         StartCoroutine(BoomerangStartup());
     }
 
@@ -125,8 +121,24 @@ public class OrangeBoss : MonoBehaviour
 
     IEnumerator BoomerangStartup()
     {
+        animator.SetTrigger("Boomerang Attack");
+        yield return new WaitForSeconds(2.5f);
+        for (int i = 0; i < 5; i++)
+        {
+            GameObject boomerangRight = SpawnBoomerang(spawnPoints[0].transform.position + spawnPoints[0].transform.right, i);
+            GameObject boomerangLeft = SpawnBoomerang(spawnPoints[1].transform.position - spawnPoints[1].transform.right, i);
+            boomerangObjects.Add(boomerangLeft);
+            boomerangObjects.Add(boomerangRight);
+            StartCoroutine(DestroyBoomerangs(boomerangRight, boomerangLeft));
+        }
+        indicating = true;
         yield return new WaitForSeconds(2);
         indicating = false;
+        foreach (GameObject b in boomerangObjects)
+        {
+            b.GetComponent<CircularMovement>().SetCollider(true);
+        }
+        boomerangObjects.Clear();
         boomerangSpinning = true;
         StartCoroutine(SpinningBoomerangs());
     }
@@ -144,24 +156,26 @@ public class OrangeBoss : MonoBehaviour
             print(temp+", "+spawnPosition);
             spawnPosition.y = 0;*/
 
-/*            int rand = UnityEngine.Random.Range(0, 2);
-*/            
+            /*            int rand = UnityEngine.Random.Range(0, 2);
+            */
             Vector3 spawnPosition = spawnPoints[i].transform.position;
             Instantiate(minions, spawnPosition, transform.rotation);
         }
-        cooldownTimer = 5f;
+        cooldownTimer = spawnCooldown;
         state = BossStates.COOLDOWN;
     }
 
     void PeelSlam()
     {
         // add animation here
-        //StartCoroutine(PeelSlamAnimation());
-        cooldownTimer = 10f;
+        indicating = true;
+        animator.SetTrigger("Peel Attack");
+        StartCoroutine(PeelSlamCooldown());
+        cooldownTimer = peelAnimationTime + peelCooldown;
         state = BossStates.COOLDOWN;
     }
 
-    IEnumerator PeelSlamAnimation()
+    IEnumerator PeelSlamCooldown()
     {
         /*        animator.Play("Windup");
                 yield return new WaitForSeconds(1); 
@@ -170,13 +184,10 @@ public class OrangeBoss : MonoBehaviour
                 animator.Play("Drop");
                 yield return new WaitForSeconds(1);
                 animator.Play("Reset");*/
-        animator.SetTrigger("Peel Attack");
-        yield return new WaitForSeconds(0.1f);
-    }
-
-    void PeelSlamCooldown()
-    {
-        // add animation here
+        yield return new WaitForSeconds(peelAnimationTime + peelCooldown);
+        print("GOT HERE");
+        animator.SetTrigger("Peel Reset");
+        indicating = false;
     }
 
     private GameObject SpawnBoomerang(Vector3 position, int radiusAdd)
@@ -187,6 +198,7 @@ public class OrangeBoss : MonoBehaviour
         circularMovement.direction = position.x > transform.position.x ? 1 : -1;
         circularMovement.angle = (position.x < transform.position.x ? 180f + transform.eulerAngles.y : 0f + transform.eulerAngles.y) * Mathf.Deg2Rad;
         circularMovement.radius += (radiusAdd * 7);
+        circularMovement.SetCollider(false);
         return boomerang;
     }
 
@@ -202,7 +214,7 @@ public class OrangeBoss : MonoBehaviour
 
     IEnumerator DestroyBoomerangs(GameObject x, GameObject y)
     {
-        yield return new WaitForSeconds(boomerangCooldown);
+        yield return new WaitForSeconds(boomerangCooldown + 1);
         Destroy(x);
         Destroy(y);
         boomerangSpinning = false;
