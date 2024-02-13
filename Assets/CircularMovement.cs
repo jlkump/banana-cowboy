@@ -58,4 +58,9 @@ public class CircularMovement : MonoBehaviour
         }
     }
 
+    public void SetCollider(bool val)
+    {
+        GetComponent<BoxCollider>().enabled = val;
+    }
+
 }

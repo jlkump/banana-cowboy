@@ -3128,14 +3128,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Orange Boss
       objectReference: {fileID: 0}
-    - target: {fileID: 7881432552762247183, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7881432552762247183, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 20
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
