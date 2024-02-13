@@ -40,6 +40,8 @@ public class OrangeEnemyController : EnemyController
     private Vector3 _chargeStartPoint;
     private Vector3 _chargeDirection;
     private Vector3 _chargeTargetPoint;
+
+    public Animator orangeEnemyAnimator;
     // Start is called before the first frame update
     void Start()
     {
@@ -145,7 +147,51 @@ public class OrangeEnemyController : EnemyController
 
     void UpdateAnimState()
     {
-
+        if (orangeEnemyAnimator == null) { return; }
+        if (_state == OrangeState.IDLE)
+        {
+            orangeEnemyAnimator.Play("Base Layer.OE_Idle");
+            print("IDLE");
+        }
+        if (_state == OrangeState.PLAYER_SPOTTED)
+        {
+            orangeEnemyAnimator.Play("Base Layer.OE_Roll");
+            print("PLAYER SPOTTED");
+        }
+        if (_state == OrangeState.CHARGE)
+        {
+            orangeEnemyAnimator.Play("Base Layer.OE_Roll");
+            print("CHARGE");
+        }
+        if(_state == OrangeState.DIZZY)
+        {
+            orangeEnemyAnimator.Play("Base Layer.OE_Stun");
+            print("DIZZY");
+        }
+        if(_state == OrangeState.HELD)
+        {
+            print("HELD");
+        }
+        if (_state == OrangeState.REV_UP)
+        {
+            print("REV UP");
+        }
+        if (_state == OrangeState.ROAM)
+        {
+            print("ROAM");
+        }
+        if (_state == OrangeState.RUN_AWAY)
+        {
+            print("RUN AWAY");
+        }
+        if (_state == OrangeState.SLOW_DOWN)
+        {
+            print("SLOW DOWN");
+        }
+        if(_state == OrangeState.THROWN)
+        {
+            print("THROWN");
+        }
     }
 
 
