@@ -46,7 +46,6 @@ public class PlayerCameraController : MonoBehaviour
         //{
         //}
         if (!PauseManager.pauseActive) {
-            print(PauseManager.pauseActive);
             GetRotationInput();
         }
     }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
@@ -15,6 +16,7 @@ public class MenuManager : MonoBehaviour
         {
             case "Play":
                 // Go to level selection screen
+                SceneManager.LoadScene(1);
                 break;
             case "Settings":
                 settings.SetActive(true);

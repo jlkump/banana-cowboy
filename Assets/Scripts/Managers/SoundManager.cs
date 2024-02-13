@@ -40,7 +40,7 @@ public class SoundManager : MonoBehaviour
                 s.src.pitch = UnityEngine.Random.Range(1f, 1.5f);
             }
         }
-        if (!s.src.isPlaying)
+        if (!s.src.isPlaying && !PauseManager.pauseActive)
         {
             s.src.Play();
         }
