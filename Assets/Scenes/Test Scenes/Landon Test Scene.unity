@@ -3414,7 +3414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd8d6079b6576364ea776072de96aa4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: -20
+  gravity: -40
   priority: 1
   attractDirection: 2
   centerOfGravity: {fileID: 0}
@@ -4320,7 +4320,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9187660138696086715, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
       propertyPath: holdSwingSpeed
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9187660138696086715, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
       propertyPath: lassoTimeToHit

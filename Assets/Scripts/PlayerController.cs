@@ -146,6 +146,13 @@ public class PlayerController : MonoBehaviour
     private float _accumPullTime;
     private float _accumHoldTime;
 
+    public enum ThrowStrength
+    {
+        WEAK,
+        MEDIUM,
+        STRONG
+    }
+
 
     [Header("Input")]
     public KeyCode sprintKey = KeyCode.LeftShift;
@@ -567,6 +574,8 @@ public class PlayerController : MonoBehaviour
 
             _lassoRenderer.Throw(lassoThrowPosition, _lassoHitPointTransform, lassoTimeToHit);
 
+            _lassoHitObjectTransform.gameObject.GetComponent<LassoObject>().currentlyLassoed = true;
+
             if (_hitLassoTarget == HitLassoTarget.SWINGABLE)
             {
                 Invoke("StartGrapple", lassoTimeToHit);
@@ -600,6 +609,7 @@ public class PlayerController : MonoBehaviour
         // Cancel on lift lmb
         if (Input.GetKeyUp(lassoKey)) { 
             _cancelLassoAction = true;
+            _lassoHitObjectTransform.gameObject.GetComponent<LassoObject>().currentlyLassoed = false;
             UpdateState(PlayerState.IDLE); // Will be corrected next update, just get the player out of the throwing state
         }
     }
@@ -683,6 +693,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(lassoKey)) {
             UpdateState(PlayerState.AIR); // Will be updated next update
             _cancelLassoAction = true;
+            _lassoHitObjectTransform.gameObject.GetComponent<LassoObject>().currentlyLassoed = false;
             _rigidBody.isKinematic = false;
             _rigidBody.AddForce((_lassoHitPointTransform.position - transform.position).normalized * 10.0f, ForceMode.Impulse);
         }
@@ -776,7 +787,10 @@ public class PlayerController : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
         _moveInput = new Vector3(horizontal, 0, vertical).normalized; // Re-using _moveInput, cause why not
 
-        if (Input.GetKeyUp(lassoKey)) { EndSwing(); }
+        if (Input.GetKeyUp(lassoKey)) {
+            _lassoHitObjectTransform.GetComponent<LassoObject>().currentlyLassoed = false;
+            EndSwing(); 
+        }
     }
 
     void StartPull()
@@ -805,6 +819,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(lassoKey))
         {
             _cancelLassoAction = true;
+            _lassoHitObjectTransform.GetComponent<LassoObject>().currentlyLassoed = false;
             _lassoHitObjectTransform.GetComponent<Rigidbody>().isKinematic = false;
             _lassoHitObjectTransform.GetComponent<Rigidbody>()
                 .AddForce((transform.position - _lassoHitPointTransform.position).normalized * tossForwardImpulse * 0.5f,
@@ -818,6 +833,8 @@ public class PlayerController : MonoBehaviour
         if (_cancelLassoAction) { return; }
         UpdateState(PlayerState.HOLD);
 
+        playerUI.ShowThrowBar();
+
         _accumHoldTime = 0.0f;
     }
 
@@ -829,6 +846,8 @@ public class PlayerController : MonoBehaviour
             + transform.right * Mathf.Cos(_accumHoldTime * holdSwingSpeed) * holdSwingRadius
             + transform.forward * Mathf.Sin(_accumHoldTime * holdSwingSpeed) * holdSwingRadius
             + transform.up * holdHeight;
+
+        playerUI.SetThrowIndicatorPos(Mathf.Sin(_accumHoldTime));
     }
 
     void GetHoldInput()
@@ -845,12 +864,27 @@ public class PlayerController : MonoBehaviour
 
     void StartToss()
     {
+        ThrowStrength strength = playerUI.GetThrowIndicatorStrength();
+        print("Toss force was: " + strength);
+
+        float forceMult = 0.4f;
+        switch(strength)
+        {
+            case ThrowStrength.MEDIUM:
+                forceMult = 0.7f; break;
+            case ThrowStrength.STRONG: 
+                forceMult = 1.0f; break;
+        }
+
+        _lassoHitObjectTransform.GetComponent<LassoObject>().currentlyLassoed = false;
         _lassoHitObjectTransform.GetComponent<Rigidbody>().isKinematic = false;
         _lassoHitObjectTransform.GetComponent<Rigidbody>()
-            .AddForce(_cameraTransform.forward * tossForwardImpulse + _gravityObject.gravityOrientation.up * tossUpwardImpulse,
+            .AddForce((_cameraTransform.forward * tossForwardImpulse + _gravityObject.gravityOrientation.up * tossUpwardImpulse) * forceMult,
             ForceMode.Impulse);
 
         UpdateState(PlayerState.TOSS);
+
+
         Invoke("EndToss", timeToToss);
     }
 
@@ -860,6 +894,8 @@ public class PlayerController : MonoBehaviour
 
         // change enemies state different so it hurts the boss
         _lassoHitObjectTransform.GetComponent<LassoableEnemy>().thrown = true;
+
+        playerUI.HideThrowBar();
     }
 
 
@@ -1083,8 +1119,8 @@ public class LassoRenderer
         for (int i = 0; i < lassoRopeSegments; i++)
         {
             float percentageAlongRope = ((float)i / (float)lassoRopeSegments);
-            Vector3 pos = percentageAlongRope * length * dir + _start.position 
-                + right * EaseInElastic(percentageAlongRope) * 5.0f * Mathf.Sin(_accumHoldTime);
+            Vector3 pos = percentageAlongRope * length * dir + _start.position;
+                //+ right * EaseInElastic(percentageAlongRope) * 5.0f * Mathf.Sin(_accumHoldTime);
             lineRenderer.SetPosition(i, pos);
         }
 

@@ -36,12 +36,12 @@ public class PlayerCameraController : MonoBehaviour
         //    _accumReorientTime += Time.deltaTime;
         //    float t = Mathf.Clamp(_accumReorientTime / reorientTime, 0.0f, 1.0f);
         //    cameraTarget.rotation = Quaternion.Slerp(
-        //        cameraTarget.rotation, 
-        //        Quaternion.FromToRotation(cameraTarget.up, _reorientUp) * cameraTarget.rotation, 
+        //        cameraTarget.rotation,
+        //        Quaternion.FromToRotation(cameraTarget.up, _reorientUp) * cameraTarget.rotation,
         //        t
         //    );
         //    cameraTarget.position = Vector3.Lerp(cameraTarget.position, transform.position + _camUp * targetHeight, t);
-        //} 
+        //}
         //else
         //{
         //}
@@ -107,6 +107,7 @@ public class PlayerCameraController : MonoBehaviour
 
     public void SetNewUp(Vector3 up)
     {
+        print("Changing up");
         if (Vector3.Distance(cameraTarget.up, up) > 0.1f)
         {
             _accumReorientTime = 0.0f;

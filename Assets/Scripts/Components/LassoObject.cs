@@ -13,6 +13,7 @@ public class LassoObject : MonoBehaviour
     public Material selectedMaterial;
 
     public bool isLassoable { get; set; } = true;
+    public bool currentlyLassoed { get; set; } = false;
 
     public void Start()
     {

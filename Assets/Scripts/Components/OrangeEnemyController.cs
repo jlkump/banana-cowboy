@@ -14,7 +14,9 @@ public class OrangeEnemyController : EnemyController
         CHARGE,
         SLOW_DOWN,
         RUN_AWAY,
-        DIZZY
+        DIZZY,
+        HELD,
+        THROWN
     }
 
     private OrangeState _state;
@@ -34,18 +36,72 @@ public class OrangeEnemyController : EnemyController
 
     private Transform _spottedPlayerTransform = null;
     private GravityObject _gravObject = null;
+    private LassoableEnemy _lassoComp = null;
     private Vector3 _chargeStartPoint;
     private Vector3 _chargeDirection;
     private Vector3 _chargeTargetPoint;
+    // Start is called before the first frame update
+    void Start()
+    {
+        _lassoComp = GetComponent<LassoableEnemy>();
+        _lassoComp.isLassoable = false;
+        _gravObject = GetComponent<GravityObject>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (_lassoComp.currentlyLassoed) { UpdateState(OrangeState.HELD); }
+        if (_state == OrangeState.HELD) {
+            if (!_lassoComp.currentlyLassoed)
+            {
+                UpdateState(OrangeState.THROWN);
+            }
+            return; 
+        }
+
+        if ((_state == OrangeState.PLAYER_SPOTTED || _state == OrangeState.REV_UP) && _spottedPlayerTransform == null)
+        {
+            UpdateState(OrangeState.IDLE);
+        }
+        switch(_state)
+        {
+            case OrangeState.PLAYER_SPOTTED:
+                spottedParam += Time.deltaTime;
+                _chargeDirection = (_spottedPlayerTransform.position - transform.position).normalized;
+                _gravObject.model.rotation = Quaternion.Slerp(
+                    _gravObject.model.rotation, 
+                    Quaternion.LookRotation(_chargeDirection, _gravObject.gravityOrientation.up), 
+                    spottedParam
+                );
+                break;
+            case OrangeState.REV_UP:
+                _chargeDirection = (_spottedPlayerTransform.position - transform.position).normalized;
+                _gravObject.model.rotation = Quaternion.LookRotation(_chargeDirection, _gravObject.gravityOrientation.up);
+                break;
+            case OrangeState.CHARGE: 
+                if (_gravObject.GetMoveVelocity().magnitude < chargeSpeed)
+                {
+                    GetComponent<Rigidbody>().AddForce(_chargeDirection * chargeSpeed);
+                }
+                break;
+            case OrangeState.RUN_AWAY:
+                // TODO
+                break;
+            case OrangeState.IDLE:
+            default:
+
+                break;
+        }
+    }
 
     void UpdateState(OrangeState newState)
     {
         if (_state != newState)
         {
-            print("Updating new state!");
             UpdateAnimState();
 
-            switch(newState)
+            switch (newState)
             {
                 case OrangeState.PLAYER_SPOTTED:
                     spottedParam = 0.0f;
@@ -72,10 +128,19 @@ public class OrangeEnemyController : EnemyController
                     break;
                 case OrangeState.ROAM:
                     break;
+                case OrangeState.HELD:
+                    break;
+            }
+            if (newState == OrangeState.DIZZY)
+            {
+                _lassoComp.isLassoable = true;
+            }
+            else
+            {
+                _lassoComp.isLassoable = false;
             }
         }
         _state = newState;
-        print("Orange enemy state: " + _state);
     }
 
     void UpdateAnimState()
@@ -83,50 +148,6 @@ public class OrangeEnemyController : EnemyController
 
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        GetComponent<LassoObject>().isLassoable = false;
-        _gravObject = GetComponent<GravityObject>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if ((_state == OrangeState.PLAYER_SPOTTED || _state == OrangeState.REV_UP) && _spottedPlayerTransform == null)
-        {
-            UpdateState(OrangeState.IDLE);
-        }
-        switch(_state)
-        {
-            case OrangeState.PLAYER_SPOTTED:
-                spottedParam += Time.deltaTime;
-                _gravObject.model.rotation = Quaternion.Slerp(
-                    _gravObject.model.rotation, 
-                    Quaternion.LookRotation((_spottedPlayerTransform.position - transform.position).normalized, 
-                        _gravObject.gravityOrientation.up), 
-                    spottedParam
-                );
-                break;
-            case OrangeState.REV_UP:
-                _chargeDirection = (_spottedPlayerTransform.position - transform.position).normalized;
-                _gravObject.model.rotation = Quaternion.LookRotation(_chargeDirection, _gravObject.gravityOrientation.up);
-                break;
-            case OrangeState.CHARGE: 
-                if (_gravObject.GetMoveVelocity().magnitude < chargeSpeed)
-                {
-                    GetComponent<Rigidbody>().AddForce(_chargeDirection * chargeSpeed);
-                }
-                break;
-            case OrangeState.RUN_AWAY:
-
-                break;
-            case OrangeState.IDLE:
-            default:
-
-                break;
-        }
-    }
 
     void EndPlayerSpotted()
     {
@@ -189,7 +210,6 @@ public class OrangeEnemyController : EnemyController
         {
             if (other.gameObject.tag == "Player")
             {
-                print("Player detected!");
                 _spottedPlayerTransform = other.gameObject.transform;
                 UpdateState(OrangeState.PLAYER_SPOTTED);
             }
@@ -203,7 +223,6 @@ public class OrangeEnemyController : EnemyController
             if (other.gameObject.tag == "Player")
             {
                 // Might change it so that the player has to run further than the trigger collider to leave sight once spotted
-                print("Player left detection!");
                 _spottedPlayerTransform = null;
                 UpdateState(OrangeState.IDLE);
             }
