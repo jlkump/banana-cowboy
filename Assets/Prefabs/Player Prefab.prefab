@@ -855,7 +855,6 @@ MonoBehaviour:
   characterRender: {fileID: 3079352835464209697}
   normalColor: {fileID: 2100000, guid: 440df321c3383b8489f44353b7295e38, type: 2}
   damageColor: {fileID: 2100000, guid: 33ca21ca645622b45b84877f9000cac3, type: 2}
-  jumpBuffer: 0.1
 --- !u!114 &5577803411208878517
 MonoBehaviour:
   m_ObjectHideFlags: 0

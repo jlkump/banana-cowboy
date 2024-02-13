@@ -119,7 +119,7 @@ public class OrangeBoss : MonoBehaviour
         while (boomerangSpinning)
         {
             yield return new WaitForEndOfFrame();
-            SoundManager.S_Instance().Play("OrangeBossBoomerangs");
+            SoundManager.Instance().PlaySFX("OrangeBossBoomerangs");
         }
     }
 
@@ -135,7 +135,7 @@ public class OrangeBoss : MonoBehaviour
     {
         // Add animation here
 
-        SoundManager.S_Instance().Play("OrangeBossSummon");
+        SoundManager.Instance().PlaySFX("OrangeBossSummon");
 
         for (int i = 0; i < spawnPoints.Length; i++)
         {

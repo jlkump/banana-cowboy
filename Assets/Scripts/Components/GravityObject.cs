@@ -33,7 +33,6 @@ public class GravityObject : MonoBehaviour
     // whenever the player lets go of the space button, we have them
     // fall faster than if they hold it down.
     public float gravityMult { get; set; } = 1.0f;
-
     public float gravityIncreaseOnFall = 1.5f;
 
     public bool disabled { get; set; } = false;
@@ -91,6 +90,7 @@ public class GravityObject : MonoBehaviour
             RaycastHit hit;
             _onGround = Physics.SphereCast(bottomModelLocation.position, heightDetectionRadius, -gravityOrientation.up, out hit, heightDetection, groundMask, QueryTriggerInteraction.Ignore);
             Vector3 targetGravUp = attractor.GetGravityDirection(gravityOrientation);
+            print("On ground " + _onGround);
             // Reorient transform
             if (model != null && reorientModel)
             {
@@ -194,20 +194,20 @@ public class GravityObject : MonoBehaviour
     // whenever it leaves, we remove it from the list.
     void OnTriggerEnter(UnityEngine.Collider collision)
     {
-        if (collision != null && collision.gameObject != null && collision.gameObject.GetComponent<GravityAttractor>() != null)
+        if (collision != null && collision.gameObject != null && collision.gameObject.GetComponentInParent<GravityAttractor>() != null)
         {
-            //print("Entered gravity attractor pull");
-            _attractors.Add(collision.gameObject.GetComponent<GravityAttractor>());
+            print("Entered gravity attractor pull");
+            _attractors.Add(collision.gameObject.GetComponentInParent<GravityAttractor>());
         }
         _highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
     }
 
     void OnTriggerExit(UnityEngine.Collider collision)
     {
-        if (collision != null && collision.gameObject != null && collision.gameObject.GetComponent<GravityAttractor>() != null)
+        if (collision != null && collision.gameObject != null && collision.gameObject.GetComponentInParent<GravityAttractor>() != null)
         {
-            //print("Left gravity attractor pull");
-            _attractors.Remove(collision.gameObject.GetComponent<GravityAttractor>());
+            print("Left gravity attractor pull");
+            _attractors.Remove(collision.gameObject.GetComponentInParent<GravityAttractor>());
         }
         _highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
     }

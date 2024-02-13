@@ -118,6 +118,8 @@ MonoBehaviour:
   pauseMenu: {fileID: 1164616214480741238}
   settingScreen: {fileID: 5442833815722529470}
   confirmationScreen: {fileID: 7649959880861027915}
+  musicSlider: {fileID: 1058375565607454060}
+  sfxSlider: {fileID: 4881738878438430979}
 --- !u!1 &1006607086198158359
 GameObject:
   m_ObjectHideFlags: 0
@@ -1831,7 +1833,7 @@ GameObject:
   - component: {fileID: 3183582799798696044}
   - component: {fileID: 4881738878438430979}
   m_Layer: 5
-  m_Name: Music Slider
+  m_Name: SFX Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

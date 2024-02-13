@@ -382,12 +382,12 @@ public class PlayerController : MonoBehaviour
                 // otherwise the player could change to the running state by simply pressing the runningKey. If logic
                 // changes here, make sure this can not happen.
                 UpdateState(PlayerState.RUN);
-                SoundManager.S_Instance().Play("PlayerRun");
+                SoundManager.Instance().PlaySFX("PlayerRun");
             }
             else
             {
                 UpdateState(PlayerState.WALK);
-                SoundManager.S_Instance().Play("PlayerWalk");
+                SoundManager.Instance().PlaySFX("PlayerWalk");
             }
         } 
         else if (_lastTimeOnGround <= 0)
@@ -566,7 +566,7 @@ public class PlayerController : MonoBehaviour
 
             UpdateState(PlayerState.THROW_LASSO);
 
-            SoundManager.S_Instance().Play("LassoThrow");
+            SoundManager.Instance().PlaySFX("LassoThrow");
 
             _lassoRenderer.Throw(lassoThrowPosition, _lassoHitPointTransform, lassoTimeToHit);
 
@@ -612,7 +612,7 @@ public class PlayerController : MonoBehaviour
 
     void HitNothing()
     {
-        SoundManager.S_Instance().Play("LassoMiss");
+        SoundManager.Instance().PlaySFX("LassoMiss");
         UpdateState(PlayerState.IDLE);
     }
 
@@ -698,7 +698,7 @@ public class PlayerController : MonoBehaviour
     void StartSwing()
     {
         if (_cancelLassoAction) { return; }
-        SoundManager.S_Instance().Play("LassoSwing");
+        SoundManager.Instance().PlaySFX("LassoSwing");
 
         Vector3 dirToPlayer = (transform.position - _lassoRaycastHit.point).normalized;
         Vector3 axisOfSwing = Vector3.Cross(_cameraTransform.forward, dirToPlayer);
@@ -900,7 +900,7 @@ public class PlayerController : MonoBehaviour
     {
         _rigidBody.AddForce(jumpImpulseForce * _gravityObject.gravityOrientation.up, ForceMode.Impulse);
         _gravityObject.gravityMult = 1.0f;
-        SoundManager.S_Instance().Play("PlayerJump");
+        SoundManager.Instance().PlaySFX("PlayerJump");
     }
 
     void EndJump()
@@ -924,7 +924,7 @@ public class PlayerController : MonoBehaviour
                 healthAnimator.SetTrigger("Damaged");
                 health -= damageAmount;
                 playerUI.ChangeHealthImage(health);
-                SoundManager.S_Instance().Play("PlayerHurt");
+                SoundManager.Instance().PlaySFX("PlayerHurt");
             }
             ApplyKnockback(knockback);
             if (health <= 0)

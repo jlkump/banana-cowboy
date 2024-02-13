@@ -12,6 +12,34 @@ public class PauseManager : MonoBehaviour
     public GameObject confirmationScreen;
     public static bool pauseActive;
 
+    public Slider musicSlider = null;
+    public Slider sfxSlider = null;
+
+    private void Start()
+    {
+        if (musicSlider != null)
+        {
+            musicSlider.value = SoundManager.Instance().MusicVolume;
+            musicSlider.onValueChanged.AddListener(delegate { MusicValueChanged(); });
+        }
+
+        if (sfxSlider != null)
+        {
+            sfxSlider.value = SoundManager.Instance().SFXVolume;
+            sfxSlider.onValueChanged.AddListener(delegate { SFXValueChanged(); });
+        }
+    }
+
+    public void MusicValueChanged()
+    {
+        SoundManager.Instance().MusicVolume = musicSlider.value;
+    }
+
+    public void SFXValueChanged()
+    {
+        SoundManager.Instance().SFXVolume = sfxSlider.value;
+    }
+
     // Update is called once per frame
     void Update()
     {

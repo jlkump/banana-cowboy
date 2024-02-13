@@ -11,7 +11,7 @@ public class Collectable : MonoBehaviour
     {
         if (item.CompareTag("Player"))
         {
-            SoundManager.S_Instance().Play("CollectStarSparkle");
+            SoundManager.Instance().PlaySFX("CollectStarSparkle");
             Destroy(gameObject);
         }
     }

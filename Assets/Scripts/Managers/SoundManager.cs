@@ -10,55 +10,98 @@ using UnityEngine;
  */
 public class SoundManager : MonoBehaviour
 {
-    public Sound[] sounds;
+    public Sound[] sfxs;
+    public Sound[] music;
 
     private static SoundManager s_Instance = null;
 
     // This should be on a range [0, 1] (representing the 0% to 100%)
     public float SFXVolume { get; set; } = 1.0f;
+    public float MusicVolume { get; set; } = 1.0f;
 
     // Start is called before the first frame update
     void Awake()
     {
         s_Instance = this;
-        foreach (Sound s in sounds) { 
+        foreach (Sound s in sfxs) { 
             s.src = gameObject.AddComponent<AudioSource>();
             s.src.clip = s.audioClip;
             s.src.volume = s.volume;
             s.src.pitch = s.pitch;
+            s.src.loop = s.loop;
+            s.type = Sound.Type.SFX;
+        }
+
+        foreach (Sound s in music)
+        {
+            s.src = gameObject.AddComponent<AudioSource>();
+            s.src.clip = s.audioClip;
+            s.src.volume = s.volume;
+            s.src.pitch = s.pitch;
+            s.src.loop = s.loop;
+            s.type = Sound.Type.MUSIC;
         }
     }
 
-    public void Play(string name)
+    public void PlaySFX(string name)
     {
-        Sound s = Array.Find(sounds, sound => sound.name == name);
+        Sound s = Array.Find(sfxs, sound => sound.name == name);
         if (s == null) { return; }
-        if (s.type == Sound.Type.SFX)
-        {
-            s.src.volume = s.volume * SFXVolume;
-            if (name.Contains("Walk") || name.Contains("Run"))
-            {
-                s.src.pitch = UnityEngine.Random.Range(1f, 1.5f);
-            }
-        }
+
+        s.src.volume = s.volume * SFXVolume;
+        s.src.pitch = s.pitch + UnityEngine.Random.Range(0.0f, s.pitchVariance);
+
         if (!s.src.isPlaying && !PauseManager.pauseActive)
         {
             s.src.Play();
         }
     }
 
-    public Sound GetSound(string name)
+    public Sound GetSFX(string name)
     {
-        return Array.Find(sounds, sound => sound.name == name);
+        return Array.Find(sfxs, sound => sound.name == name);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PlayMusic(string name)
     {
-        
+        Sound s = Array.Find(music, sound => sound.name == name);
+        if (s == null) { return; }
+        s.src.volume = s.volume * SFXVolume;
+
+        if (!s.src.isPlaying)
+        {
+            s.src.Play();
+        }
     }
 
-    public static SoundManager S_Instance()
+    public void PauseMusic(string name)
+    {
+        Sound s = Array.Find(music, sound => sound.name == name);
+        if (s == null) { return; }
+
+        if (s.src.isPlaying)
+        {
+            s.src.Pause();
+        }
+    }
+
+    public void StopMusic(string name)
+    {
+        Sound s = Array.Find(music, sound => sound.name == name);
+        if (s == null) { return; }
+
+        if (s.src.isPlaying)
+        {
+            s.src.Stop();
+        }
+    }
+
+    public Sound GetMusic(string name)
+    {
+        return Array.Find(music, sound => sound.name == name);
+    }
+
+    public static SoundManager Instance()
     { 
         return s_Instance; 
     }
@@ -72,6 +115,9 @@ public class Sound
     public float volume = 1.0f;
     [Range(0.1f, 3)]
     public float pitch = 1.0f;
+    [Range(0.0f, 3)]
+    public float pitchVariance = 0.0f;
+    public bool loop = false;
     public enum Type
     {
         SFX,
@@ -79,6 +125,7 @@ public class Sound
         MUSIC,
     };
 
+    [HideInInspector]
     public Type type;
 
     [HideInInspector]
