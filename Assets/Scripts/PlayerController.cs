@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     public Transform model;
     public Transform emptyObjectPrefab;
     public Animator playerAnimator = null;
+    public Animator healthAnimator = null;
     public UIManager playerUI;
     // We can find these ourselves
     Rigidbody _rigidBody;
@@ -160,10 +161,13 @@ public class PlayerController : MonoBehaviour
     public KeyCode lassoKey = KeyCode.Mouse0;
 
     [Header("Health")]
-    public static int maxHealth = 3;
     public int health;
-    public bool canTakeDamage; // Invincibilty frames
-    
+    public static int maxHealth = 3;
+    private bool _canTakeDamage; // Invincibilty frames
+    public GameObject characterRender;
+    public Material normalColor;
+    public Material damageColor;
+
     enum PlayerState
     {
         IDLE,
@@ -213,7 +217,7 @@ public class PlayerController : MonoBehaviour
         _lassoThrowCooldown = 0.5f;
 
         health = maxHealth;
-        canTakeDamage = true;
+        _canTakeDamage = true;
         playerUI.ChangeHealthImage(health);
     }
     void Update()
@@ -337,8 +341,8 @@ public class PlayerController : MonoBehaviour
     {
         return true;
     }
-    public float jump_buffer_timer = 0;
-    public float jump_buffer = 0.1f;
+    private float _jumpBufferTimer = 0;
+    public float jumpBuffer = 0.1f;
 
     void GetMoveInput()
     {
@@ -370,7 +374,7 @@ public class PlayerController : MonoBehaviour
                 OnLand();
 
                 // Jump buffering goes here(?)
-                if (jump_buffer_timer > 0)
+                if (_jumpBufferTimer > 0)
                 {
                     StartJump();
                 }
@@ -386,10 +390,12 @@ public class PlayerController : MonoBehaviour
                 // otherwise the player could change to the running state by simply pressing the runningKey. If logic
                 // changes here, make sure this can not happen.
                 UpdateState(PlayerState.RUN);
-            } 
+                SoundManager.S_Instance().Play("PlayerRun");
+            }
             else
             {
                 UpdateState(PlayerState.WALK);
+                SoundManager.S_Instance().Play("PlayerWalk");
             }
         } 
         else if (_lastTimeOnGround <= 0)
@@ -397,10 +403,10 @@ public class PlayerController : MonoBehaviour
             // We are no longer on the ground, change state to air
             UpdateState(PlayerState.AIR);
         }
-        jump_buffer_timer -= Time.deltaTime;
+        _jumpBufferTimer -= Time.deltaTime;
         if (Input.GetKeyDown(jumpKey)) 
         {
-            jump_buffer_timer = jump_buffer;
+            _jumpBufferTimer = jumpBuffer;
             // Last time on ground acts as a coyote timer for jumping
             if (_lastTimeOnGround > 0)
             {
@@ -904,14 +910,15 @@ public class PlayerController : MonoBehaviour
     {
         _rigidBody.AddForce(jumpImpulseForce * _gravityObject.gravityOrientation.up, ForceMode.Impulse);
         _gravityObject.gravityMult = 1.0f;
-        jump_buffer_timer = 0;
+        _jumpBufferTimer = 0;
+        SoundManager.S_Instance().Play("PlayerJump");
     }
 
     void EndJump()
     {
         print("Jump end");
         _gravityObject.gravityMult = gravIncreaseOnJumpRelease;
-        jump_buffer_timer = 0;
+        _jumpBufferTimer = 0;
     }
 
     void OnLand()
@@ -922,10 +929,15 @@ public class PlayerController : MonoBehaviour
 
     public void Damage(int damageAmount, Vector3 knockback)
     {
-        if (health > 0 && canTakeDamage)
+        if (health > 0 && _canTakeDamage)
         {
-            health -= damageAmount;
-            playerUI.ChangeHealthImage(health);
+            if (damageAmount > 0)
+            {
+                healthAnimator.SetTrigger("Damaged");
+                health -= damageAmount;
+                playerUI.ChangeHealthImage(health);
+                SoundManager.S_Instance().Play("PlayerHurt");
+            }
             ApplyKnockback(knockback);
             if (health <= 0)
             {
@@ -936,15 +948,30 @@ public class PlayerController : MonoBehaviour
             else
             {
                 StartCoroutine(Invincibility());
+                if (damageColor != null && normalColor != null && characterRender != null)
+                {
+                    StartCoroutine(FlashInvincibility(characterRender.GetComponent<Renderer>()));
+                }
             }
+        }
+    }
+
+    IEnumerator FlashInvincibility(Renderer charRender)
+    {
+        while (!_canTakeDamage)
+        {
+            charRender.material = damageColor; // Assign damageColor material
+            yield return new WaitForSeconds(0.2f);
+            charRender.material = normalColor; // Assign normalColor material
+            yield return new WaitForSeconds(0.2f); // Add a slight delay before looping again
         }
     }
 
     IEnumerator Invincibility()
     {
-        canTakeDamage = false;
-        yield return new WaitForSeconds(3f);
-        canTakeDamage = true;
+        _canTakeDamage = false;
+        yield return new WaitForSeconds(2f);
+        _canTakeDamage = true;
     }
 
     public void ApplyKnockback(Vector3 knockback)

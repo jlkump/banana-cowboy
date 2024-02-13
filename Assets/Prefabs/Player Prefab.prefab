@@ -675,7 +675,7 @@ GameObject:
   - component: {fileID: 7838862824688470847}
   m_Layer: 2
   m_Name: Model
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -801,6 +801,7 @@ MonoBehaviour:
   model: {fileID: 7838862824688470847}
   emptyObjectPrefab: {fileID: 4070204132712235945, guid: d076296c76109af44991ebf6823031f4, type: 3}
   playerAnimator: {fileID: 1968445635583081218}
+  healthAnimator: {fileID: 6132763969182505666}
   playerUI: {fileID: 574274520373564533}
   walkSpeed: 12
   runSpeed: 19
@@ -852,6 +853,9 @@ MonoBehaviour:
   lassoKey: 323
   health: 0
   canTakeDamage: 0
+  characterRender: {fileID: 3079352835464209697}
+  normalColor: {fileID: 2100000, guid: 440df321c3383b8489f44353b7295e38, type: 2}
+  damageColor: {fileID: 2100000, guid: 33ca21ca645622b45b84877f9000cac3, type: 2}
   jump_buffer_timer: 0
   jump_buffer: 0.1
 --- !u!114 &5577803411208878517
@@ -1019,6 +1023,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4239679806363491457}
+  - component: {fileID: 6132763969182505666}
   m_Layer: 5
   m_Name: Health Holder
   m_TagString: Untagged
@@ -1046,6 +1051,27 @@ RectTransform:
   m_AnchoredPosition: {x: 60, y: -100}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 1}
+--- !u!95 &6132763969182505666
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4128062965984371809}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: abcb91593b760014b9db6c615b690b05, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4166899333501965974
 GameObject:
   m_ObjectHideFlags: 0
@@ -1658,5 +1684,10 @@ Animator:
 --- !u!4 &2007776245381137457 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6b4ce42d0d055ca4c8db898f3b5754c6, type: 3}
+  m_PrefabInstance: {fileID: 2042299585268048858}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3079352835464209697 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3957463063493068539, guid: 6b4ce42d0d055ca4c8db898f3b5754c6, type: 3}
   m_PrefabInstance: {fileID: 2042299585268048858}
   m_PrefabAsset: {fileID: 0}

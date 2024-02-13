@@ -35,11 +35,14 @@ public class SoundManager : MonoBehaviour
         if (s.type == Sound.Type.SFX)
         {
             s.src.volume = s.volume * SFXVolume;
+            if (name.Contains("Walk") || name.Contains("Run"))
+            {
+                s.src.pitch = UnityEngine.Random.Range(1f, 1.5f);
+            }
         }
-        s.src.Play();
         if (!s.src.isPlaying)
         {
-
+            s.src.Play();
         }
     }
 

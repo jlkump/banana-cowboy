@@ -45,15 +45,63 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sounds:
-  - name: LassoHit
+  - name: LassoThrow
     audioClip: {fileID: 8300000, guid: 5762e2dcb9e988b47aec3a1d82f939fc, type: 3}
-    volume: 1
-    pitch: 0
+    volume: 0.5
+    pitch: 1
     type: 0
     src: {fileID: 0}
   - name: LassoMiss
     audioClip: {fileID: 8300000, guid: a78aa5e3ecd92aa4193225e1c070641d, type: 3}
     volume: 1
-    pitch: 0
+    pitch: 1
+    type: 0
+    src: {fileID: 0}
+  - name: LassoSwing
+    audioClip: {fileID: 8300000, guid: bebdc4ba740e332419cab5b743df8620, type: 3}
+    volume: 0.5
+    pitch: 1
+    type: 0
+    src: {fileID: 0}
+  - name: PlayerWalk
+    audioClip: {fileID: 8300000, guid: b401237eb46fbd14e8b98bae92b2b234, type: 3}
+    volume: 0.2
+    pitch: 1
+    type: 0
+    src: {fileID: 0}
+  - name: PlayerRun
+    audioClip: {fileID: 8300000, guid: 8042d2069ed60104ea4bf6ea406ae720, type: 3}
+    volume: 0.2
+    pitch: 1
+    type: 0
+    src: {fileID: 0}
+  - name: PlayerJump
+    audioClip: {fileID: 8300000, guid: c2890ee6703e3a54ab10007153ee4697, type: 3}
+    volume: 0.5
+    pitch: 1
+    type: 0
+    src: {fileID: 0}
+  - name: PlayerHurt
+    audioClip: {fileID: 8300000, guid: 4f6fb3cd7128a4c46b98ddc6d1f79fed, type: 3}
+    volume: 0.5
+    pitch: 1
+    type: 0
+    src: {fileID: 0}
+  - name: OrangeBossBoomerangs
+    audioClip: {fileID: 8300000, guid: 3eb05bb6f51ba1d4280155845688a173, type: 3}
+    volume: 0.5
+    pitch: 1
+    type: 0
+    src: {fileID: 0}
+  - name: OrangeBossSummon
+    audioClip: {fileID: 8300000, guid: fcf0f45b6daa41543a5eaf3af7d6db78, type: 3}
+    volume: 0.5
+    pitch: 1
+    type: 0
+    src: {fileID: 0}
+  - name: OrangeBossSlam
+    audioClip: {fileID: 8300000, guid: c8e930362c4701841a255c00171ef4d5, type: 3}
+    volume: 0.5
+    pitch: 1
     type: 0
     src: {fileID: 0}

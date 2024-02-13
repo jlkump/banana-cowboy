@@ -16,6 +16,8 @@ public class OrangeBoss : MonoBehaviour
     private readonly int moves = 3;
     private int currMove;
     public bool boomerangIndicating = false;
+    public bool boomerangSpinning = false;
+
 
     public GameObject[] spawnPoints;
     public GameObject origin;
@@ -44,6 +46,8 @@ public class OrangeBoss : MonoBehaviour
 
         player = GameObject.FindWithTag("Player");
         boomerangIndicating = false;
+        boomerangSpinning = false;
+
     }
 
     private void Update()
@@ -109,15 +113,28 @@ public class OrangeBoss : MonoBehaviour
         StartCoroutine(BoomerangStartup());
     }
 
+    IEnumerator SpinningBoomerangs()
+    {
+        while (boomerangSpinning)
+        {
+            yield return new WaitForEndOfFrame();
+            SoundManager.S_Instance().Play("OrangeBossBoomerangs");
+        }
+    }
+
     IEnumerator BoomerangStartup()
     {
         yield return new WaitForSeconds(2);
         boomerangIndicating = false;
+        boomerangSpinning = true;
+        StartCoroutine(SpinningBoomerangs());
     }
 
     void SpawnEnemies()
     {
         // Add animation here
+
+        SoundManager.S_Instance().Play("OrangeBossSummon");
 
         for (int i = 0; i < 2; i++)
         {
@@ -173,6 +190,7 @@ public class OrangeBoss : MonoBehaviour
         yield return new WaitForSeconds(boomerangCooldown);
         Destroy(x);
         Destroy(y);
+        boomerangSpinning = false;
     }
 
     public void Damage(int dmg)
