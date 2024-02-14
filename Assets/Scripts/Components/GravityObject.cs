@@ -84,13 +84,13 @@ public class GravityObject : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (_highestPrioAttractorIndex != -1 && bottomModelLocation != null && !disabled && !_rigidBody.isKinematic)
+        if (_highestPrioAttractorIndex != -1 && bottomModelLocation != null && !_rigidBody.isKinematic)
         {
             GravityAttractor attractor = _attractors[_highestPrioAttractorIndex];
             RaycastHit hit;
             _onGround = Physics.SphereCast(bottomModelLocation.position, heightDetectionRadius, -gravityOrientation.up, out hit, heightDetection, groundMask, QueryTriggerInteraction.Ignore);
             Vector3 targetGravUp = attractor.GetGravityDirection(gravityOrientation);
-            //print("On ground " + _onGround);
+ 
             // Reorient transform
             if (model != null && reorientModel)
             {
@@ -109,7 +109,7 @@ public class GravityObject : MonoBehaviour
             Vector3 fallingVec = GetFallingVelocity();
             if (!_onGround)
             {
-                if (fallingVec.magnitude < maxFallSpeed)
+                if (fallingVec.magnitude < maxFallSpeed || Vector3.Dot(fallingVec, -targetGravUp) < 0)
                 {
                     if (gravityOrientation.InverseTransformDirection(fallingVec).y < 0)
                     {
@@ -196,19 +196,25 @@ public class GravityObject : MonoBehaviour
     {
         if (collision != null && collision.gameObject != null && collision.gameObject.GetComponentInParent<GravityAttractor>() != null)
         {
-            //print("Entered gravity attractor pull");
+            if (gameObject.tag == "Player")
+                print("Entered " + collision.gameObject.name + " is kinematic " + _rigidBody.isKinematic);
             _attractors.Add(collision.gameObject.GetComponentInParent<GravityAttractor>());
+            _highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
+            if (gameObject.tag == "Player")
+                print("Entered with highest prio " + _highestPrioAttractorIndex);
         }
-        _highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
     }
 
     void OnTriggerExit(UnityEngine.Collider collision)
     {
         if (collision != null && collision.gameObject != null && collision.gameObject.GetComponentInParent<GravityAttractor>() != null)
         {
-            //print("Left gravity attractor pull");
+            if (gameObject.tag == "Player")
+                print("Left " + collision.gameObject.name + " is kinematic " + _rigidBody.isKinematic);
             _attractors.Remove(collision.gameObject.GetComponentInParent<GravityAttractor>());
+            _highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
+            if (gameObject.tag == "Player")
+                print("Left with highest prio " + _highestPrioAttractorIndex);
         }
-        _highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
     }
 }
