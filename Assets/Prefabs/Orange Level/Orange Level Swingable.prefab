@@ -140,6 +140,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f3e6474bbab3ff4c8783abe4c860046, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  materialRenderer: {fileID: 0}
+  materialRenderer: {fileID: 8455201791316520658}
   originalMaterial: {fileID: 2100000, guid: 14466de290c5f424c95dc8b9eb83c740, type: 2}
   selectedMaterial: {fileID: 2100000, guid: 772e5a7763637fe42aba9e07c6976cab, type: 2}
