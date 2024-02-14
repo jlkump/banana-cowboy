@@ -10,6 +10,34 @@ public class MenuManager : MonoBehaviour
     public GameObject help;
     public GameObject credits;
 
+    public Slider musicSlider = null;
+    public Slider sfxSlider = null;
+    private void Start()
+    {
+        if (musicSlider != null && SoundManager.Instance() != null)
+        {
+            musicSlider.value = SoundManager.Instance().MusicVolume;
+            musicSlider.onValueChanged.AddListener(delegate { MusicValueChanged(); });
+        }
+
+        if (sfxSlider != null && SoundManager.Instance() != null)
+        {
+            sfxSlider.value = SoundManager.Instance().SFXVolume;
+            sfxSlider.onValueChanged.AddListener(delegate { SFXValueChanged(); });
+        }
+    }
+
+    public void MusicValueChanged()
+    {
+        SoundManager.Instance().MusicVolume = musicSlider.value;
+    }
+
+    public void SFXValueChanged()
+    {
+        SoundManager.Instance().SFXVolume = sfxSlider.value;
+    }
+
+
     public void ChangeScreen(Button button)
     {
         switch (button.name)
@@ -21,8 +49,8 @@ public class MenuManager : MonoBehaviour
             case "Settings":
                 settings.SetActive(true);
                 break;
-            case "Help":
-                help.SetActive(true);
+            case "Tutorial":
+                SceneManager.LoadScene(2);
                 break;
             case "Credits":
                 credits.SetActive(true);

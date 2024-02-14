@@ -201,14 +201,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackForce: 20
-  chargeSpeed: 20
+  chargeSpeed: 30
   maxChargeDistance: 40
   walkSpeed: 10
-  timeToBeginRev: 1
-  timeToBeginCharge: 1
-  timeSpentCharging: 1
-  dizzyTime: 1
-  timeSpentRunningAway: 1
+  timeToBeginRev: 0.5
+  timeToBeginCharge: 1.7
+  timeSpentCharging: 2
+  dizzyTime: 2
+  timeSpentRunningAway: 0.1
   orangeEnemyAnimator: {fileID: 3427894436404194328}
 --- !u!1 &9110357491282975244
 GameObject:
@@ -311,10 +311,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8532563085274162050, guid: 516f69377678e454cb8fd9139f59123b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fd4d77308c29033498752ab6dc263588, type: 2}
+    - target: {fileID: -3242198171734335436, guid: 516f69377678e454cb8fd9139f59123b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 66799bcfb0f0c5245a439e094fc9f6b8, type: 2}
     - target: {fileID: 919132149155446097, guid: 516f69377678e454cb8fd9139f59123b, type: 3}
       propertyPath: m_Name
       value: Orange_Enemy_Rigged_Model
       objectReference: {fileID: 0}
+    - target: {fileID: 3083504262309093072, guid: 516f69377678e454cb8fd9139f59123b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 2d40161ae33fc414c86f4c28d5ab0cb0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
