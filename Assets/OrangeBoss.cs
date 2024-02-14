@@ -223,7 +223,9 @@ public class OrangeBoss : MonoBehaviour
             // TODO: GO TO SOME SORT OF WIN SCREEN. FOR NOW GO TO MAIN MENU
             UnityEngine.Cursor.lockState = CursorLockMode.None;
             UnityEngine.Cursor.visible = true;
-            SceneManager.LoadScene(0); 
+            SoundManager.Instance().StopMusic("Orange Boss");
+            SoundManager.Instance().PlayMusic("Main Menu");
+            SceneManager.LoadScene(0);
         }
     }
 
