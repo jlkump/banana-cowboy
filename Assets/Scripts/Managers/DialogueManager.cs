@@ -14,6 +14,9 @@ public class DialogueManager : MonoBehaviour
     public TMP_Text nameOfCharacter;
     public Image charPortrait;
 
+    public GameObject portraitHolder = null;
+    public GameObject nameHolder = null;
+
     // TODO might create a dictionary to get the portrait corresponding to the type/ name.
     public List<GameObject> portraits;
 
@@ -48,6 +51,8 @@ public class DialogueManager : MonoBehaviour
         // TODO Depending on what the enemy is, put the image here. For now change color and use enum
         Color colorChar;
         Color colorBox;
+        bool showPortrait = true;
+        bool showName = true;
         switch (type)
         {
             case TypeOfCharacter.Strawberry:
@@ -69,8 +74,19 @@ public class DialogueManager : MonoBehaviour
             default: 
                 colorChar = Color.white;
                 colorBox = Color.white;
+                showPortrait = false;
+                showName = false;
                 break;
         }
+        if (s_instance.portraitHolder != null)
+        {
+            s_instance.portraitHolder.SetActive(showPortrait);
+        }
+        if (s_instance.nameHolder != null)
+        {
+            s_instance.nameHolder.SetActive(showName);
+        }
+
         s_instance.charPortrait.color = colorChar;
         s_instance.dialogueHolder.GetComponent<Image>().color = colorBox;
 

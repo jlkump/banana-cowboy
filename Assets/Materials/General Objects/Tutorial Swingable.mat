@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Banana Cowboy Shader
+  m_Name: Tutorial Swingable
   m_Shader: {fileID: 4800000, guid: 51aeb2c5568bfea4799f7fc0a07e2a62, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -72,17 +72,17 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _RimAmount: 0.283
-    - _RimThreshold: 1
+    - _RimAmount: 0.406
+    - _RimThreshold: 0.533
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _AmbientColor: {r: 0.60784316, g: 0.41171587, b: 0.14117645, a: 1}
-    - _Color: {r: 0.78867924, g: 0.5828244, b: 0.19493769, a: 1}
+    - _AmbientColor: {r: 0.7584905, g: 0.5252189, b: 0.5252189, a: 1}
+    - _Color: {r: 0.509434, g: 0.2104364, b: 0.18358847, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RimColor: {r: 0.4566037, g: 0.19211814, b: 0.19211814, a: 1}
-    - _SpecularColor: {r: 0.3735848, g: 0.03030968, b: 0.03030968, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecularColor: {r: 0.690566, g: 0.46776077, b: 0.46776077, a: 1}
   m_BuildTextureStacks: []

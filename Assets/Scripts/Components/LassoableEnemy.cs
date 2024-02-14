@@ -29,9 +29,15 @@ public class LassoableEnemy : LassoObject
             if (thrown)
             {
                 // Will fix to handle more bosses (for orange, handle weak spots too)
-                if (collision.transform.name == "Orange Boss") {
-                    // if (weak spot){ DoMoreDmg(); } else{
-                    collision.gameObject.GetComponent<OrangeBoss>().Damage(1);
+                if (collision.transform.name == "Orange Boss" || collision.transform.parent.parent.name == "Orange Boss") {
+                    if (collision.transform.name.Contains("Weak Spot"))
+                    {
+                        collision.transform.parent.parent.gameObject.GetComponent<OrangeBoss>().Damage(2);
+                    } 
+                    else
+                    {
+                        collision.gameObject.GetComponent<OrangeBoss>().Damage(1);
+                    }
                 }
                 Destroy(gameObject);
             }

@@ -872,7 +872,8 @@ MonoBehaviour:
   cameraTarget: {fileID: 7239246675022263076}
   orbitRotationSpeed: 10
   tiltRotationSpeed: 10
-  targetHeight: 3
+  targetHeight: 3.53
+  invertY: 1
   reorientTime: 0.4
 --- !u!120 &2226797022978423219
 LineRenderer:
@@ -1233,7 +1234,7 @@ Transform:
   m_GameObject: {fileID: 5016804911169280025}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalPosition: {x: 0, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
