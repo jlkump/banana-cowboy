@@ -23,7 +23,8 @@ public class OrangeBoss : MonoBehaviour
     public float peelAnimationTime;
     private float cooldownTimer;
 
-    public Animator animator;
+    public Animator modelAnimator;
+    public Animator healthAnimator;
 
     public GameObject[] spawnPoints;
     public GameObject origin;
@@ -121,7 +122,7 @@ public class OrangeBoss : MonoBehaviour
 
     IEnumerator BoomerangStartup()
     {
-        animator.SetTrigger("Boomerang Attack");
+        modelAnimator.SetTrigger("Boomerang Attack");
         yield return new WaitForSeconds(2.5f);
         for (int i = 0; i < 5; i++)
         {
@@ -148,7 +149,7 @@ public class OrangeBoss : MonoBehaviour
         // Add animation here
 
         SoundManager.Instance().PlaySFX("OrangeBossSummon");
-        animator.SetTrigger("Spawn Orange");
+        modelAnimator.SetTrigger("Spawn Orange");
         for (int i = 0; i < spawnPoints.Length; i++)
         {
             /*Vector3 temp = UnityEngine.Random.onUnitSphere;
@@ -169,7 +170,7 @@ public class OrangeBoss : MonoBehaviour
     {
         // add animation here
         indicating = true;
-        animator.SetTrigger("Peel Attack");
+        modelAnimator.SetTrigger("Peel Attack");
         StartCoroutine(PeelSlamCooldown());
         cooldownTimer = peelAnimationTime + peelCooldown;
         state = BossStates.COOLDOWN;
@@ -178,7 +179,7 @@ public class OrangeBoss : MonoBehaviour
     IEnumerator PeelSlamCooldown()
     {
         yield return new WaitForSeconds(peelAnimationTime + peelCooldown);
-        animator.SetTrigger("Peel Reset");
+        modelAnimator.SetTrigger("Peel Reset");
         indicating = false;
     }
 
@@ -215,6 +216,7 @@ public class OrangeBoss : MonoBehaviour
     public void Damage(int dmg)
     {
         health -= dmg;
+        healthAnimator.SetTrigger("DamageWeak"); // in case we want to make weak spots have diff anim
         healthUI.fillAmount = health / (1.0f * maxHealth);
         if (health == 0)
         {
