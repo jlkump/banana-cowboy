@@ -7936,7 +7936,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -12715,7 +12715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd8d6079b6576364ea776072de96aa4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: -20
+  gravity: -40
   priority: 1
   attractDirection: 2
   centerOfGravity: {fileID: 0}
@@ -16426,3 +16426,4 @@ SceneRoots:
   - {fileID: 858184720}
   - {fileID: 1984428569}
   - {fileID: 1803103041}
+  - {fileID: 1604654522}
