@@ -221,6 +221,10 @@ public class OrangeBoss : MonoBehaviour
         {
             print("BOSS DEFEATED");
             // TODO: GO TO SOME SORT OF WIN SCREEN. FOR NOW GO TO MAIN MENU
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
+            UnityEngine.Cursor.visible = true;
+            SoundManager.Instance().StopMusic("Orange Boss");
+            SoundManager.Instance().PlayMusic("Main Menu");
             SceneManager.LoadScene(0);
         }
     }
