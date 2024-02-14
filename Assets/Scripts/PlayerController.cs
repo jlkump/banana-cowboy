@@ -142,7 +142,7 @@ public class PlayerController : MonoBehaviour
     public float percentageFarThrow = 0.2f;
     public float percentageMidThow = 0.3f;
     [Tooltip("The speed of the indicator for the throwing mini-game.")]
-    public float throwCycleSpeed = 1.6f;
+    public float lassoIndicatorSpeed = 1.6f;
 
     public float holdSwingRadius = 4.0f;
     public float holdSwingSpeed = 1.0f;
@@ -899,7 +899,7 @@ public class PlayerController : MonoBehaviour
             + transform.forward * Mathf.Sin(_accumHoldTime * holdSwingSpeed) * holdSwingRadius
             + transform.up * holdHeight;
 
-        playerUI.SetThrowIndicatorPos(Mathf.Sin(_accumHoldTime * throwCycleSpeed));
+        playerUI.SetThrowIndicatorPos(Mathf.Sin(_accumHoldTime * lassoIndicatorSpeed));
     }
 
     void GetHoldInput()
