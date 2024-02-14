@@ -186,7 +186,13 @@ public class PlayerController : MonoBehaviour
     };
 
     private PlayerState _state = PlayerState.AIR;
-    
+
+    // use coroutine to set player position
+    IEnumerator SetSpawnPos()
+    {
+        yield return new WaitForEndOfFrame();
+        this.transform.position = LevelData.getRespawnPos();
+    }
 
     private void Awake()
     {
@@ -197,6 +203,7 @@ public class PlayerController : MonoBehaviour
         {
             playerAnimator.SetLayerWeight(1, 0.0f);
         }
+        StartCoroutine(SetSpawnPos());
     }
 
     void Start()

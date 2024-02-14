@@ -91,6 +91,7 @@ public class PauseManager : MonoBehaviour
                 break;
             case "Restart":
                 pauseActive = false;
+                LevelData.resetLevelData();
                 Time.timeScale = 1.0f;
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 break;

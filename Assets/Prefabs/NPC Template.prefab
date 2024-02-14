@@ -76,6 +76,7 @@ GameObject:
   - component: {fileID: 3837552301989598086}
   - component: {fileID: 7681066512378368039}
   - component: {fileID: 4522955207488432433}
+  - component: {fileID: 1111547986019136607}
   m_Layer: 0
   m_Name: Dialog Trigger
   m_TagString: Untagged
@@ -110,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c4cac097ae897a41b371f7b2937eedc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueText: '"Howdy Banana Cowboy!"'
+  dialogueText: '"I am a test checkpoint :3"'
   boss: 0
   nameOfCharacter: 
   typeOfCharacter: 0
@@ -135,6 +136,19 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 3
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1111547986019136607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868118778594070022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b777273eff8a0bc40bd53ac76c0ae183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <checkpointNum>k__BackingField: 0
 --- !u!1 &4759826926169826630
 GameObject:
   m_ObjectHideFlags: 0
