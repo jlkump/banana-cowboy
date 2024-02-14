@@ -196,12 +196,8 @@ public class GravityObject : MonoBehaviour
     {
         if (collision != null && collision.gameObject != null && collision.gameObject.GetComponentInParent<GravityAttractor>() != null)
         {
-            if (gameObject.tag == "Player")
-                print("Entered " + collision.gameObject.name + " is kinematic " + _rigidBody.isKinematic);
             _attractors.Add(collision.gameObject.GetComponentInParent<GravityAttractor>());
             _highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
-            if (gameObject.tag == "Player")
-                print("Entered with highest prio " + _highestPrioAttractorIndex);
         }
     }
 
@@ -209,12 +205,8 @@ public class GravityObject : MonoBehaviour
     {
         if (collision != null && collision.gameObject != null && collision.gameObject.GetComponentInParent<GravityAttractor>() != null)
         {
-            if (gameObject.tag == "Player")
-                print("Left " + collision.gameObject.name + " is kinematic " + _rigidBody.isKinematic);
             _attractors.Remove(collision.gameObject.GetComponentInParent<GravityAttractor>());
             _highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
-            if (gameObject.tag == "Player")
-                print("Left with highest prio " + _highestPrioAttractorIndex);
         }
     }
 }
