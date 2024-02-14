@@ -24,17 +24,18 @@ public class LassoableEnemy : LassoObject
     private void OnCollisionStay(Collision collision)
     {
         // TODO: Handle orange, blueberry, strawberry enemies and bosses, and blender
-        if (collision.collider.CompareTag("Boss"))
+        if (thrown)
         {
-            if (thrown)
+            if (collision.collider.CompareTag("Boss"))
             {
                 // Will fix to handle more bosses (for orange, handle weak spots too)
                 if (collision.transform.name == "Orange Boss") {
                     // if (weak spot){ DoMoreDmg(); } else{
                     collision.gameObject.GetComponent<OrangeBoss>().Damage(1);
                 }
-                Destroy(gameObject);
             }
+            SoundManager.Instance().PlaySFX("EnemySplat");
+            Destroy(gameObject);
         }
     }
 }

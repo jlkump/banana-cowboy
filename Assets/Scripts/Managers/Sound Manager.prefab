@@ -109,4 +109,68 @@ MonoBehaviour:
     loop: 0
     type: 0
     src: {fileID: 0}
-  music: []
+  - name: LassoSpin
+    audioClip: {fileID: 8300000, guid: e9fc70bb02b3cff428f166dbd3dd890b, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0
+    loop: 1
+    type: 0
+    src: {fileID: 0}
+  - name: LassoWindUp
+    audioClip: {fileID: 8300000, guid: 143817a1771d7e8429aaa93391d5b05f, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    type: 0
+    src: {fileID: 0}
+  - name: EnemySplat
+    audioClip: {fileID: 8300000, guid: 8f08076c9536c5e4ab9aa08b46b4f9b3, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    type: 0
+    src: {fileID: 0}
+  - name: OrangeRevUp
+    audioClip: {fileID: 8300000, guid: 42a6d270fe780f147af57800bf27906d, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    type: 0
+    src: {fileID: 0}
+  - name: OrangeCharge
+    audioClip: {fileID: 8300000, guid: 476a0f8d507590d41803460c74053a09, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    type: 0
+    src: {fileID: 0}
+  music:
+  - name: Main Menu
+    audioClip: {fileID: 8300000, guid: 999e7316a58c7d948a214205bc5d2170, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    type: 0
+    src: {fileID: 0}
+  - name: Orange Planet
+    audioClip: {fileID: 8300000, guid: 04f99ae264fc0d94d96367ea7411f440, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    type: 0
+    src: {fileID: 0}
+  - name: Orange Boss
+    audioClip: {fileID: 8300000, guid: b0ae1fb3b6c35d248ba93766b787b3c6, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    type: 0
+    src: {fileID: 0}

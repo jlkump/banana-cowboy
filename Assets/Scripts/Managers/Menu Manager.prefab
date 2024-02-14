@@ -585,7 +585,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -59.8828}
+  m_AnchoredPosition: {x: 0, y: -160}
   m_SizeDelta: {x: 400, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &450467721425733701
@@ -1355,6 +1355,8 @@ MonoBehaviour:
   settings: {fileID: 5269242703568471457}
   help: {fileID: 5943163568649130454}
   credits: {fileID: 794028632875893621}
+  musicSlider: {fileID: 4099939193838429085}
+  sfxSlider: {fileID: 7513965041493862660}
 --- !u!1 &1166739562143826019
 GameObject:
   m_ObjectHideFlags: 0
@@ -1420,7 +1422,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Help
+  m_text: Tutorial
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 860607c7d3d113b4a9fcb1fedacca414, type: 2}
   m_sharedMaterial: {fileID: -3272343887646507298, guid: 860607c7d3d113b4a9fcb1fedacca414, type: 2}
@@ -3977,7 +3979,7 @@ GameObject:
   - component: {fileID: 5031415600207934514}
   - component: {fileID: 2216981359066365616}
   m_Layer: 5
-  m_Name: Help
+  m_Name: Tutorial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4000,7 +4002,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -157.97934}
+  m_AnchoredPosition: {x: 0, y: -60}
   m_SizeDelta: {x: 400, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2914718319996714883
@@ -4786,8 +4788,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4694497011229710355}
-  - {fileID: 8400974881278736035}
   - {fileID: 8937187910038116516}
+  - {fileID: 8400974881278736035}
   - {fileID: 6221114015437490676}
   - {fileID: 7431349143618321439}
   m_Father: {fileID: 3808290977223644412}
@@ -5282,7 +5284,7 @@ GameObject:
   - component: {fileID: 196118415762793550}
   - component: {fileID: 7513965041493862660}
   m_Layer: 5
-  m_Name: Music Slider
+  m_Name: SFX Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

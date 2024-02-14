@@ -114,7 +114,7 @@ public class PlayerCameraController : MonoBehaviour
 
     public void SetNewUp(Vector3 up)
     {
-        print("Changing up");
+        //print("Changing up");
         if (Vector3.Distance(cameraTarget.up, up) > 0.1f)
         {
             _accumReorientTime = 0.0f;

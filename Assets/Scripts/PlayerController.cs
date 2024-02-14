@@ -814,6 +814,9 @@ public class PlayerController : MonoBehaviour
         _lassoRenderer.Pullin(lassoThrowPosition, _lassoHitObjectTransform);
         Invoke("StartHold", timeToPullObject);
 
+        SoundManager.Instance().PlaySFX("LassoWindUp");
+
+
         _accumPullTime = 0.0f;
     }
     void Pull()
@@ -846,6 +849,9 @@ public class PlayerController : MonoBehaviour
 
         playerUI.ShowThrowBar();
 
+        SoundManager.Instance().PlaySFX("LassoSpin");
+
+
         _accumHoldTime = 0.0f;
     }
 
@@ -877,6 +883,8 @@ public class PlayerController : MonoBehaviour
     {
         ThrowStrength strength = playerUI.GetThrowIndicatorStrength();
         print("Toss force was: " + strength);
+        SoundManager.Instance().StopSFX("LassoSpin");
+
 
         float forceMult = 0.4f;
         switch(strength)

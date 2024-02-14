@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Orange Body
+  m_Name: Orange Helmet Mat
   m_Shader: {fileID: 4800000, guid: 51aeb2c5568bfea4799f7fc0a07e2a62, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -72,17 +72,17 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _RimAmount: 0.256
-    - _RimThreshold: 0.836
+    - _RimAmount: 0.716
+    - _RimThreshold: 0.1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _AmbientColor: {r: 0.4792453, g: 0.35489604, b: 0.12207186, a: 1}
-    - _Color: {r: 0.2981131, g: 0.17453846, b: 0.08718398, a: 1}
+    - _AmbientColor: {r: 0.6226415, g: 0.29063436, b: 0.13803844, a: 1}
+    - _Color: {r: 0.066037714, g: 0.03893733, b: 0.03893733, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RimColor: {r: 1, g: 0.8746814, b: 0, a: 1}
-    - _SpecularColor: {r: 0.554717, g: 0.39605424, b: 0.28363827, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecularColor: {r: 0.9, g: 0.9, b: 0.9, a: 1}
   m_BuildTextureStacks: []

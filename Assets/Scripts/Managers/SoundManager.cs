@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 /**
  * This SoundManager class will be used in casses where sfx
@@ -18,17 +19,57 @@ public class SoundManager : MonoBehaviour
     private List<Sound> _loopedSounds = new List<Sound>();
 
     // This should be on a range [0, 1] (representing the 0% to 100%)
-    public float SFXVolume { get; set; } = 1.0f;
-    public float MusicVolume { get; set; } = 1.0f;
+
+    [SerializeField]
+    private float m_sfxvolume = 1.0f;
+    [SerializeField]
+    private float m_musicvolume = 1.0f;
+    public float SFXVolume { 
+        get { return m_sfxvolume; } 
+        set
+        {
+            m_sfxvolume = value;
+            if (sfxs != null)
+            {
+                foreach (Sound s in sfxs)
+                {
+                    if (s != null && s.src != null)
+                    {
+                        s.src.volume = s.volume * m_sfxvolume;
+                    }
+                }
+            }
+        } 
+    }
+    public float MusicVolume {
+        get { return m_musicvolume; } 
+        set {
+            m_musicvolume = value;
+            if (music != null)
+            {
+                foreach (Sound s in music)
+                {
+                    if (s != null && s.src != null)
+                    {
+                        s.src.volume = s.volume * m_musicvolume;
+                    }
+                }
+            }
+        } 
+    }
+
 
     // Start is called before the first frame update
     void Awake()
     {
+        SFXVolume = 1.0f;
+        MusicVolume = 1.0f;
+
         s_Instance = this;
         foreach (Sound s in sfxs) { 
             s.src = gameObject.AddComponent<AudioSource>();
             s.src.clip = s.audioClip;
-            s.src.volume = s.volume;
+            s.src.volume = s.volume * SFXVolume;
             s.src.pitch = s.pitch;
             s.type = Sound.Type.SFX;
         }
@@ -37,9 +78,26 @@ public class SoundManager : MonoBehaviour
         {
             s.src = gameObject.AddComponent<AudioSource>();
             s.src.clip = s.audioClip;
-            s.src.volume = s.volume;
+            s.src.volume = s.volume * MusicVolume;
             s.src.pitch = s.pitch;
             s.type = Sound.Type.MUSIC;
+        }
+    }
+
+    public void Start()
+    {
+        // This is awful, I know. Just here to get first playable music into the game
+        if (SceneManager.GetActiveScene().name == "Menu")
+        {
+            PlayMusic("Main Menu");
+        } 
+        else if (SceneManager.GetActiveScene().name == "Orange Level First Playable")
+        {
+            PlayMusic("Orange Planet");
+        }
+        else if (SceneManager.GetActiveScene().name == "Orange Boss Scene")
+        {
+            PlayMusic("Orange Boss");
         }
     }
 

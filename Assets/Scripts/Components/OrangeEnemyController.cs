@@ -99,8 +99,10 @@ public class OrangeEnemyController : EnemyController
 
     void UpdateState(OrangeState newState)
     {
+        if (_state == OrangeState.HELD) { return; }
         if (_state != newState)
         {
+            _state = newState;
             UpdateAnimState();
 
             switch (newState)
@@ -111,9 +113,12 @@ public class OrangeEnemyController : EnemyController
                     break;
                 case OrangeState.REV_UP:
                     _chargeStartPoint = transform.position;
+                    SoundManager.Instance().PlaySFX("OrangeRevUp");
                     Invoke("EndRevUp", timeToBeginCharge);
                     break;
                 case OrangeState.CHARGE:
+                    SoundManager.Instance().StopSFX("OrangeRevUp");
+                    SoundManager.Instance().PlaySFX("OrangeCharge");
                     Invoke("EndCharge", timeSpentCharging);
                     break;
                 case OrangeState.RUN_AWAY:
@@ -142,7 +147,6 @@ public class OrangeEnemyController : EnemyController
                 _lassoComp.isLassoable = false;
             }
         }
-        _state = newState;
     }
 
     void UpdateAnimState()
@@ -197,11 +201,13 @@ public class OrangeEnemyController : EnemyController
 
     void EndPlayerSpotted()
     {
+        if (_state != OrangeState.PLAYER_SPOTTED) { return; }
         UpdateState(OrangeState.REV_UP);
     }
 
     void EndRevUp()
     {
+        if (_state != OrangeState.REV_UP) { return; }
         UpdateState(OrangeState.CHARGE);
     }
 
@@ -213,11 +219,13 @@ public class OrangeEnemyController : EnemyController
 
     void EndSlowDown()
     {
+        if (_state != OrangeState.SLOW_DOWN) { return; }
         UpdateState(OrangeState.RUN_AWAY);
     }
 
     void EndRunAway()
     {
+        if (_state != OrangeState.RUN_AWAY) { return; }
         if (_spottedPlayerTransform != null)
         {
             UpdateState(OrangeState.PLAYER_SPOTTED);
@@ -230,6 +238,7 @@ public class OrangeEnemyController : EnemyController
 
     void EndDizzy()
     {
+        if (_state != OrangeState.DIZZY) { return; }
         UpdateState(OrangeState.RUN_AWAY);
     }
 
