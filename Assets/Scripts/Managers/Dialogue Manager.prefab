@@ -638,4 +638,6 @@ MonoBehaviour:
   textDisplay: {fileID: 5220900833327728886}
   nameOfCharacter: {fileID: 3980671408776543402}
   charPortrait: {fileID: 4747665593096480559}
+  portraitHolder: {fileID: 168958158217791396}
+  nameHolder: {fileID: 1425183110451390563}
   portraits: []
