@@ -225,6 +225,7 @@ public class OrangeBoss : MonoBehaviour
             UnityEngine.Cursor.visible = true;
             SoundManager.Instance().StopMusic("Orange Boss");
             SoundManager.Instance().PlayMusic("Main Menu");
+            SoundManager.Instance().StopAllSFX();
             SceneManager.LoadScene(0);
         }
     }

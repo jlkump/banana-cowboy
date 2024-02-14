@@ -166,6 +166,14 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public void StopAllSFX()
+    {
+        foreach (Sound s in sfxs)
+        {
+            _loopedSounds.Remove(s);
+        }
+    }
+
     public void PlayMusic(string name)
     {
         Sound s = Array.Find(music, sound => sound.name == name);
