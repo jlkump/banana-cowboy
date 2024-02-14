@@ -926,6 +926,7 @@ public class PlayerController : MonoBehaviour
     void OnLand()
     {
         _detectLanding = false;
+        SoundManager.Instance().PlaySFX("PlayerLand");
     }
 
     public void Damage(int damageAmount, Vector3 knockback)
@@ -942,7 +943,6 @@ public class PlayerController : MonoBehaviour
             ApplyKnockback(knockback);
             if (health <= 0)
             {
-                print("Dead");
                 // TODO: for now reload the scene, it should be reload to checkpoint
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }

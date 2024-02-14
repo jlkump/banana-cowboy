@@ -812,6 +812,8 @@ MonoBehaviour:
   jumpImpulseForce: 25
   gravIncreaseOnJumpRelease: 2
   conserveMomentum: 1
+  walkAnimSpeed: 1.6
+  runAnimSpeed: 1.2
   lassoThrowPosition: {fileID: 8925892245031520248}
   lassoAimRange: 40
   lassoTimeToHit: 0.3

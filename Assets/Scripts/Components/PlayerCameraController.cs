@@ -10,6 +10,7 @@ public class PlayerCameraController : MonoBehaviour
     public float tiltRotationSpeed = 10.0f;
     [Range(-10.0f, 10.0f)]
     public float targetHeight = 3.0f;
+    public bool invertY = true;
 
     public float reorientTime = 0.4f;
     private float _accumReorientTime = 0.0f;
@@ -54,6 +55,10 @@ public class PlayerCameraController : MonoBehaviour
     {
         float mouseX = Input.GetAxisRaw("Mouse X");
         float mouseY = Input.GetAxisRaw("Mouse Y");
+        if (invertY)
+        {
+            mouseY = -mouseY;
+        }
 
         _orbitDegrees += + mouseX * orbitRotationSpeed;
         if (_orbitDegrees < 0.0f)

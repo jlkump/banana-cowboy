@@ -54,7 +54,7 @@ MonoBehaviour:
     type: 0
     src: {fileID: 0}
   - name: PlayerWalk
-    audioClip: {fileID: 8300000, guid: a2df220aa74ae0345b8bb1cfecbe8447, type: 3}
+    audioClip: {fileID: 8300000, guid: b401237eb46fbd14e8b98bae92b2b234, type: 3}
     volume: 0.4
     pitch: 1
     pitchVariance: 0.25
@@ -65,6 +65,14 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: c2890ee6703e3a54ab10007153ee4697, type: 3}
     volume: 1
     pitch: 1
+    pitchVariance: 0
+    loop: 0
+    type: 0
+    src: {fileID: 0}
+  - name: PlayerLand
+    audioClip: {fileID: 8300000, guid: b401237eb46fbd14e8b98bae92b2b234, type: 3}
+    volume: 0.6
+    pitch: 1.4
     pitchVariance: 0
     loop: 0
     type: 0

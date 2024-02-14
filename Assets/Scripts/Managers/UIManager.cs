@@ -20,7 +20,10 @@ public class UIManager : MonoBehaviour
 
     public void ChangeHealthImage(int health)
     {
-        healthSprite.GetComponent<Image>().sprite = healthSprites[health];
+        if (health >= 0 && health < 5)
+        {
+            healthSprite.GetComponent<Image>().sprite = healthSprites[health];
+        }
     } 
 
     public void ReticleOverLassoable()
