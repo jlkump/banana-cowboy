@@ -23,12 +23,14 @@ public class OrangeBoss : MonoBehaviour
     public float peelAnimationTime;
     private float cooldownTimer;
 
-    public Animator animator;
+    public Animator modelAnimator;
+    public Animator healthAnimator;
 
     public GameObject[] spawnPoints;
     public GameObject origin;
     public GameObject player;
     public List<GameObject> boomerangObjects;
+    public List<GameObject> weakSpots;
 
     //public float sizeOfArena;
     public BossStates state;
@@ -104,7 +106,6 @@ public class OrangeBoss : MonoBehaviour
 
     void SpawnBoomerangs()
     {
-        // Add animation here
         cooldownTimer = 5f + boomerangCooldown;
         state = BossStates.COOLDOWN;
         StartCoroutine(BoomerangStartup());
@@ -121,7 +122,7 @@ public class OrangeBoss : MonoBehaviour
 
     IEnumerator BoomerangStartup()
     {
-        animator.SetTrigger("Boomerang Attack");
+        modelAnimator.SetTrigger("Boomerang Attack");
         yield return new WaitForSeconds(2.5f);
         for (int i = 0; i < 5; i++)
         {
@@ -132,7 +133,7 @@ public class OrangeBoss : MonoBehaviour
             StartCoroutine(DestroyBoomerangs(boomerangRight, boomerangLeft));
         }
         indicating = true;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.5f);
         indicating = false;
         foreach (GameObject b in boomerangObjects)
         {
@@ -148,7 +149,7 @@ public class OrangeBoss : MonoBehaviour
         // Add animation here
 
         SoundManager.Instance().PlaySFX("OrangeBossSummon");
-
+        modelAnimator.SetTrigger("Spawn Orange");
         for (int i = 0; i < spawnPoints.Length; i++)
         {
             /*Vector3 temp = UnityEngine.Random.onUnitSphere;
@@ -169,7 +170,7 @@ public class OrangeBoss : MonoBehaviour
     {
         // add animation here
         indicating = true;
-        animator.SetTrigger("Peel Attack");
+        modelAnimator.SetTrigger("Peel Attack");
         StartCoroutine(PeelSlamCooldown());
         cooldownTimer = peelAnimationTime + peelCooldown;
         state = BossStates.COOLDOWN;
@@ -177,16 +178,8 @@ public class OrangeBoss : MonoBehaviour
 
     IEnumerator PeelSlamCooldown()
     {
-        /*        animator.Play("Windup");
-                yield return new WaitForSeconds(1); 
-                animator.Play("Shake");
-                yield return new WaitForSeconds(1);
-                animator.Play("Drop");
-                yield return new WaitForSeconds(1);
-                animator.Play("Reset");*/
         yield return new WaitForSeconds(peelAnimationTime + peelCooldown);
-        print("GOT HERE");
-        animator.SetTrigger("Peel Reset");
+        modelAnimator.SetTrigger("Peel Reset");
         indicating = false;
     }
 
@@ -214,7 +207,7 @@ public class OrangeBoss : MonoBehaviour
 
     IEnumerator DestroyBoomerangs(GameObject x, GameObject y)
     {
-        yield return new WaitForSeconds(boomerangCooldown + 1);
+        yield return new WaitForSeconds(boomerangCooldown);
         Destroy(x);
         Destroy(y);
         boomerangSpinning = false;
@@ -223,12 +216,26 @@ public class OrangeBoss : MonoBehaviour
     public void Damage(int dmg)
     {
         health -= dmg;
+        healthAnimator.SetTrigger("DamageWeak"); // in case we want to make weak spots have diff anim
         healthUI.fillAmount = health / (1.0f * maxHealth);
         if (health == 0)
         {
             print("BOSS DEFEATED");
             // TODO: GO TO SOME SORT OF WIN SCREEN. FOR NOW GO TO MAIN MENU
             SceneManager.LoadScene(0);
+        }
+    }
+
+    public void ShowWeakSpot(int weakSpotIndex)
+    {
+        weakSpots[weakSpotIndex].SetActive(true);
+    }
+
+    public void HideWeakSpots()
+    {
+        foreach(GameObject o in weakSpots)
+        {
+            o.SetActive(false);
         }
     }
 }
