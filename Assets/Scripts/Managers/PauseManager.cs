@@ -100,6 +100,7 @@ public class PauseManager : MonoBehaviour
                 break;
             case "Confirm":
                 pauseActive = false;
+                LevelData.resetLevelData();
                 Time.timeScale = 1.0f;
                 SceneManager.LoadScene(0);
                 break;
