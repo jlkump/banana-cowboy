@@ -17,6 +17,9 @@ public class CircularMovement : MonoBehaviour
 
     private float x = 0f;
     private float z = 0f;
+    public Material normalColor;
+    public Material transparentColor;
+    public Renderer model;
 
     [Header ("Knockback")]
     Vector3 knockback = Vector3.zero;
@@ -25,6 +28,7 @@ public class CircularMovement : MonoBehaviour
     private void Start()
     {
         knockback = flatKnockBack * ((transform.position - target.position).normalized + Vector3.up);
+        model = transform.GetChild(0).GetComponent<Renderer>();
     }
     // Update is called once per frame
     void Update()
@@ -61,6 +65,14 @@ public class CircularMovement : MonoBehaviour
     public void SetCollider(bool val)
     {
         GetComponent<BoxCollider>().enabled = val;
+        if (val && model != null)
+        {
+            model.GetComponent<Renderer>().material = normalColor;
+        }
+        else
+        {
+            model.GetComponent<Renderer>().material = transparentColor;
+        }
     }
 
 }
