@@ -890,7 +890,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orangeSliceBoomerangs: {fileID: 7387894852522414964, guid: 21b1232b40c759b44890163f6bd4551e, type: 3}
   minions: {fileID: 3406329834922141317, guid: ff552be70d20c574298cc4bc1e637942, type: 3}
-  numberOfEnemies: 3
   indicating: 0
   boomerangSpinning: 0
   boomerangCooldown: 10

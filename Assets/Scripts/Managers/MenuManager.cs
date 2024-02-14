@@ -60,7 +60,7 @@ public class MenuManager : MonoBehaviour
                 settings.SetActive(true);
                 break;
             case "Tutorial":
-                SceneManager.LoadScene(2);
+                SceneManager.LoadScene("Tutorial Level");
                 break;
             case "Credits":
                 credits.SetActive(true);

@@ -15,6 +15,7 @@ public class TutorialEnd : MonoBehaviour
         {
             UnityEngine.Cursor.lockState = CursorLockMode.None;
             UnityEngine.Cursor.visible = true;
+            LevelData.resetLevelData();
             SceneManager.LoadScene(menuScene); 
             if(menuScene == "Orange Boss Scene")
             {
