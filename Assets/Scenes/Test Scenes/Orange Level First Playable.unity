@@ -12198,10 +12198,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC Template
       objectReference: {fileID: 0}
-    - target: {fileID: 1111547986019136607, guid: b9f5f4883dd473c4b8692fb05090a6d8, type: 3}
-      propertyPath: <checkpointNum>k__BackingField
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5189294841936727178, guid: b9f5f4883dd473c4b8692fb05090a6d8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 138.9
@@ -12216,31 +12212,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5189294841936727178, guid: b9f5f4883dd473c4b8692fb05090a6d8, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.06914858
+      value: 0.47896728
       objectReference: {fileID: 0}
     - target: {fileID: 5189294841936727178, guid: b9f5f4883dd473c4b8692fb05090a6d8, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: -0.4955561
       objectReference: {fileID: 0}
     - target: {fileID: 5189294841936727178, guid: b9f5f4883dd473c4b8692fb05090a6d8, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.9976064
+      value: -0.62584394
       objectReference: {fileID: 0}
     - target: {fileID: 5189294841936727178, guid: b9f5f4883dd473c4b8692fb05090a6d8, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.36514917
       objectReference: {fileID: 0}
     - target: {fileID: 5189294841936727178, guid: b9f5f4883dd473c4b8692fb05090a6d8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: -1.012
       objectReference: {fileID: 0}
     - target: {fileID: 5189294841936727178, guid: b9f5f4883dd473c4b8692fb05090a6d8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -187.93
+      value: -105.936
       objectReference: {fileID: 0}
     - target: {fileID: 5189294841936727178, guid: b9f5f4883dd473c4b8692fb05090a6d8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: 75.982
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
