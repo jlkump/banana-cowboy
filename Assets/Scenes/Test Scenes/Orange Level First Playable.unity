@@ -3966,6 +3966,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 834ad45018a24de4ca5403dcd0f7a9d9, type: 3}
   m_PrefabInstance: {fileID: 624226426}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &687097022 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9187660138696086715, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+  m_PrefabInstance: {fileID: 6955882050540410816}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13e59a7e0bfea3a4e95f65975b37484a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &687868887
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5389,6 +5400,7 @@ GameObject:
   - component: {fileID: 926659192}
   - component: {fileID: 926659191}
   - component: {fileID: 926659190}
+  - component: {fileID: 926659194}
   m_Layer: 0
   m_Name: Soda Sphere
   m_TagString: Untagged
@@ -5482,6 +5494,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &926659194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926659189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ddd3196287f85841ae7a4eb95579b82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 687097022}
+  kill: 1
+  knockback: {x: 0, y: 0, z: 0}
+  damage: 0
 --- !u!1001 &937128539
 PrefabInstance:
   m_ObjectHideFlags: 0
