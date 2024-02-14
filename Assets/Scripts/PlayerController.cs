@@ -141,8 +141,8 @@ public class PlayerController : MonoBehaviour
     public float timeToToss = 0.1f;
     public float percentageFarThrow = 0.2f;
     public float percentageMidThow = 0.3f;
-    [Tooltip("The time it takes for the throwing mini-game to start over. A shorter time makes the throwing mini-game harder.")]
-    public float throwCycleTime = 0.6f;
+    [Tooltip("The speed of the indicator for the throwing mini-game.")]
+    public float throwCycleSpeed = 1.6f;
 
     public float holdSwingRadius = 4.0f;
     public float holdSwingSpeed = 1.0f;
@@ -184,6 +184,7 @@ public class PlayerController : MonoBehaviour
         HOLD,
         TOSS,
     };
+    
 
     private PlayerState _state = PlayerState.AIR;
 
@@ -252,6 +253,7 @@ public class PlayerController : MonoBehaviour
                     break;
                 case PlayerState.HOLD:
                     GetHoldInput();
+                    UpdateMoveHoldAnim();
                     break;
                 case PlayerState.TOSS:
                     GetMoveInput();
@@ -356,6 +358,32 @@ public class PlayerController : MonoBehaviour
             playerAnimator.speed = 1.5f;
             playerAnimator.SetLayerWeight(1, 0.0f);
         }
+    }
+
+    void UpdateMoveHoldAnim()
+    {
+        if (_moveInput.magnitude > 0)
+        {
+            if (_isRunning)
+            {
+                playerAnimator.Play("Base Layer.BC_Run");
+                playerAnimator.speed = runAnimSpeed;
+                playerAnimator.SetLayerWeight(1, 0.0f);
+            }
+            else
+            {
+                playerAnimator.Play("Base Layer.BC_Walk");
+                playerAnimator.speed = walkAnimSpeed;
+                playerAnimator.SetLayerWeight(1, 0.0f);
+            }
+        }
+        else
+        {
+            playerAnimator.Play("Base Layer.BC_Idle");
+            playerAnimator.speed = 1.0f;
+            playerAnimator.SetLayerWeight(1, 0.0f);
+        }
+        playerAnimator.SetLayerWeight(1, 1.0f);
     }
 
     bool IsValidState(PlayerState newState)
@@ -871,7 +899,7 @@ public class PlayerController : MonoBehaviour
             + transform.forward * Mathf.Sin(_accumHoldTime * holdSwingSpeed) * holdSwingRadius
             + transform.up * holdHeight;
 
-        playerUI.SetThrowIndicatorPos(Mathf.Sin(_accumHoldTime));
+        playerUI.SetThrowIndicatorPos(Mathf.Sin(_accumHoldTime * throwCycleSpeed));
     }
 
     void GetHoldInput()

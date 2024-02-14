@@ -138,7 +138,7 @@ public class OrangeEnemyController : EnemyController
                 case OrangeState.HELD:
                     break;
             }
-            if (newState == OrangeState.DIZZY)
+            if (newState == OrangeState.DIZZY || newState == OrangeState.HELD)
             {
                 _lassoComp.isLassoable = true;
             }

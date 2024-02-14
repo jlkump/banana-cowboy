@@ -64,8 +64,15 @@ public class SoundManager : MonoBehaviour
     {
         SFXVolume = 1.0f;
         MusicVolume = 1.0f;
+        if (s_Instance == null)
+        {
+            s_Instance = this;
+        } 
+        else
+        {
+            Destroy(gameObject);
+        }
 
-        s_Instance = this;
         foreach (Sound s in sfxs) { 
             s.src = gameObject.AddComponent<AudioSource>();
             s.src.clip = s.audioClip;
@@ -80,6 +87,7 @@ public class SoundManager : MonoBehaviour
             s.src.clip = s.audioClip;
             s.src.volume = s.volume * MusicVolume;
             s.src.pitch = s.pitch;
+            s.src.loop = s.loop;
             s.type = Sound.Type.MUSIC;
         }
     }
@@ -87,18 +95,19 @@ public class SoundManager : MonoBehaviour
     public void Start()
     {
         // This is awful, I know. Just here to get first playable music into the game
-        if (SceneManager.GetActiveScene().name == "Menu")
-        {
-            PlayMusic("Main Menu");
-        } 
-        else if (SceneManager.GetActiveScene().name == "Orange Level First Playable")
-        {
-            PlayMusic("Orange Planet");
-        }
-        else if (SceneManager.GetActiveScene().name == "Orange Boss Scene")
-        {
-            PlayMusic("Orange Boss");
-        }
+        //if (SceneManager.GetActiveScene().name == "Menu")
+        //{
+        //    
+        //} 
+        //else if (SceneManager.GetActiveScene().name == "Orange Level First Playable")
+        //{
+        //    
+        //}
+        //else if (SceneManager.GetActiveScene().name == "Orange Boss Scene")
+        //{
+        //    PlayMusic("Orange Boss");
+        //}
+        DontDestroyOnLoad(gameObject);
     }
 
     void Update()

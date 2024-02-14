@@ -25,6 +25,11 @@ public class MenuManager : MonoBehaviour
             sfxSlider.value = SoundManager.Instance().SFXVolume;
             sfxSlider.onValueChanged.AddListener(delegate { SFXValueChanged(); });
         }
+
+        if (SoundManager.Instance() != null)
+        {
+            SoundManager.Instance().PlayMusic("Main Menu");
+        }
     }
 
     public void MusicValueChanged()
@@ -44,6 +49,11 @@ public class MenuManager : MonoBehaviour
         {
             case "Play":
                 // Go to level selection screen
+                if (SoundManager.Instance() != null)
+                {
+                    SoundManager.Instance().StopMusic("Main Menu");
+                    SoundManager.Instance().PlayMusic("Orange Planet");
+                }
                 SceneManager.LoadScene(1);
                 break;
             case "Settings":
