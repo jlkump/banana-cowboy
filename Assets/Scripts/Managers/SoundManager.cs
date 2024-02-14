@@ -208,6 +208,17 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public void StopAllMusic()
+    {
+        foreach (Sound s in music)
+        {
+            if (s.src.isPlaying)
+            {
+                s.src.Stop();
+            }
+        }
+    }
+
     public Sound GetMusic(string name)
     {
         return Array.Find(music, sound => sound.name == name);

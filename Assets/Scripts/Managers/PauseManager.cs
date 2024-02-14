@@ -101,6 +101,8 @@ public class PauseManager : MonoBehaviour
             case "Confirm":
                 pauseActive = false;
                 LevelData.resetLevelData();
+                SoundManager.Instance().StopAllMusic();
+                SoundManager.Instance().PlayMusic("Menu Music");
                 Time.timeScale = 1.0f;
                 SceneManager.LoadScene(0);
                 break;

@@ -201,11 +201,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackForce: 20
-  chargeSpeed: 30
-  maxChargeDistance: 40
+  chargeSpeed: 50
+  maxChargeDistance: 50
   walkSpeed: 10
   timeToBeginRev: 0.5
-  timeToBeginCharge: 1.7
+  timeToBeginCharge: 1.5
   timeSpentCharging: 2
   dizzyTime: 2
   timeSpentRunningAway: 0.1
