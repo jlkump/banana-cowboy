@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.03662065, g: 0.055943064, b: 0.10633219, a: 1}
+  m_IndirectSpecularColor: {r: 0.037241355, g: 0.055941746, b: 0.106525935, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2356,6 +2356,79 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 3402092397473759072, guid: 75614dbcafc47084ca5f860a25e3d7f2, type: 3}
   m_PrefabInstance: {fileID: 1901824477}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &341511065
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 31d4ffed43ca8f944ac3942493fd8ecb, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 31d4ffed43ca8f944ac3942493fd8ecb, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 31d4ffed43ca8f944ac3942493fd8ecb, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 31d4ffed43ca8f944ac3942493fd8ecb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 108.63678
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 31d4ffed43ca8f944ac3942493fd8ecb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 133.07875
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 31d4ffed43ca8f944ac3942493fd8ecb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 394.41382
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 31d4ffed43ca8f944ac3942493fd8ecb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.06265237
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 31d4ffed43ca8f944ac3942493fd8ecb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.25827408
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 31d4ffed43ca8f944ac3942493fd8ecb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.9638918
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 31d4ffed43ca8f944ac3942493fd8ecb, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.016787656
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 31d4ffed43ca8f944ac3942493fd8ecb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 3.711
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 31d4ffed43ca8f944ac3942493fd8ecb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 173.55
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 31d4ffed43ca8f944ac3942493fd8ecb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 29.791
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 31d4ffed43ca8f944ac3942493fd8ecb, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 31d4ffed43ca8f944ac3942493fd8ecb, type: 3}
+      propertyPath: m_Name
+      value: Orange_Boss_Rigged_Model
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 31d4ffed43ca8f944ac3942493fd8ecb, type: 3}
 --- !u!1 &357896926 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a97ca17d9e072f5458eb7d46801cf5f2, type: 3}
@@ -7853,15 +7926,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ad5f82e104a49e24a9f6e68067af9a10, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.88848037
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ad5f82e104a49e24a9f6e68067af9a10, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ad5f82e104a49e24a9f6e68067af9a10, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.45891482
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ad5f82e104a49e24a9f6e68067af9a10, type: 3}
       propertyPath: m_LocalRotation.z
@@ -7873,7 +7946,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ad5f82e104a49e24a9f6e68067af9a10, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 54.634
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ad5f82e104a49e24a9f6e68067af9a10, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -10445,67 +10518,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 8.422043, z: 8.047647}
   m_Center: {x: -0.0000069215716, y: 3.9419272, z: -2.7517276}
---- !u!1001 &1386715024
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4792375295655101336, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 114
-      objectReference: {fileID: 0}
-    - target: {fileID: 4792375295655101336, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 146.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4792375295655101336, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 395
-      objectReference: {fileID: 0}
-    - target: {fileID: 4792375295655101336, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.11693658
-      objectReference: {fileID: 0}
-    - target: {fileID: 4792375295655101336, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.25774792
-      objectReference: {fileID: 0}
-    - target: {fileID: 4792375295655101336, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.9588421
-      objectReference: {fileID: 0}
-    - target: {fileID: 4792375295655101336, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.022667479
-      objectReference: {fileID: 0}
-    - target: {fileID: 4792375295655101336, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0.963
-      objectReference: {fileID: 0}
-    - target: {fileID: 4792375295655101336, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 166.351
-      objectReference: {fileID: 0}
-    - target: {fileID: 4792375295655101336, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 29.977
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369561918749010671, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
-      propertyPath: m_Name
-      value: Orange Boss
-      objectReference: {fileID: 0}
-    - target: {fileID: 8184012128182721529, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
 --- !u!1 &1389048956
 GameObject:
   m_ObjectHideFlags: 0
@@ -11571,6 +11583,7 @@ GameObject:
   - component: {fileID: 1603288096}
   - component: {fileID: 1603288095}
   - component: {fileID: 1603288094}
+  - component: {fileID: 1603288101}
   m_Layer: 3
   m_Name: Platform (1)
   m_TagString: Untagged
@@ -11728,6 +11741,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -0.963, y: -13.649, z: -28.972}
+--- !u!114 &1603288101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603288093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 446ce9d6724a8af4c9b1bec39f030961, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuScene: Orange Boss Scene
 --- !u!1001 &1604654522
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15160,6 +15186,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ecf8efff4b557004c86d7e3fa69b9918, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16422,7 +16452,7 @@ SceneRoots:
   - {fileID: 926659193}
   - {fileID: 1977999168}
   - {fileID: 1603288100}
-  - {fileID: 1386715024}
+  - {fileID: 341511065}
   - {fileID: 858184720}
   - {fileID: 1984428569}
   - {fileID: 1803103041}

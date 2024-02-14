@@ -54,7 +54,7 @@ public class MenuManager : MonoBehaviour
                     SoundManager.Instance().StopMusic("Main Menu");
                     SoundManager.Instance().PlayMusic("Orange Planet");
                 }
-                SceneManager.LoadScene(1);
+                SceneManager.LoadScene("Orange Level First Playable");
                 break;
             case "Settings":
                 settings.SetActive(true);

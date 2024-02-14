@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 5144009049096338560}
   m_Layer: 0
   m_Name: Peel
-  m_TagString: Untagged
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -389,7 +389,7 @@ GameObject:
   - component: {fileID: 8903483359444398070}
   m_Layer: 0
   m_Name: Peel
-  m_TagString: Untagged
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -890,7 +890,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orangeSliceBoomerangs: {fileID: 7387894852522414964, guid: 21b1232b40c759b44890163f6bd4551e, type: 3}
   minions: {fileID: 3406329834922141317, guid: ff552be70d20c574298cc4bc1e637942, type: 3}
-  numberOfEnemies: 5
+  numberOfEnemies: 3
   indicating: 0
   boomerangSpinning: 0
   boomerangCooldown: 10
@@ -911,7 +911,7 @@ MonoBehaviour:
   - {fileID: 2466153519696501011}
   - {fileID: 5306181837942905815}
   state: 0
-  maxHealth: 8
+  maxHealth: 6
   healthUI: {fileID: 1489641839754729368}
 --- !u!1 &6760218775934478820
 GameObject:
@@ -1033,7 +1033,7 @@ GameObject:
   - component: {fileID: 8916658128246683875}
   m_Layer: 0
   m_Name: Peel
-  m_TagString: Untagged
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

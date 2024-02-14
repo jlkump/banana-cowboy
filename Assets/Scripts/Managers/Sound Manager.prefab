@@ -149,6 +149,22 @@ MonoBehaviour:
     loop: 0
     type: 0
     src: {fileID: 0}
+  - name: OrangeBossBoomerangs
+    audioClip: {fileID: 8300000, guid: 3eb05bb6f51ba1d4280155845688a173, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    type: 0
+    src: {fileID: 0}
+  - name: OrangeBossSummon
+    audioClip: {fileID: 8300000, guid: fcf0f45b6daa41543a5eaf3af7d6db78, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    type: 0
+    src: {fileID: 0}
   music:
   - name: Main Menu
     audioClip: {fileID: 8300000, guid: 999e7316a58c7d948a214205bc5d2170, type: 3}
@@ -174,3 +190,5 @@ MonoBehaviour:
     loop: 0
     type: 0
     src: {fileID: 0}
+  m_sfxvolume: 1
+  m_musicvolume: 1

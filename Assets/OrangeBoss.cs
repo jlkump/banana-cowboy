@@ -10,7 +10,6 @@ public class OrangeBoss : MonoBehaviour
     [Header("Atacks")]
     public GameObject orangeSliceBoomerangs;
     public GameObject minions;
-    public int numberOfEnemies;
     private readonly int moves = 3;
     private int currMove;
     public bool indicating = false;
