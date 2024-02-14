@@ -9,9 +9,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Screens/Menu.unity
     guid: 2eaafc2a7ee3a3f408126e1967972e21
   - enabled: 1
+    path: Assets/Scenes/Levels/Tutorial Level.unity
+    guid: 9aa6854b4d03ecc479b0ee4e0760d2f6
+  - enabled: 1
     path: Assets/Scenes/Test Scenes/Orange Level First Playable.unity
     guid: 2a06ac1a4ac043545a4eea22cce15311
   - enabled: 1
-    path: Assets/Scenes/Levels/Tutorial Level.unity
-    guid: 9aa6854b4d03ecc479b0ee4e0760d2f6
+    path: Assets/Scenes/Levels/Bosses/Orange Boss Scene.unity
+    guid: 3fed549251f24a249a094aabd4e6a122
   m_configObjects: {}

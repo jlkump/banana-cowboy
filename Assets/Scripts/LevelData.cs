@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // PRE-ALPHA VERSION
 /* stores level checkpoint/default spawn locations and keeps track of
@@ -13,7 +15,13 @@ public static class LevelData
     private static Vector3[] OrangeRespawnArray = new[] {
         new Vector3(-40.4f, 22.3f, 41.2f),
         new Vector3(144.26f, 66.95f, 42.81f)
-    }; 
+    };
+
+    private static Vector3[] TutorialRespawnArray = new[]
+    {
+        new Vector3(0,3,0),
+        new Vector3(38.2f,37.6f,32.7f)
+    };
 
     private static int checkpointReached; // stores latest checkpoint reached
 
@@ -37,7 +45,16 @@ public static class LevelData
     // TODO - works for the base level rn, expand to other levels as they are made
     public static Vector3 getRespawnPos() {
         Debug.Log("GIVING RESPAWN POSITION TO PLAYER CONTROLLER");
-        return OrangeRespawnArray[checkpointReached];
+        switch (SceneManager.GetActiveScene().name)
+        {
+            case "Orange Level First Playable":
+                return OrangeRespawnArray[checkpointReached];
+            case "Tutorial Level":
+                return TutorialRespawnArray[checkpointReached];
+            default:
+                return Vector3.zero;
+
+        }
     }
 
     public static void setCheckpoint(int c) {

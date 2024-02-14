@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.016900655, g: 0.037343066, b: 0.087850146, a: 1}
+  m_IndirectSpecularColor: {r: 0.017225567, g: 0.037343066, b: 0.08813346, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -632,6 +632,7 @@ GameObject:
   - component: {fileID: 455272001}
   - component: {fileID: 455272003}
   - component: {fileID: 455272002}
+  - component: {fileID: 455272004}
   m_Layer: 0
   m_Name: Checkpoint Controls Dialog
   m_TagString: Untagged
@@ -691,6 +692,19 @@ MonoBehaviour:
   boss: 0
   nameOfCharacter: Checkpoint
   typeOfCharacter: 0
+--- !u!114 &455272004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455272000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b777273eff8a0bc40bd53ac76c0ae183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <checkpointNum>k__BackingField: 1
 --- !u!1001 &478246364
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1196,7 +1210,7 @@ Transform:
   m_GameObject: {fileID: 993150170}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -250, y: -30, z: 0}
+  m_LocalPosition: {x: -100, y: -30, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2155,7 +2169,7 @@ Transform:
   m_GameObject: {fileID: 1865463632}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 250, y: -30, z: 0}
+  m_LocalPosition: {x: 100, y: -30, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

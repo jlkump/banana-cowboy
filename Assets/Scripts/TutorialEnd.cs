@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class TutorialEnd : MonoBehaviour
 {
+    // TODO: Change name so that it can work for other levels instead of only tutorial
     public string menuScene;
     private void OnTriggerEnter(Collider other)
     {
@@ -14,7 +15,15 @@ public class TutorialEnd : MonoBehaviour
         {
             UnityEngine.Cursor.lockState = CursorLockMode.None;
             UnityEngine.Cursor.visible = true;
-            SceneManager.LoadScene(menuScene);
+            SceneManager.LoadScene(menuScene); 
+            if(menuScene == "Orange Boss Scene")
+            {
+                if (SoundManager.Instance() != null)
+                {
+                    SoundManager.Instance().StopMusic("Orange Planet");
+                    SoundManager.Instance().PlayMusic("Orange Boss");
+                }
+            }
         }
     }
 }
