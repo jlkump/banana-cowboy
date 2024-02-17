@@ -46,7 +46,7 @@ public static class LevelData
         Debug.Log("GIVING RESPAWN POSITION TO PLAYER CONTROLLER");
         switch (SceneManager.GetActiveScene().name)
         {
-            case "Orange Level First Playable":
+            case "Orange Level":
                 return OrangeRespawnArray[checkpointReached];
             case "Tutorial Level":
                 return TutorialRespawnArray[checkpointReached];

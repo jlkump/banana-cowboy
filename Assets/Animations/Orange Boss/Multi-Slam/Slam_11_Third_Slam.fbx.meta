@@ -64,6 +64,13 @@ ModelImporter:
         floatParameter: 2
         intParameter: 0
         messageOptions: 0
+      - time: 0.5263154
+        functionName: PlaySlamSFX
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 2
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

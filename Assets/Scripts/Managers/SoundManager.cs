@@ -87,6 +87,7 @@ public class SoundManager : MonoBehaviour
             s.src.clip = s.audioClip;
             s.src.volume = s.volume * MusicVolume;
             s.src.pitch = s.pitch;
+            s.loop = true;
             s.src.loop = s.loop;
             s.type = Sound.Type.MUSIC;
         }

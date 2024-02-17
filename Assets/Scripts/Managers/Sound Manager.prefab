@@ -47,7 +47,7 @@ MonoBehaviour:
   sfxs:
   - name: PlayerRun
     audioClip: {fileID: 8300000, guid: 8042d2069ed60104ea4bf6ea406ae720, type: 3}
-    volume: 0.5
+    volume: 0.4
     pitch: 1
     pitchVariance: 0.25
     loop: 1
@@ -55,7 +55,7 @@ MonoBehaviour:
     src: {fileID: 0}
   - name: PlayerWalk
     audioClip: {fileID: 8300000, guid: b401237eb46fbd14e8b98bae92b2b234, type: 3}
-    volume: 0.4
+    volume: 0.3
     pitch: 1
     pitchVariance: 0.25
     loop: 1
@@ -70,7 +70,7 @@ MonoBehaviour:
     type: 0
     src: {fileID: 0}
   - name: PlayerLand
-    audioClip: {fileID: 8300000, guid: b401237eb46fbd14e8b98bae92b2b234, type: 3}
+    audioClip: {fileID: 8300000, guid: 0d38a4cfaa147d1459cdf49f586de138, type: 3}
     volume: 0.6
     pitch: 1.4
     pitchVariance: 0
@@ -135,7 +135,7 @@ MonoBehaviour:
     src: {fileID: 0}
   - name: OrangeRevUp
     audioClip: {fileID: 8300000, guid: 42a6d270fe780f147af57800bf27906d, type: 3}
-    volume: 1
+    volume: 0.3
     pitch: 1
     pitchVariance: 0
     loop: 0
@@ -159,6 +159,14 @@ MonoBehaviour:
     src: {fileID: 0}
   - name: OrangeBossSummon
     audioClip: {fileID: 8300000, guid: fcf0f45b6daa41543a5eaf3af7d6db78, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    type: 0
+    src: {fileID: 0}
+  - name: OrangeBossPeelSlam
+    audioClip: {fileID: 8300000, guid: c8e930362c4701841a255c00171ef4d5, type: 3}
     volume: 1
     pitch: 1
     pitchVariance: 0

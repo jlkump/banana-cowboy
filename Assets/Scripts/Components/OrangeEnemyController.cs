@@ -239,7 +239,9 @@ public class OrangeEnemyController : EnemyController
     void EndDizzy()
     {
         if (_state != OrangeState.DIZZY) { return; }
-        UpdateState(OrangeState.RUN_AWAY);
+        //UpdateState(OrangeState.RUN_AWAY);
+        _spottedPlayerTransform = null;
+        UpdateState(OrangeState.IDLE); // should be run away but make idle for testing
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -249,6 +251,8 @@ public class OrangeEnemyController : EnemyController
             if (collision.gameObject.GetComponent<Obstacle>() != null)
             {
                 collision.gameObject.GetComponent<Obstacle>().Hit();
+                SoundManager.Instance().StopSFX("OrangeCharge");
+                // TODO: Add a crash sound here
                 UpdateState(OrangeState.DIZZY);
             }
             else if (collision.gameObject.tag == "Player" && _state == OrangeState.CHARGE)
@@ -266,7 +270,12 @@ public class OrangeEnemyController : EnemyController
             if (other.gameObject.tag == "Player")
             {
                 _spottedPlayerTransform = other.gameObject.transform;
-                UpdateState(OrangeState.PLAYER_SPOTTED);
+                // was a bug where when a player jumps while enemy is charging (escapes the triggerbox), then enters again
+                // if the player gets hit, would not take damage.
+                if (_state != OrangeState.CHARGE)
+                {
+                    UpdateState(OrangeState.PLAYER_SPOTTED);
+                }
             }
         }
     }
@@ -278,8 +287,8 @@ public class OrangeEnemyController : EnemyController
             if (other.gameObject.tag == "Player")
             {
                 // Might change it so that the player has to run further than the trigger collider to leave sight once spotted
-                _spottedPlayerTransform = null;
-                UpdateState(OrangeState.IDLE);
+                //_spottedPlayerTransform = null;
+                //UpdateState(OrangeState.IDLE);
             }
         }
     }

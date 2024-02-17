@@ -9,4 +9,9 @@ public class OrangeBossAnimationManager : MonoBehaviour
     {
         instance.ShowWeakSpot(weakSpotIndex);
     }
+
+    public void PlaySlamSFX()
+    {
+        SoundManager.Instance().PlaySFX("OrangeBossPeelSlam");
+    }
 }

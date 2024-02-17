@@ -165,6 +165,11 @@ public class GravityObject : MonoBehaviour
      */
     public Vector3 GetMoveVelocity()
     {
+        if (gravityOrientation == null || _rigidBody == null)
+        {
+            return Vector3.zero;
+        }
+
         Vector3 vel = gravityOrientation.InverseTransformDirection(_rigidBody.velocity);
         vel.y = 0;
         return gravityOrientation.TransformDirection(vel);

@@ -5,9 +5,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-public class TutorialEnd : MonoBehaviour
+public class LevelSwitch : MonoBehaviour
 {
-    // TODO: Change name so that it can work for other levels instead of only tutorial
     public string menuScene;
     private void OnTriggerEnter(Collider other)
     {
@@ -16,6 +15,7 @@ public class TutorialEnd : MonoBehaviour
             UnityEngine.Cursor.lockState = CursorLockMode.None;
             UnityEngine.Cursor.visible = true;
             LevelData.resetLevelData();
+            SoundManager.Instance().StopAllSFX();
             SceneManager.LoadScene(menuScene); 
             if(menuScene == "Orange Boss Scene")
             {
