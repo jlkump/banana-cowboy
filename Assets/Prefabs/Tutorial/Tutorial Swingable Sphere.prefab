@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8059619736004247315}
   - component: {fileID: 3718078236430800272}
   - component: {fileID: 3146475595508901116}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Tutorial Swingable Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}

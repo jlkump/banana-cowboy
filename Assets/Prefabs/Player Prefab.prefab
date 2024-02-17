@@ -814,7 +814,7 @@ MonoBehaviour:
   gravityOrientation: {fileID: 5503662033258183763}
   groundMask:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 256
   bottomModelLocation: {fileID: 7183610922977414858}
   heightDetection: 1
   heightDetectionRadius: 0.1
@@ -901,14 +901,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ce15c7be69435f47b3965c4b63e777f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cinemachineCamController: {fileID: 0}
   _cameraPivot: {fileID: 7239246675022263076}
   _cameraTarget: {fileID: 3537890142686293665}
   _cameraCurrent: {fileID: 2321862978866353591}
   _orbitRotationSpeed: 10
   _tiltRotationSpeed: 10
+  _orbitZoomSpeed: 10
   _reorientSpeed: 8
+  _orbitMinDist: 3
+  _orbitMaxDist: 20
   _orbitDistance: 0
-  _invertY: 1
+  invertY: 1
+  invertZoom: 0
 --- !u!120 &2226797022978423219
 LineRenderer:
   serializedVersion: 2
