@@ -11,8 +11,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/Tutorial Level.unity
     guid: 9aa6854b4d03ecc479b0ee4e0760d2f6
-  - enabled: 1
-    path: Assets/Scenes/Levels/Orange Level.unity
+  - enabled: 0
+    path: Assets/Scenes/Test Scenes/Orange Level First Playable.unity
     guid: 2a06ac1a4ac043545a4eea22cce15311
   - enabled: 1
     path: Assets/Scenes/Levels/Bosses/Orange Boss Scene.unity

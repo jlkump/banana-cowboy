@@ -21,6 +21,9 @@ public class OrangeEnemyController : EnemyController
 
     private OrangeState _state;
 
+    [SerializeField]
+    Transform _model = null;
+
     public float knockbackForce = 4.0f;
     public float chargeSpeed = 30.0f;
     public float maxChargeDistance = 70.0f;
@@ -71,15 +74,19 @@ public class OrangeEnemyController : EnemyController
             case OrangeState.PLAYER_SPOTTED:
                 spottedParam += Time.deltaTime;
                 _chargeDirection = (_spottedPlayerTransform.position - transform.position).normalized;
-                _gravObject.model.rotation = Quaternion.Slerp(
-                    _gravObject.model.rotation, 
-                    Quaternion.LookRotation(_chargeDirection, _gravObject.gravityOrientation.up), 
-                    spottedParam
-                );
+                if (_model != null)
+                {
+                    _model.rotation = Quaternion.Slerp(_model.rotation, 
+                        Quaternion.LookRotation(_chargeDirection, _gravObject.gravityOrientation.up), 
+                        spottedParam);
+                }
                 break;
             case OrangeState.REV_UP:
                 _chargeDirection = (_spottedPlayerTransform.position - transform.position).normalized;
-                _gravObject.model.rotation = Quaternion.LookRotation(_chargeDirection, _gravObject.gravityOrientation.up);
+                if (_model != null)
+                {
+                    _model.rotation = Quaternion.LookRotation(_chargeDirection, _gravObject.gravityOrientation.up);
+                }
                 break;
             case OrangeState.CHARGE: 
                 if (_gravObject.GetMoveVelocity().magnitude < chargeSpeed)

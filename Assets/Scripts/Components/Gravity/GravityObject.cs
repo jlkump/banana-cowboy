@@ -14,6 +14,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody))]
 public class GravityObject : MonoBehaviour
 {
+    Rigidbody _rigidBody;
+
     // The list of all attractors having influence on this object
     // This is looped through whenever the attractor list is updated
     // to find the highest priority attractor. The Gravity Object is
@@ -25,45 +27,25 @@ public class GravityObject : MonoBehaviour
     // from completely taking over and flinging things out into
     // the middle of nowhere
     public float maxFallSpeed { get; set; } = 30.0f;
-
+    public bool disabled { get; set; } = false;
 
     // This is useful to modify when we want to have the player fall
     // at different speeds based on different situations. For example,
     // whenever the player lets go of the space button, we have them
     // fall faster than if they hold it down.
     public float gravityMult { get; set; } = 1.0f;
-    public float gravityIncreaseOnFall = 1.5f;
 
-    public bool disabled { get; set; } = false;
-
-    [Header("References")]
-    [Tooltip("This is the reference to the transform of the root of the model")]
-    public Transform model = null;
-    [Tooltip("Turn this to false if the 3D model should not be re-oriented to the direction of gravity")]
-    public bool reorientModel = true;
+    [SerializeField, Range(1f, 10f)]
+    float _gravityIncreaseOnFall = 1.5f;
 
     public Transform gravityOrientation = null;
 
     [Header("Ground Detection")]
-    // Used to determine what is and what is not ground.
-    // It is a LayerMask and not a Tag incase we ever need to
-    // Raycast to detect the ground (which we likely will for enemies).
-    public LayerMask groundMask;
-    public Transform bottomModelLocation = null;
-    [Tooltip("This determines how far we look below bottomModelLocation for the ground")]
-    public float heightDetection = 0.1f;
-    public float heightDetectionRadius = 0.3f;
+    [SerializeField, Tooltip("The collider to detect if the player is on the ground")]
+    Collider _feetCollider = null;
+    List<Collider> _groundColliders = new List<Collider>();
+    bool _onGround = false;
 
-    // Updated whenever the Gravity Object collides with something. If that
-    // something has the groundMask layer on it, then this is updated to
-    // true (regardless if that ground was the ground the object is being attracted to.
-    // This currently is problematic for edge cases, so TODO: Update to identify the
-    // ground hit).
-    // ^^^ Also, there will be cases that there are ground objects that don't have a
-    //     gravity attractor component, so that is another case to keep in mind.
-    private bool _onGround = false;
-
-    Rigidbody _rigidBody;
 
     void Awake()
     {
@@ -80,21 +62,13 @@ public class GravityObject : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (_highestPrioAttractorIndex != -1 && bottomModelLocation != null && !_rigidBody.isKinematic)
+        if (_highestPrioAttractorIndex != -1 && _feetCollider != null && !_rigidBody.isKinematic)
         {
             GravityAttractor attractor = _attractors[_highestPrioAttractorIndex];
-            RaycastHit hit;
-            _onGround = Physics.SphereCast(bottomModelLocation.position, heightDetectionRadius, -gravityOrientation.up, out hit, heightDetection, groundMask, QueryTriggerInteraction.Ignore);
             Vector3 targetGravUp = attractor.GetGravityDirection(gravityOrientation);
  
             // Reorient transform
-            if (model != null && reorientModel)
-            {
-                // Reorient model if we have one (and are not prevented from doing it)
-                model.rotation = Quaternion.Slerp(model.rotation, Quaternion.FromToRotation(model.up, targetGravUp) * model.rotation, Time.deltaTime * 6.0f);
-            }
             gravityOrientation.rotation = Quaternion.FromToRotation(gravityOrientation.up, targetGravUp) * gravityOrientation.rotation;
-
 
             // We are not on the ground yet, so pull to the nearest attractor
             Vector3 grav = attractor.GetGravityDirection(gravityOrientation) * attractor.GetGravityForce();
@@ -106,7 +80,7 @@ public class GravityObject : MonoBehaviour
                     if (gravityOrientation.InverseTransformDirection(fallingVec).y < 0)
                     {
                         // We are falling down, so increase gravity
-                        _rigidBody.AddForce(gravityIncreaseOnFall * gravityMult * grav);
+                        _rigidBody.AddForce(_gravityIncreaseOnFall * gravityMult * grav);
                     } 
                     else
                     {
@@ -136,7 +110,6 @@ public class GravityObject : MonoBehaviour
                 index = i;
             }
         }
-
         return index;
     }
 
@@ -204,6 +177,34 @@ public class GravityObject : MonoBehaviour
         {
             _attractors.Remove(collision.gameObject.GetComponentInParent<GravityAttractor>());
             _highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+
+        if (collision.contactCount != 0)
+        {
+            _groundColliders.Add(collision.GetContact(0).otherCollider);
+            // Not exactly Dot > 0 comparison since very occasionally the player will phase through the floor if that is the case
+            if (Vector3.Dot((_feetCollider.transform.position - collision.GetContact(0).point).normalized, gravityOrientation.up) > -0.2f) {
+                if (collision.GetContact(0).thisCollider == _feetCollider)
+                {
+                    _onGround = true;
+                }
+            }
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (_groundColliders.Contains(collision.collider))
+        {
+            _groundColliders.Remove(collision.collider);
+        }
+        if (_groundColliders.Count == 0)
+        {
+            _onGround = false;
         }
     }
 }
