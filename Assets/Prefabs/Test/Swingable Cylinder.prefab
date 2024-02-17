@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4979006304209697769}
   - component: {fileID: 808251270555069734}
   - component: {fileID: 897783137821046101}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Swingable Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}

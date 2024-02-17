@@ -43,7 +43,6 @@ public class GravityObject : MonoBehaviour
     public bool reorientModel = true;
 
     public Transform gravityOrientation = null;
-    PlayerCameraController _camController;
 
     [Header("Ground Detection")]
     // Used to determine what is and what is not ground.
@@ -73,8 +72,6 @@ public class GravityObject : MonoBehaviour
         _rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
         _attractors = new List<GravityAttractor>();
 
-        _camController = GetComponent<PlayerCameraController>();
-
         if (gravityOrientation == null)
         {
             gravityOrientation = transform;
@@ -95,10 +92,6 @@ public class GravityObject : MonoBehaviour
             {
                 // Reorient model if we have one (and are not prevented from doing it)
                 model.rotation = Quaternion.Slerp(model.rotation, Quaternion.FromToRotation(model.up, targetGravUp) * model.rotation, Time.deltaTime * 6.0f);
-            }
-            if (_camController != null && gravityOrientation.up != targetGravUp)
-            {
-                _camController.SetNewUp(targetGravUp);
             }
             gravityOrientation.rotation = Quaternion.FromToRotation(gravityOrientation.up, targetGravUp) * gravityOrientation.rotation;
 

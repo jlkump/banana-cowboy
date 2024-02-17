@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6450913455938873643}
   - component: {fileID: 7464532887970869274}
   - component: {fileID: 660843245199160849}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Tutorial Swingable Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}

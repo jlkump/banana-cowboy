@@ -65,16 +65,15 @@ public class PlayerController : MonoBehaviour
     [Header("Lasso Throw")]
     public Transform lassoThrowPosition;
     [Tooltip("The distance that the lasso can aim to. The player will be pulled to the max distance the lasso can reach for the action.")]
-    public float lassoAimRange = 40.0f;
     public float lassoTimeToHit = 0.3f;
-    [Range(1, 100)]
-    public int lassoVertRaycasts = 25;
-    [Range(1, 100)]
-    public int lassoHorizontalRaycasts = 25;
-    [Range(0.01f, 4.0f)]
-    public float raycastRadius = 0.1f;
-    [Range(0.1f, 50.0f), Tooltip("The distance between the camera and object in which the object is ignored.")]
-    public float lassoIgnoreDist = 10f;
+    [SerializeField, Range(2, 100), Tooltip("The number of sphere-casts we perform per-frame for aim-assist")]
+    int _aimAssistRaycastResolution = 10;
+
+    [SerializeField, Range(0.01f, 50f)]
+    float _aimAssistMinRadius = 0.4f, _aimAssistMaxRadius = 10f, _cameraRaycastRadius = 0.1f, lassoAimRange = 40.0f;
+    [SerializeField, Range(0.1f, 50.0f), Tooltip("The distance between the camera and object in which the object is ignored.")]
+    float _lassoIgnoreDist = 10f;
+
     public LayerMask lassoLayerMask;
 
     enum HitLassoTarget
@@ -84,11 +83,7 @@ public class PlayerController : MonoBehaviour
         ENEMY,
         OBJECT
     }
-    // This is NOT the transform of the object hit, but the transform of the specific raycast hit
-    // For swinging, it is used for up calculating the basis of the swing for swinging
-    // For enemies ...
-    // For objects ...
-    private Transform _lassoHitPointTransform;
+    private Transform _lassoHitPointTransform; // This is NOT the transform of the object hit, but the transform of the specific raycast hit
     private Transform _lassoHitObjectTransform; // The transform of the object actually hit
     private RaycastHit _lassoRaycastHit;
     private LassoObject _lassoSelectedObject = null;
@@ -512,18 +507,13 @@ public class PlayerController : MonoBehaviour
 
     void AimLasso()
     {
-        float deltaX = 1.0f / (float) lassoHorizontalRaycasts;
-        float deltaY = 1.0f / (float) lassoVertRaycasts;
-
-        float startingOffsetX = deltaX / 2;
-        float startingOffsetY = deltaY / 2;
-
+        // Do a simple raycast from the camera out forward where the camera is looking
         RaycastHit hit;
-        if (Physics.SphereCast(_cameraTransform.position, 0.04f, _cameraTransform.forward, 
+        if (Physics.SphereCast(_cameraTransform.position, _cameraRaycastRadius, _cameraTransform.forward, 
             out hit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) && 
             hit.collider.gameObject.GetComponent<LassoObject>() != null &&
             hit.collider.gameObject.GetComponent<LassoObject>().isLassoable &&
-            Vector3.Distance(hit.point, _cameraTransform.position) > lassoIgnoreDist) {
+            Vector3.Distance(hit.point, _cameraTransform.position) > _lassoIgnoreDist) {
             // Looking directly at an object
             playerUI.ReticleOverLassoable();
         }
@@ -533,28 +523,26 @@ public class PlayerController : MonoBehaviour
             playerUI.ReticleReset();
         }
 
+        // We are not directly looking at anything, so use aim-assist
         if (hit.point == Vector3.zero)
         {
-            // We are not directly looking at anything
+            float deltaRadius = (_aimAssistMaxRadius - _aimAssistMinRadius) / (_aimAssistRaycastResolution - 1);
             float closestDist = float.MaxValue;
-            for (int i = 0; i < lassoHorizontalRaycasts; i++)
-            {
-                for (int j = 0; j < lassoVertRaycasts; j++)
-                {
-                    Vector3 viewportPoint = new Vector3(i * deltaX + startingOffsetX, j * deltaY + startingOffsetY, Camera.main.nearClipPlane);
-                    Vector3 startPoint = Camera.main.ViewportToWorldPoint(viewportPoint);
-                    Vector3 dir = (startPoint - _cameraTransform.position).normalized;
 
-                    RaycastHit raycastHit;
-                    if (Physics.SphereCast(startPoint, raycastRadius, dir, out raycastHit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) &&
-                        raycastHit.collider.gameObject.GetComponent<LassoObject>() != null &&
-                        raycastHit.collider.gameObject.GetComponent<LassoObject>().isLassoable &&
-                        Vector3.Distance(raycastHit.point, transform.position) < closestDist &&
-                        Camera.main.WorldToViewportPoint(raycastHit.point).z > lassoIgnoreDist)
-                    {
-                        closestDist = Vector3.Distance(raycastHit.point, transform.position);
-                        hit = raycastHit;
-                    }
+            for (int i = 0; i < _aimAssistRaycastResolution; i++)
+            {
+                float raycastRadius = _aimAssistMinRadius + deltaRadius * i;
+
+                RaycastHit raycastHit;
+                if (Physics.SphereCast(_cameraTransform.position, raycastRadius, _cameraTransform.forward, 
+                    out raycastHit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) &&
+                    raycastHit.collider.gameObject.GetComponent<LassoObject>() != null &&
+                    raycastHit.collider.gameObject.GetComponent<LassoObject>().isLassoable &&
+                    Vector3.Distance(raycastHit.point, transform.position) < closestDist &&
+                    Camera.main.WorldToViewportPoint(raycastHit.point).z > _lassoIgnoreDist)
+                {
+                    closestDist = Vector3.Distance(raycastHit.point, transform.position);
+                    hit = raycastHit;
                 }
             }
         }

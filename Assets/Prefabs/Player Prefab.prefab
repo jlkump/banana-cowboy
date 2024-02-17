@@ -35,6 +35,37 @@ RectTransform:
   m_AnchoredPosition: {x: -50, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &580561625516227255
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2321862978866353591}
+  m_Layer: 2
+  m_Name: CameraCurrent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2321862978866353591
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 580561625516227255}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1526105572669686172}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &928329164210492016
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,6 +446,7 @@ Transform:
   m_Children:
   - {fileID: 7183610922977414858}
   - {fileID: 8925892245031520248}
+  - {fileID: 7239246675022263076}
   m_Father: {fileID: 1526105572669686172}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &9129656824554081828
@@ -733,8 +765,8 @@ Transform:
   m_Children:
   - {fileID: 7838862824688470847}
   - {fileID: 5503662033258183763}
-  - {fileID: 7239246675022263076}
   - {fileID: 5509548602144535539}
+  - {fileID: 2321862978866353591}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &5301294379991499084
@@ -815,15 +847,16 @@ MonoBehaviour:
   walkAnimSpeed: 1.6
   runAnimSpeed: 1.2
   lassoThrowPosition: {fileID: 8925892245031520248}
-  lassoAimRange: 40
   lassoTimeToHit: 0.3
-  lassoVertRaycasts: 20
-  lassoHorizontalRaycasts: 20
-  raycastRadius: 0.1
-  lassoIgnoreDist: 7
+  _aimAssistRaycastResolution: 10
+  _aimAssistMinRadius: 0.4
+  _aimAssistMaxRadius: 10
+  _cameraRaycastRadius: 0.1
+  lassoAimRange: 40
+  _lassoIgnoreDist: 10
   lassoLayerMask:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 256
   numberOfLassoLoopSegments: 40
   numberOfLassoRopeSegments: 40
   lassoRadius: 4
@@ -847,7 +880,7 @@ MonoBehaviour:
   timeToToss: 0.1
   percentageFarThrow: 0.2
   percentageMidThow: 0.3
-  throwCycleTime: 0.6
+  lassoIndicatorSpeed: 1.6
   holdSwingRadius: 4
   holdSwingSpeed: 6
   sprintKey: 304
@@ -869,12 +902,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ce15c7be69435f47b3965c4b63e777f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraTarget: {fileID: 7239246675022263076}
-  orbitRotationSpeed: 10
-  tiltRotationSpeed: 10
-  targetHeight: 3.53
+  _cinemachineCamController: {fileID: 0}
+  _cameraPivot: {fileID: 7239246675022263076}
+  _cameraTarget: {fileID: 3537890142686293665}
+  _cameraCurrent: {fileID: 2321862978866353591}
+  _orbitRotationSpeed: 10
+  _tiltRotationSpeed: 10
+  _orbitZoomSpeed: 10
+  _reorientSpeed: 8
+  _orbitMinDist: 3
+  _orbitMaxDist: 20
+  _orbitDistance: 0
   invertY: 1
-  reorientTime: 0.4
+  invertZoom: 0
 --- !u!120 &2226797022978423219
 LineRenderer:
   serializedVersion: 2
@@ -1219,7 +1259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7239246675022263076}
   m_Layer: 2
-  m_Name: Camera Target
+  m_Name: Camera Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1233,12 +1273,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5016804911169280025}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 4, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1526105572669686172}
+  m_Children:
+  - {fileID: 3537890142686293665}
+  m_Father: {fileID: 5503662033258183763}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5945864623176456424
 GameObject:
@@ -1372,6 +1413,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5503662033258183763}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6435897076055692967
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3537890142686293665}
+  m_Layer: 2
+  m_Name: Camera Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3537890142686293665
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6435897076055692967}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.09, y: 3.12, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7239246675022263076}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8734567638047839574
 GameObject:
