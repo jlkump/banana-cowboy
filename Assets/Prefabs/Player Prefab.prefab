@@ -814,7 +814,7 @@ MonoBehaviour:
   gravityOrientation: {fileID: 5503662033258183763}
   groundMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 8
   bottomModelLocation: {fileID: 7183610922977414858}
   heightDetection: 1
   heightDetectionRadius: 0.1
@@ -847,15 +847,16 @@ MonoBehaviour:
   walkAnimSpeed: 1.6
   runAnimSpeed: 1.2
   lassoThrowPosition: {fileID: 8925892245031520248}
-  lassoAimRange: 40
   lassoTimeToHit: 0.3
-  lassoVertRaycasts: 20
-  lassoHorizontalRaycasts: 20
-  raycastRadius: 0.1
-  lassoIgnoreDist: 7
+  _aimAssistRaycastResolution: 10
+  _aimAssistMinRadius: 0.4
+  _aimAssistMaxRadius: 10
+  _cameraRaycastRadius: 0.1
+  lassoAimRange: 40
+  _lassoIgnoreDist: 10
   lassoLayerMask:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 256
   numberOfLassoLoopSegments: 40
   numberOfLassoRopeSegments: 40
   lassoRadius: 4

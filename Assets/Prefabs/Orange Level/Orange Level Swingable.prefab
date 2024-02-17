@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3910959533284104876}
   - component: {fileID: 3643054399410802257}
   - component: {fileID: 3219288878775488494}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Orange Level Swingable
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 499642400738929519}
   - component: {fileID: 1396028609601465084}
   - component: {fileID: 4986149363430250679}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Swingable Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
