@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,21 +6,22 @@ using UnityEngine;
 public class PlayerCameraController : MonoBehaviour
 {
     [Header("References")]
-    public Transform cameraTarget;
-    public float orbitRotationSpeed = 10.0f;
-    public float tiltRotationSpeed = 10.0f;
-    [Range(-10.0f, 10.0f)]
-    public float targetHeight = 3.0f;
-    public bool invertY = true;
+    [SerializeField]
+    CinemachineVirtualCamera _cinemachineCamController;
+    [SerializeField]
+    Transform _cameraPivot = null, _cameraTarget = null, _cameraCurrent = null;
 
-    public float reorientTime = 0.4f;
-    private float _accumReorientTime = 0.0f;
-    private Vector3 _reorientUp = Vector3.up;
 
-    private Vector3 _camUp = Vector3.up;
-    private Vector3 _camForward = Vector3.forward;
-    private float _tiltDegrees = 0.0f;
-    private float _orbitDegrees = 0.0f;
+    [SerializeField, Range(1.0f, 80.0f)]
+    float _orbitRotationSpeed = 10.0f, _tiltRotationSpeed = 10.0f, _orbitZoomSpeed = 10.0f;
+
+    [SerializeField, Range(1.0f, 20.0f)]
+    float _reorientSpeed = 8.0f;
+
+    [SerializeField, Range(0f, 30f)]
+    float _orbitMinDist = 3f, _orbitMaxDist = 20f, _orbitDistance = 10f;
+
+    public bool invertY = true, invertZoom = false;
 
 
     void Start()
@@ -31,23 +33,10 @@ public class PlayerCameraController : MonoBehaviour
 
     void Update()
     {
-        if (cameraTarget == null) { return; }
-        //if (_accumReorientTime < reorientTime)
-        //{
-        //    _accumReorientTime += Time.deltaTime;
-        //    float t = Mathf.Clamp(_accumReorientTime / reorientTime, 0.0f, 1.0f);
-        //    cameraTarget.rotation = Quaternion.Slerp(
-        //        cameraTarget.rotation,
-        //        Quaternion.FromToRotation(cameraTarget.up, _reorientUp) * cameraTarget.rotation,
-        //        t
-        //    );
-        //    cameraTarget.position = Vector3.Lerp(cameraTarget.position, transform.position + _camUp * targetHeight, t);
-        //}
-        //else
-        //{
-        //}
+        if (_cameraTarget == null || _cameraPivot == null) { return; }
         if (!PauseManager.pauseActive) {
             GetRotationInput();
+            BlendToTarget();
         }
     }
 
@@ -55,72 +44,51 @@ public class PlayerCameraController : MonoBehaviour
     {
         float mouseX = Input.GetAxisRaw("Mouse X");
         float mouseY = Input.GetAxisRaw("Mouse Y");
+        float mouseScroll = -Input.GetAxisRaw("Mouse ScrollWheel");
+
         if (invertY)
         {
             mouseY = -mouseY;
         }
-
-        _orbitDegrees += + mouseX * orbitRotationSpeed;
-        if (_orbitDegrees < 0.0f)
+        if (invertZoom)
         {
-            _orbitDegrees += 360.0f;
-        } 
-        else if (_orbitDegrees > 360.0f)
-        {
-            _orbitDegrees -= 360.0f;
-        }
-        _tiltDegrees = (_tiltDegrees + mouseY * tiltRotationSpeed);
-        if (_tiltDegrees < -30.0f)
-        {
-            _tiltDegrees = -30.0f;
-        } 
-        else if (_tiltDegrees > 60.0f)
-        {
-            _tiltDegrees = 60.0f;
+            mouseScroll = -mouseScroll;
         }
 
-        cameraTarget.rotation = Quaternion.AngleAxis(_orbitDegrees, _camUp) * Quaternion.LookRotation(_camForward, _camUp);
-        cameraTarget.rotation = Quaternion.AngleAxis(_tiltDegrees, cameraTarget.right) * cameraTarget.rotation;
+        _cameraPivot.localRotation *= Quaternion.AngleAxis(mouseX * _orbitRotationSpeed, Vector3.up);
+        _cameraTarget.localRotation *= Quaternion.AngleAxis(mouseY * _tiltRotationSpeed, Vector3.right);
 
-        cameraTarget.position = transform.position + _camUp * targetHeight;
+        var angles = _cameraTarget.localEulerAngles;
+        angles.z = 0;
+        angles.y = 0;
+
+        var angle = _cameraTarget.localEulerAngles.x;
+
+        if (angle < 180 && angle > 60)
+        {
+            angles.x = 60;
+        }
+        else if (angle > 60 && angle < 290)
+        {
+            angles.x = 290;
+        }
+
+        _cameraTarget.localEulerAngles = angles;
+
+        _orbitDistance = Mathf.Clamp(_orbitDistance + mouseScroll * _orbitZoomSpeed, _orbitMinDist, _orbitMaxDist);
+        if (_cinemachineCamController != null)
+        {
+            Cinemachine3rdPersonFollow ccb = _cinemachineCamController.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+            if (ccb != null)
+            {
+                ccb.CameraDistance = _orbitDistance;
+            }
+        }
     }
 
-    //void GetRotationInput()
-    //{
-    //    float mouseX = Input.GetAxisRaw("Mouse X");
-    //    float mouseY = Input.GetAxisRaw("Mouse Y");
-
-    //    // This code is used from Unity's tutorial on Cinemachine
-    //    // https://www.youtube.com/watch?v=537B1kJp9YQ
-    //    cameraTarget.rotation *= Quaternion.AngleAxis(mouseX * orbitRotationSpeed, cameraTarget.up);
-    //    cameraTarget.rotation *= Quaternion.AngleAxis(mouseY * tiltRotationSpeed, cameraTarget.right);
-
-    //    var angles = cameraTarget.localEulerAngles;
-    //    angles.z = 0;
-
-    //    var angle = cameraTarget.localEulerAngles.x;
-
-    //    if (angle < 180 && angle > 50)
-    //    {
-    //        angles.x = 50;
-    //    }
-    //    else if (angle > 50 && angle < 340)
-    //    {
-    //        angles.x = 340;
-    //    }
-
-    //    cameraTarget.localEulerAngles = angles;
-    //}
-
-    public void SetNewUp(Vector3 up)
+    void BlendToTarget()
     {
-        //print("Changing up");
-        if (Vector3.Distance(cameraTarget.up, up) > 0.1f)
-        {
-            _accumReorientTime = 0.0f;
-            _reorientUp = up;
-            _camUp = up;
-            _camForward = Vector3.Cross(up, Vector3.Cross(_camForward, up).normalized).normalized;
-        }
+        _cameraCurrent.rotation = Quaternion.Slerp(_cameraCurrent.rotation, _cameraTarget.rotation, Time.deltaTime * _reorientSpeed);
+        _cameraCurrent.position = Vector3.Lerp(_cameraCurrent.position, _cameraTarget.position, Time.deltaTime * _reorientSpeed);
     }
 }
