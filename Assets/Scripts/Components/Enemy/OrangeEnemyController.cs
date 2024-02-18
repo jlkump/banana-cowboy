@@ -44,6 +44,8 @@ public class OrangeEnemyController : EnemyController
     private Vector3 _chargeDirection;
     private Vector3 _chargeTargetPoint;
 
+    public bool playerInView = false;
+
     public Animator orangeEnemyAnimator;
     // Start is called before the first frame update
     void Start()
@@ -57,27 +59,28 @@ public class OrangeEnemyController : EnemyController
     void Update()
     {
         if (_lassoComp.currentlyLassoed) { UpdateState(OrangeState.HELD); }
-        if (_state == OrangeState.HELD) {
+        if (_state == OrangeState.HELD)
+        {
             if (!_lassoComp.currentlyLassoed)
             {
                 UpdateState(OrangeState.THROWN);
             }
-            return; 
+            return;
         }
 
         if ((_state == OrangeState.PLAYER_SPOTTED || _state == OrangeState.REV_UP) && _spottedPlayerTransform == null)
         {
             UpdateState(OrangeState.IDLE);
         }
-        switch(_state)
+        switch (_state)
         {
             case OrangeState.PLAYER_SPOTTED:
                 spottedParam += Time.deltaTime;
                 _chargeDirection = (_spottedPlayerTransform.position - transform.position).normalized;
                 if (_model != null)
                 {
-                    _model.rotation = Quaternion.Slerp(_model.rotation, 
-                        Quaternion.LookRotation(_chargeDirection, _gravObject.gravityOrientation.up), 
+                    _model.rotation = Quaternion.Slerp(_model.rotation,
+                        Quaternion.LookRotation(_chargeDirection, _gravObject.gravityOrientation.up),
                         spottedParam);
                 }
                 break;
@@ -88,7 +91,7 @@ public class OrangeEnemyController : EnemyController
                     _model.rotation = Quaternion.LookRotation(_chargeDirection, _gravObject.gravityOrientation.up);
                 }
                 break;
-            case OrangeState.CHARGE: 
+            case OrangeState.CHARGE:
                 if (_gravObject.GetMoveVelocity().magnitude < chargeSpeed)
                 {
                     GetComponent<Rigidbody>().AddForce(_chargeDirection * chargeSpeed);
@@ -176,12 +179,12 @@ public class OrangeEnemyController : EnemyController
             orangeEnemyAnimator.Play("Base Layer.OE_Roll");
             print("CHARGE");
         }
-        if(_state == OrangeState.DIZZY)
+        if (_state == OrangeState.DIZZY)
         {
             orangeEnemyAnimator.Play("Base Layer.OE_Stun");
             print("DIZZY");
         }
-        if(_state == OrangeState.HELD)
+        if (_state == OrangeState.HELD)
         {
             print("HELD");
         }
@@ -201,7 +204,7 @@ public class OrangeEnemyController : EnemyController
         {
             print("SLOW DOWN");
         }
-        if(_state == OrangeState.THROWN)
+        if (_state == OrangeState.THROWN)
         {
             print("THROWN");
         }
@@ -249,8 +252,15 @@ public class OrangeEnemyController : EnemyController
     {
         if (_state != OrangeState.DIZZY) { return; }
         //UpdateState(OrangeState.RUN_AWAY);
-        _spottedPlayerTransform = null;
-        UpdateState(OrangeState.IDLE); // should be run away but make idle for testing
+        if (playerInView)
+        {
+            UpdateState(OrangeState.PLAYER_SPOTTED);
+        }
+        else
+        {
+            _spottedPlayerTransform = null;
+            UpdateState(OrangeState.IDLE); // should be run away but make idle for testing
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -279,9 +289,10 @@ public class OrangeEnemyController : EnemyController
             if (other.gameObject.tag == "Player")
             {
                 _spottedPlayerTransform = other.gameObject.transform;
+                playerInView = true;
                 // was a bug where when a player jumps while enemy is charging (escapes the triggerbox), then enters again
                 // if the player gets hit, would not take damage.
-                if (_state != OrangeState.CHARGE)
+                if (_state != OrangeState.CHARGE && _state != OrangeState.DIZZY)
                 {
                     UpdateState(OrangeState.PLAYER_SPOTTED);
                 }
@@ -295,9 +306,7 @@ public class OrangeEnemyController : EnemyController
         {
             if (other.gameObject.tag == "Player")
             {
-                // Might change it so that the player has to run further than the trigger collider to leave sight once spotted
-                //_spottedPlayerTransform = null;
-                //UpdateState(OrangeState.IDLE);
+                playerInView = false;
             }
         }
     }

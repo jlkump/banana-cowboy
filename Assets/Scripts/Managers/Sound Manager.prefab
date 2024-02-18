@@ -143,7 +143,7 @@ MonoBehaviour:
     src: {fileID: 0}
   - name: OrangeCharge
     audioClip: {fileID: 8300000, guid: 476a0f8d507590d41803460c74053a09, type: 3}
-    volume: 1
+    volume: 0.5
     pitch: 1
     pitchVariance: 0
     loop: 0

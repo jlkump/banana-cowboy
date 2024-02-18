@@ -983,6 +983,10 @@ PrefabInstance:
       value: 100.303
       objectReference: {fileID: 0}
     - target: {fileID: 7681066512378368039, guid: b9f5f4883dd473c4b8692fb05090a6d8, type: 3}
+      propertyPath: dialogueText
+      value: You got this, Banana Cowboy!
+      objectReference: {fileID: 0}
+    - target: {fileID: 7681066512378368039, guid: b9f5f4883dd473c4b8692fb05090a6d8, type: 3}
       propertyPath: typeOfCharacter
       value: 4
       objectReference: {fileID: 0}
