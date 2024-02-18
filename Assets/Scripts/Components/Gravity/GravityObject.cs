@@ -187,7 +187,7 @@ public class GravityObject : MonoBehaviour
         {
             _groundColliders.Add(collision.GetContact(0).otherCollider);
             // Not exactly Dot > 0 comparison since very occasionally the player will phase through the floor if that is the case
-            if (Vector3.Dot((_feetCollider.transform.position - collision.GetContact(0).point).normalized, gravityOrientation.up) > -0.2f) {
+            if (Vector3.Dot((_feetCollider.transform.position - collision.GetContact(0).point).normalized, gravityOrientation.up) > -0.4f) {
                 if (collision.GetContact(0).thisCollider == _feetCollider)
                 {
                     _onGround = true;

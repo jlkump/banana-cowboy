@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -31,13 +32,15 @@ public class OrangeBoss : MonoBehaviour
     public List<GameObject> boomerangObjects;
     public List<GameObject> weakSpots;
 
-    //public float sizeOfArena;
     public BossStates state;
 
     [Header("Damage")]
     public int maxHealth;
     private int health;
     public Image healthUI;
+    public Material normalColor;
+    public Material hurtColor;
+    public GameObject[] partsOfModel;
 
     public enum BossStates
     {
@@ -217,6 +220,8 @@ public class OrangeBoss : MonoBehaviour
         health -= dmg;
         healthAnimator.SetTrigger("DamageWeak"); // in case we want to make weak spots have diff anim
         healthUI.fillAmount = health / (1.0f * maxHealth);
+        StartCoroutine(FlashDamage());
+
         if (health == 0)
         {
             print("BOSS DEFEATED");
@@ -228,6 +233,20 @@ public class OrangeBoss : MonoBehaviour
             SoundManager.Instance().StopAllSFX();
             SceneManager.LoadScene(0);
         }
+    }
+
+    IEnumerator FlashDamage()
+    {
+        for (int i = 0; i < partsOfModel.Length; i++)
+        {
+            partsOfModel[i].GetComponent<Renderer>().material = hurtColor;
+        }
+        yield return new WaitForSeconds(0.3f);
+        for (int i = 0; i < partsOfModel.Length; i++)
+        {
+            partsOfModel[i].GetComponent<Renderer>().material = normalColor;
+        }
+        yield return new WaitForSeconds(0.3f);
     }
 
     public void ShowWeakSpot(int weakSpotIndex)

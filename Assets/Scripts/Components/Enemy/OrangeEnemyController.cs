@@ -277,8 +277,8 @@ public class OrangeEnemyController : EnemyController
             else if (collision.gameObject.tag == "Player" && _state == OrangeState.CHARGE)
             {
                 collision.gameObject.GetComponentInParent<PlayerController>().Damage(1, (collision.gameObject.transform.position - transform.position).normalized * knockbackForce);
-                UpdateState(OrangeState.RUN_AWAY);
-            }
+/*                UpdateState(OrangeState.RUN_AWAY);
+*/            }
         }
     }
 

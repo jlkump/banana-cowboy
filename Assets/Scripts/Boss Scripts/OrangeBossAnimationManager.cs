@@ -14,4 +14,9 @@ public class OrangeBossAnimationManager : MonoBehaviour
     {
         SoundManager.Instance().PlaySFX("OrangeBossPeelSlam");
     }
+
+    public void HideWeakSpots()
+    {
+        instance.HideWeakSpots();
+    }
 }

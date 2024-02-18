@@ -29,24 +29,25 @@ public class LassoableEnemy : LassoObject
             if (collision.collider.CompareTag("Boss"))
             {
                 // Will fix to handle more bosses (for orange, handle weak spots too)
-                if (collision.transform.name == "Orange Boss" || collision.transform.parent.parent.name == "Orange Boss" || collision.transform.name == "Peel") {
-                    OrangeBoss gameObject = GameObject.Find("Orange Boss").GetComponent<OrangeBoss>();
+                if (collision.transform.name == "Orange Boss" || collision.transform.parent.parent.name == "Orange Boss" || collision.transform.name.Contains("Peel")){
+                    OrangeBoss boss = GameObject.Find("Orange Boss").GetComponent<OrangeBoss>();
                     if (collision.transform.name.Contains("Weak Spot"))
                     {
                         print("Weak Spot Damage");
-                        gameObject.Damage(2);
+                        Destroy(gameObject);
+                        boss.Damage(2);
                     } 
                     else
                     {
                         print("Normal Damage");
-                        gameObject.Damage(1);
+                        Destroy(gameObject);
+                        boss.Damage(1);
                         
 
                     }
                 }
             }
             SoundManager.Instance().PlaySFX("EnemySplat");
-            Destroy(gameObject);
         }
     }
 }
