@@ -42,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4649061867434933926}
   - component: {fileID: 5684234742533907616}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Enemy Sight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -229,7 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 516eda5e65a052c4b8e65c95e6161e0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityIncreaseOnFall: 1.5
+  _gravityIncreaseOnFall: 1.5
   gravityOrientation: {fileID: 7266123389711490642}
   _feetCollider: {fileID: 3549976459434604110}
 --- !u!114 &8344437055072087473
@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7266a71ba6018ec40babfa998989f89a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _model: {fileID: 0}
+  _model: {fileID: 4115535371960722218}
   knockbackForce: 20
   chargeSpeed: 50
   maxChargeDistance: 50
@@ -265,7 +265,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4677478680374795018}
   - component: {fileID: 5816570000177465240}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Body Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -337,8 +337,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4677478680374795018}
   - {fileID: 6081423879174714477}
+  - {fileID: 4677478680374795018}
   - {fileID: 4115535371960722218}
   - {fileID: 4649061867434933926}
   m_Father: {fileID: 2379062788576937066}

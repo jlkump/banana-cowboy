@@ -147,10 +147,12 @@ public class OrangeEnemyController : EnemyController
             }
             if (newState == OrangeState.DIZZY || newState == OrangeState.HELD)
             {
+                print("Lassoable");
                 _lassoComp.isLassoable = true;
             }
             else
             {
+                print("Not lassoable");
                 _lassoComp.isLassoable = false;
             }
         }

@@ -85,6 +85,7 @@ public class PlayerController : MonoBehaviour
     }
     private Transform _lassoHitPointTransform; // This is NOT the transform of the object hit, but the transform of the specific raycast hit
     private Transform _lassoHitObjectTransform; // The transform of the object actually hit
+    private Rigidbody _lassoHitObjectRigidBody = null;
     private RaycastHit _lassoRaycastHit;
     private LassoObject _lassoSelectedObject = null;
     private HitLassoTarget _hitLassoTarget;
@@ -511,9 +512,12 @@ public class PlayerController : MonoBehaviour
         RaycastHit hit;
         if (Physics.SphereCast(_cameraTransform.position, _cameraRaycastRadius, _cameraTransform.forward, 
             out hit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) && 
-            hit.collider.gameObject.GetComponent<LassoObject>() != null &&
-            hit.collider.gameObject.GetComponent<LassoObject>().isLassoable &&
+            ((hit.collider.gameObject.GetComponent<LassoObject>() != null &&
+            hit.collider.gameObject.GetComponent<LassoObject>().isLassoable) ||
+            (hit.collider.gameObject.GetComponentInParent<LassoObject>() != null &&
+            hit.collider.gameObject.GetComponentInParent<LassoObject>().isLassoable)) &&
             Vector3.Distance(hit.point, _cameraTransform.position) > _lassoIgnoreDist) {
+
             // Looking directly at an object
             playerUI.ReticleOverLassoable();
         }
@@ -522,6 +526,8 @@ public class PlayerController : MonoBehaviour
             hit.point = Vector3.zero;
             playerUI.ReticleReset();
         }
+        hit.point = Vector3.zero;
+
 
         // We are not directly looking at anything, so use aim-assist
         if (hit.point == Vector3.zero)
@@ -536,8 +542,11 @@ public class PlayerController : MonoBehaviour
                 RaycastHit raycastHit;
                 if (Physics.SphereCast(_cameraTransform.position, raycastRadius, _cameraTransform.forward, 
                     out raycastHit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) &&
-                    raycastHit.collider.gameObject.GetComponent<LassoObject>() != null &&
-                    raycastHit.collider.gameObject.GetComponent<LassoObject>().isLassoable &&
+                    hit.collider != null && hit.collider.gameObject != null &&
+                    ((hit.collider.gameObject.GetComponent<LassoObject>() != null &&
+                    hit.collider.gameObject.GetComponent<LassoObject>().isLassoable) ||
+                    (hit.collider.gameObject.GetComponentInParent<LassoObject>() != null &&
+                    hit.collider.gameObject.GetComponentInParent<LassoObject>().isLassoable)) &&
                     Vector3.Distance(raycastHit.point, transform.position) < closestDist &&
                     Camera.main.WorldToViewportPoint(raycastHit.point).z > _lassoIgnoreDist)
                 {
@@ -554,7 +563,25 @@ public class PlayerController : MonoBehaviour
             {
                 _lassoSelectedObject.Deselect();
             }
-            _lassoSelectedObject = hit.collider.gameObject.GetComponent<LassoObject>();
+            if (hit.collider.gameObject.GetComponent<LassoObject>() != null)
+            {
+                _lassoSelectedObject = hit.collider.gameObject.GetComponent<LassoObject>();
+
+            }
+            else if (hit.collider.gameObject.GetComponentInParent<LassoObject>() != null)
+            {
+                _lassoSelectedObject = hit.collider.gameObject.GetComponentInParent<LassoObject>();
+            }
+
+            if (hit.collider.gameObject.GetComponent<Rigidbody>() != null)
+            {
+                _lassoHitObjectRigidBody = hit.collider.gameObject.GetComponent<Rigidbody>();
+
+            }
+            else if (hit.collider.gameObject.GetComponentInParent<Rigidbody>() != null)
+            {
+                _lassoHitObjectRigidBody = hit.collider.gameObject.GetComponentInParent<Rigidbody>();
+            }
             _lassoSelectedObject.Select();
             _lassoRaycastHit = hit;
         }
@@ -565,6 +592,7 @@ public class PlayerController : MonoBehaviour
             {
                 _lassoSelectedObject.Deselect();
                 _lassoSelectedObject = null;
+                _lassoHitObjectRigidBody = null;
             }
         }
     }
@@ -573,16 +601,16 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(lassoKey)) {
             _hitLassoTarget = HitLassoTarget.NONE;
-            if (_lassoRaycastHit.point != Vector3.zero && _lassoRaycastHit.collider.gameObject.GetComponent<LassoObject>() != null)
+            if (_lassoRaycastHit.point != Vector3.zero && _lassoSelectedObject != null)
             {
                 // Move lassoHit to the location of the lasso hitpoint
                 _lassoHitPointTransform.position = _lassoRaycastHit.point;
                 _lassoHitObjectTransform = _lassoRaycastHit.collider.gameObject.transform;
-                if (_lassoRaycastHit.collider.gameObject.GetComponent<SwingableObject>() != null)
+                if (_lassoSelectedObject is SwingableObject)
                 {
                     _hitLassoTarget = HitLassoTarget.SWINGABLE;
                 } 
-                else if (_lassoRaycastHit.collider.gameObject.GetComponent<LassoableEnemy>() != null)
+                else if (_lassoSelectedObject is LassoableEnemy)
                 {
                     _hitLassoTarget = HitLassoTarget.ENEMY;
                 }
@@ -605,7 +633,7 @@ public class PlayerController : MonoBehaviour
 
             _lassoRenderer.Throw(lassoThrowPosition, _lassoHitPointTransform, lassoTimeToHit);
 
-            _lassoHitObjectTransform.gameObject.GetComponent<LassoObject>().currentlyLassoed = true;
+            _lassoSelectedObject.currentlyLassoed = true;
 
             if (_hitLassoTarget == HitLassoTarget.SWINGABLE)
             {
@@ -640,7 +668,7 @@ public class PlayerController : MonoBehaviour
         // Cancel on lift lmb
         if (Input.GetKeyUp(lassoKey)) { 
             _cancelLassoAction = true;
-            _lassoHitObjectTransform.gameObject.GetComponent<LassoObject>().currentlyLassoed = false;
+            _lassoSelectedObject.currentlyLassoed = false;
             UpdateState(PlayerState.IDLE); // Will be corrected next update, just get the player out of the throwing state
         }
     }
@@ -724,7 +752,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(lassoKey)) {
             UpdateState(PlayerState.AIR); // Will be updated next update
             _cancelLassoAction = true;
-            _lassoHitObjectTransform.gameObject.GetComponent<LassoObject>().currentlyLassoed = false;
+            _lassoSelectedObject.currentlyLassoed = false;
             _rigidBody.isKinematic = false;
             _rigidBody.AddForce((_lassoHitPointTransform.position - transform.position).normalized * 10.0f, ForceMode.Impulse);
         }
@@ -822,7 +850,7 @@ public class PlayerController : MonoBehaviour
         _moveInput = new Vector3(horizontal, 0, vertical).normalized; // Re-using _moveInput, cause why not
 
         if (Input.GetKeyUp(lassoKey)) {
-            _lassoHitObjectTransform.GetComponent<LassoObject>().currentlyLassoed = false;
+            _lassoSelectedObject.currentlyLassoed = false;
             EndSwing(); 
         }
     }
@@ -832,7 +860,7 @@ public class PlayerController : MonoBehaviour
         if (_cancelLassoAction) { return; }
         UpdateState(PlayerState.PULL);
 
-        _lassoHitObjectTransform.GetComponent<Rigidbody>().isKinematic = true;
+        _lassoHitObjectRigidBody.isKinematic = true;
 
         _lassoRenderer.Pullin(lassoThrowPosition, _lassoHitObjectTransform);
         Invoke("StartHold", timeToPullObject);
@@ -846,7 +874,7 @@ public class PlayerController : MonoBehaviour
     {
         _accumPullTime += Time.deltaTime;
         float percentageComplete = Mathf.Clamp(_accumPullTime / timeToPullObject, 0.0f, 1.0f);
-        _lassoHitObjectTransform.position = percentageComplete
+        _lassoHitObjectRigidBody.transform.position = percentageComplete
             * Vector3.Distance(transform.position + transform.up * holdHeight, _lassoHitPointTransform.position)
             * (transform.position + transform.up * holdHeight - _lassoHitPointTransform.position).normalized + _lassoHitPointTransform.position;
     }
@@ -856,10 +884,9 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(lassoKey))
         {
             _cancelLassoAction = true;
-            _lassoHitObjectTransform.GetComponent<LassoObject>().currentlyLassoed = false;
-            _lassoHitObjectTransform.GetComponent<Rigidbody>().isKinematic = false;
-            _lassoHitObjectTransform.GetComponent<Rigidbody>()
-                .AddForce((transform.position - _lassoHitPointTransform.position).normalized * tossForwardImpulse * 0.5f,
+            _lassoSelectedObject.currentlyLassoed = false;
+            _lassoHitObjectRigidBody.isKinematic = false;
+            _lassoHitObjectRigidBody.AddForce((transform.position - _lassoHitPointTransform.position).normalized * tossForwardImpulse * 0.5f,
                 ForceMode.Impulse);
             UpdateState(PlayerState.IDLE);
         }
@@ -882,7 +909,7 @@ public class PlayerController : MonoBehaviour
     {
         // Display UI rectangle for variable throw range
         _accumHoldTime += Time.deltaTime;
-        _lassoHitObjectTransform.position = transform.position 
+        _lassoHitObjectRigidBody.transform.position = transform.position 
             + transform.right * Mathf.Cos(_accumHoldTime * holdSwingSpeed) * holdSwingRadius
             + transform.forward * Mathf.Sin(_accumHoldTime * holdSwingSpeed) * holdSwingRadius
             + transform.up * holdHeight;
@@ -918,10 +945,11 @@ public class PlayerController : MonoBehaviour
                 forceMult = 1.0f; break;
         }
 
-        _lassoHitObjectTransform.GetComponent<LassoObject>().currentlyLassoed = false;
-        _lassoHitObjectTransform.GetComponent<Rigidbody>().isKinematic = false;
-        _lassoHitObjectTransform.GetComponent<Rigidbody>()
-            .AddForce((_cameraTransform.forward * tossForwardImpulse + _gravityObject.gravityOrientation.up * tossUpwardImpulse) * forceMult,
+        // change enemies state different so it hurts the boss
+        (_lassoSelectedObject as LassoableEnemy).thrown = true;
+        _lassoSelectedObject.currentlyLassoed = false;
+        _lassoHitObjectRigidBody.isKinematic = false;
+        _lassoHitObjectRigidBody.AddForce((_cameraTransform.forward * tossForwardImpulse + _gravityObject.gravityOrientation.up * tossUpwardImpulse) * forceMult,
             ForceMode.Impulse);
 
         UpdateState(PlayerState.TOSS);
@@ -932,10 +960,8 @@ public class PlayerController : MonoBehaviour
 
     void EndToss()
     {
+        
         UpdateState(PlayerState.IDLE);
-
-        // change enemies state different so it hurts the boss
-        _lassoHitObjectTransform.GetComponent<LassoableEnemy>().thrown = true;
 
         playerUI.HideThrowBar();
     }
