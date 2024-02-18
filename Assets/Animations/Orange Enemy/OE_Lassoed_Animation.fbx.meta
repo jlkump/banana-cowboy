@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fde8053dc2097b44bbb739bbe5c30ae2
+guid: 62a3e7d5b6aae2649b5a047d92a8b711
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -33,18 +33,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: OE_Stun
+      name: OE_Lassoed
       takeName: Take 001
       internalID: 1827226128182048838
       firstFrame: 0
-      lastFrame: 29
+      lastFrame: 17
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0

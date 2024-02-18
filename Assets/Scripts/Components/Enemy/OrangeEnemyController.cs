@@ -171,12 +171,12 @@ public class OrangeEnemyController : EnemyController
         }
         if (_state == OrangeState.PLAYER_SPOTTED)
         {
-            orangeEnemyAnimator.Play("Base Layer.OE_Roll");
+            orangeEnemyAnimator.Play("Base Layer.OE_Player_Spotted");
             print("PLAYER SPOTTED");
         }
         if (_state == OrangeState.CHARGE)
         {
-            orangeEnemyAnimator.Play("Base Layer.OE_Roll");
+            orangeEnemyAnimator.Play("Base Layer.OE_Roll_Anticipation");
             print("CHARGE");
         }
         if (_state == OrangeState.DIZZY)
@@ -186,10 +186,12 @@ public class OrangeEnemyController : EnemyController
         }
         if (_state == OrangeState.HELD)
         {
+            orangeEnemyAnimator.Play("Base Layer.OE_Lassoed");
             print("HELD");
         }
         if (_state == OrangeState.REV_UP)
         {
+            orangeEnemyAnimator.Play("Base Layer.OE_Rev_Up"); // CHANGE
             print("REV UP");
         }
         if (_state == OrangeState.ROAM)
@@ -206,6 +208,7 @@ public class OrangeEnemyController : EnemyController
         }
         if (_state == OrangeState.THROWN)
         {
+            orangeEnemyAnimator.Play("Base Layer.OE_Thrown");
             print("THROWN");
         }
     }
