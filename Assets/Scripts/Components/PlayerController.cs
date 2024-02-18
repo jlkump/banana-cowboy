@@ -974,6 +974,7 @@ public class PlayerController : MonoBehaviour
             if (damageAmount > 0)
             {
                 healthAnimator.SetTrigger("Damaged");
+                ScreenShakeManager.Instance.ShakeCamera(2, 1, 0.1f);
                 health -= damageAmount;
                 playerUI.ChangeHealthImage(health);
                 SoundManager.Instance().PlaySFX("PlayerHurt");
@@ -983,6 +984,7 @@ public class PlayerController : MonoBehaviour
             {
                 // TODO: for now reload the scene, it should be reload to checkpoint
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                SoundManager.Instance().StopAllSFX();
             }
             else
             {

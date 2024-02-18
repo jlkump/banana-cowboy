@@ -79,6 +79,7 @@ public class PauseManager : MonoBehaviour
             case "Checkpoint Restart":
                 pauseActive = false;
                 Time.timeScale = 1.0f;
+                SoundManager.Instance().StopAllSFX();
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 break;
             case "Settings":
@@ -92,6 +93,7 @@ public class PauseManager : MonoBehaviour
             case "Restart":
                 pauseActive = false;
                 LevelData.resetLevelData();
+                SoundManager.Instance().StopAllSFX();
                 Time.timeScale = 1.0f;
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 break;
@@ -101,6 +103,7 @@ public class PauseManager : MonoBehaviour
             case "Confirm":
                 pauseActive = false;
                 LevelData.resetLevelData();
+                SoundManager.Instance().StopAllSFX();
                 SoundManager.Instance().StopAllMusic();
                 SoundManager.Instance().PlayMusic("Menu Music");
                 Time.timeScale = 1.0f;

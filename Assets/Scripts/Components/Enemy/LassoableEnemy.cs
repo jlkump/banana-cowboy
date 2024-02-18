@@ -21,7 +21,7 @@ public class LassoableEnemy : LassoObject
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 10 * Time.deltaTime);
         }*/
 
-    private void OnCollisionStay(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
         // TODO: Handle orange, blueberry, strawberry enemies and bosses, and blender
         if (thrown)
@@ -29,24 +29,26 @@ public class LassoableEnemy : LassoObject
             if (collision.collider.CompareTag("Boss"))
             {
                 // Will fix to handle more bosses (for orange, handle weak spots too)
-                if (collision.transform.name == "Orange Boss" || collision.transform.parent.parent.name == "Orange Boss" || collision.transform.name == "Peel") {
-                    OrangeBoss gameObject = GameObject.Find("Orange Boss").GetComponent<OrangeBoss>();
+                if (collision.transform.name == "Orange Boss" || collision.transform.parent.parent.name == "Orange Boss" || collision.transform.name.Contains("Peel")){
+                    OrangeBoss boss = GameObject.Find("Orange Boss").GetComponent<OrangeBoss>();
                     if (collision.transform.name.Contains("Weak Spot"))
                     {
                         print("Weak Spot Damage");
-                        gameObject.Damage(2);
+                        ScreenShakeManager.Instance.ShakeCamera(6, 4, 1.5f);
+                        boss.Damage(2);
                     } 
                     else
                     {
                         print("Normal Damage");
-                        gameObject.Damage(1);
+                        ScreenShakeManager.Instance.ShakeCamera(2, 1, 0.1f);
+                        boss.Damage(1);
                         
 
                     }
                 }
             }
-            SoundManager.Instance().PlaySFX("EnemySplat");
             Destroy(gameObject);
+            SoundManager.Instance().PlaySFX("EnemySplat");
         }
     }
 }
