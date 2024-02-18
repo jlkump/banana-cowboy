@@ -30,24 +30,18 @@ public class LassoableEnemy : LassoObject
             {
                 // Will fix to handle more bosses (for orange, handle weak spots too)
                 if (collision.transform.name == "Orange Boss" || collision.transform.parent.parent.name == "Orange Boss" || collision.transform.name == "Peel") {
+                    OrangeBoss gameObject = GameObject.Find("Orange Boss").GetComponent<OrangeBoss>();
                     if (collision.transform.name.Contains("Weak Spot"))
                     {
                         print("Weak Spot Damage");
-                        collision.transform.parent.parent.gameObject.GetComponent<OrangeBoss>().Damage(2);
+                        gameObject.Damage(2);
                     } 
                     else
                     {
                         print("Normal Damage");
-                        // Works for now TODO: Fix this so that we get the reference to the "Orange Boss" gameobject
-                        // Do Find Game Object
-                        if (collision.transform.name == "Peel") 
-                        {
-                            collision.transform.parent.parent.parent.gameObject.GetComponent<OrangeBoss>().Damage(1);
-                        }
-                        else
-                        {
-                            collision.gameObject.GetComponent<OrangeBoss>().Damage(1);
-                        }
+                        gameObject.Damage(1);
+                        
+
                     }
                 }
             }
