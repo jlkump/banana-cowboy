@@ -43,6 +43,8 @@ public class GravityObject : MonoBehaviour
     [Header("Ground Detection")]
     [SerializeField, Tooltip("The collider to detect if the player is on the ground")]
     Collider _feetCollider = null;
+    [SerializeField, Tooltip("Freeze rotation for the rigid-body")]
+    bool _freezeRotation = true;
     List<Collider> _groundColliders = new List<Collider>();
     bool _onGround = false;
 
@@ -51,7 +53,10 @@ public class GravityObject : MonoBehaviour
     {
         _rigidBody = GetComponent<Rigidbody>();
         _rigidBody.useGravity = false;
-        _rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
+        if (_freezeRotation)
+        {
+            _rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
+        }
         _attractors = new List<GravityAttractor>();
 
         if (gravityOrientation == null)
@@ -62,11 +67,11 @@ public class GravityObject : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (_highestPrioAttractorIndex != -1 && _feetCollider != null && !_rigidBody.isKinematic)
+        if (_highestPrioAttractorIndex != -1 && !_rigidBody.isKinematic)
         {
             GravityAttractor attractor = _attractors[_highestPrioAttractorIndex];
             Vector3 targetGravUp = attractor.GetGravityDirection(gravityOrientation);
- 
+
             // Reorient transform
             gravityOrientation.rotation = Quaternion.FromToRotation(gravityOrientation.up, targetGravUp) * gravityOrientation.rotation;
 
@@ -81,7 +86,7 @@ public class GravityObject : MonoBehaviour
                     {
                         // We are falling down, so increase gravity
                         _rigidBody.AddForce(_gravityIncreaseOnFall * gravityMult * grav);
-                    } 
+                    }
                     else
                     {
                         _rigidBody.AddForce(gravityMult * grav);
@@ -182,12 +187,13 @@ public class GravityObject : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-
+        if (_feetCollider == null) { return; }
         if (collision.contactCount != 0)
         {
             _groundColliders.Add(collision.GetContact(0).otherCollider);
             // Not exactly Dot > 0 comparison since very occasionally the player will phase through the floor if that is the case
-            if (Vector3.Dot((_feetCollider.transform.position - collision.GetContact(0).point).normalized, gravityOrientation.up) > -0.2f) {
+            if (Vector3.Dot((_feetCollider.transform.position - collision.GetContact(0).point).normalized, gravityOrientation.up) > -0.2f)
+            {
                 if (collision.GetContact(0).thisCollider == _feetCollider)
                 {
                     _onGround = true;
@@ -198,6 +204,7 @@ public class GravityObject : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
+        if (_feetCollider == null) { return; }
         if (_groundColliders.Contains(collision.collider))
         {
             _groundColliders.Remove(collision.collider);

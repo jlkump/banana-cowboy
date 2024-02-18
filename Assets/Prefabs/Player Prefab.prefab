@@ -810,6 +810,7 @@ MonoBehaviour:
   _gravityIncreaseOnFall: 1.5
   gravityOrientation: {fileID: 5503662033258183763}
   _feetCollider: {fileID: 4075203376313498946}
+  _freezeRotation: 1
 --- !u!114 &9187660138696086715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -858,13 +859,8 @@ MonoBehaviour:
   lassoTimeToGrapple: 0.2
   endSwingBoostForce: 50
   endSwingVerticalBoostForce: 2
-  minSwingRadius: 4
-  maxSwingRadius: 10
-  distanceOfSwing: 1.7
-  maxSwingSpeed: 3
-  startingSwingSpeed: 1.2
-  swingAccelRate: 0.5
-  swingSideRotateSpeed: 1
+  swingRadius: 10
+  swingSpeed: 2
   holdHeight: 9
   tossForwardImpulse: 30
   tossUpwardImpulse: 10
@@ -872,7 +868,7 @@ MonoBehaviour:
   timeToToss: 0.1
   percentageFarThrow: 0.2
   percentageMidThow: 0.3
-  lassoIndicatorSpeed: 1.6
+  lassoIndicatorSpeed: 3
   holdSwingRadius: 4
   holdSwingSpeed: 6
   sprintKey: 304
