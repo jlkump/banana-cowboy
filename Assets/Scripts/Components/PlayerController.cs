@@ -499,26 +499,23 @@ public class PlayerController : MonoBehaviour
 
     void AimLasso()
     {
+        if (!_canThrowLasso) { return; }
         // Do a simple raycast from the camera out forward where the camera is looking
         RaycastHit hit;
-        if (Physics.SphereCast(_cameraTransform.position, _cameraRaycastRadius, _cameraTransform.forward, 
-            out hit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) && 
-            ((hit.collider.gameObject.GetComponent<LassoObject>() != null &&
-            hit.collider.gameObject.GetComponent<LassoObject>().isLassoable) ||
-            (hit.collider.gameObject.GetComponentInParent<LassoObject>() != null &&
-            hit.collider.gameObject.GetComponentInParent<LassoObject>().isLassoable)) &&
-            Vector3.Distance(hit.point, _cameraTransform.position) > _lassoIgnoreDist) {
+        if (Physics.SphereCast(_cameraTransform.position, _cameraRaycastRadius, _cameraTransform.forward,
+            out hit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) &&
+            hit.collider != null && hit.collider.gameObject != null &&
+            hit.collider.gameObject.GetComponentInParent<LassoObject>() != null &&
+            hit.collider.gameObject.GetComponentInParent<LassoObject>().isLassoable)
+        {
 
             // Looking directly at an object
-            playerUI.ReticleOverLassoable();
+            // Nothing to do here for now
         }
         else
         {
             hit.point = Vector3.zero;
-            playerUI.ReticleReset();
         }
-        hit.point = Vector3.zero;
-
 
         // We are not directly looking at anything, so use aim-assist
         if (hit.point == Vector3.zero)
@@ -526,18 +523,17 @@ public class PlayerController : MonoBehaviour
             float deltaRadius = (_aimAssistMaxRadius - _aimAssistMinRadius) / (_aimAssistRaycastResolution - 1);
             float closestDist = float.MaxValue;
 
+
             for (int i = 0; i < _aimAssistRaycastResolution; i++)
             {
                 float raycastRadius = _aimAssistMinRadius + deltaRadius * i;
 
                 RaycastHit raycastHit;
-                if (Physics.SphereCast(_cameraTransform.position, raycastRadius, _cameraTransform.forward, 
+                if (Physics.SphereCast(_cameraTransform.position, raycastRadius, _cameraTransform.forward,
                     out raycastHit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) &&
-                    hit.collider != null && hit.collider.gameObject != null &&
-                    ((hit.collider.gameObject.GetComponent<LassoObject>() != null &&
-                    hit.collider.gameObject.GetComponent<LassoObject>().isLassoable) ||
-                    (hit.collider.gameObject.GetComponentInParent<LassoObject>() != null &&
-                    hit.collider.gameObject.GetComponentInParent<LassoObject>().isLassoable)) &&
+                    raycastHit.collider != null && raycastHit.collider.gameObject != null &&
+                    raycastHit.collider.gameObject.GetComponentInParent<LassoObject>() != null &&
+                    raycastHit.collider.gameObject.GetComponentInParent<LassoObject>().isLassoable &&
                     Vector3.Distance(raycastHit.point, transform.position) < closestDist &&
                     Camera.main.WorldToViewportPoint(raycastHit.point).z > _lassoIgnoreDist)
                 {
@@ -550,31 +546,15 @@ public class PlayerController : MonoBehaviour
         // We found an actual hit
         if (hit.point != Vector3.zero)
         {
-            if (_lassoSelectedObject != null && hit.collider.gameObject.GetComponent<LassoObject>() != _lassoSelectedObject)
+            if (_lassoSelectedObject != null && hit.collider.gameObject.GetComponentInParent<LassoObject>() != _lassoSelectedObject)
             {
                 _lassoSelectedObject.Deselect();
             }
-            if (hit.collider.gameObject.GetComponent<LassoObject>() != null)
-            {
-                _lassoSelectedObject = hit.collider.gameObject.GetComponent<LassoObject>();
-
-            }
-            else if (hit.collider.gameObject.GetComponentInParent<LassoObject>() != null)
-            {
-                _lassoSelectedObject = hit.collider.gameObject.GetComponentInParent<LassoObject>();
-            }
-
-            if (hit.collider.gameObject.GetComponent<Rigidbody>() != null)
-            {
-                _lassoHitObjectRigidBody = hit.collider.gameObject.GetComponent<Rigidbody>();
-
-            }
-            else if (hit.collider.gameObject.GetComponentInParent<Rigidbody>() != null)
-            {
-                _lassoHitObjectRigidBody = hit.collider.gameObject.GetComponentInParent<Rigidbody>();
-            }
+            _lassoSelectedObject = hit.collider.gameObject.GetComponentInParent<LassoObject>();
             _lassoSelectedObject.Select();
             _lassoRaycastHit = hit;
+            playerUI.ReticleOverLassoable();
+
         }
         else
         {
@@ -584,7 +564,9 @@ public class PlayerController : MonoBehaviour
                 _lassoSelectedObject.Deselect();
                 _lassoSelectedObject = null;
                 _lassoHitObjectRigidBody = null;
+                _lassoHitObjectTransform = null;
             }
+            playerUI.ReticleReset();
         }
     }
 
@@ -597,6 +579,8 @@ public class PlayerController : MonoBehaviour
                 // Move lassoHit to the location of the lasso hitpoint
                 _lassoHitPointTransform.position = _lassoRaycastHit.point;
                 _lassoHitObjectTransform = _lassoRaycastHit.collider.gameObject.transform;
+                _lassoHitObjectRigidBody = _lassoRaycastHit.collider.gameObject.GetComponentInParent<Rigidbody>();
+
                 if (_lassoSelectedObject is SwingableObject)
                 {
                     _hitLassoTarget = HitLassoTarget.SWINGABLE;
@@ -774,8 +758,8 @@ public class PlayerController : MonoBehaviour
         // Move along a parametric curve
         // For now, lock the player right where they need to be.
         Vector3 prev = transform.position;
-        transform.position = _lassoHitPointTransform.position
-                + swingRadius * (-(Mathf.Cos(_swingProgress * swingSpeed * 2f) + 1f) * 0.5f + 1f)* -_lassoHitPointTransform.right
+        transform.position = _lassoHitObjectTransform.position
+                + swingRadius * (-(Mathf.Cos(_swingProgress * swingSpeed * 2f) + 1f) * 0.5f + 1f) * -_lassoHitPointTransform.right
                 + swingRadius * Mathf.Cos(_swingProgress * swingSpeed) * _lassoHitPointTransform.forward;
         _swingProgress += Time.deltaTime;
         
@@ -819,8 +803,12 @@ public class PlayerController : MonoBehaviour
 
         SoundManager.Instance().StopSFX("LassoSwing");
 
+        _rigidBody.AddForce(model.transform.forward * endSwingBoostForce, ForceMode.Impulse);
 
-        _rigidBody.AddForce(endSwingVerticalBoostForce * _gravityObject.gravityOrientation.up + model.transform.forward * endSwingBoostForce, ForceMode.Impulse);
+        if (!_gravityObject.IsInSpace())
+        {
+            model.rotation = Quaternion.FromToRotation(model.up, _gravityObject.gravityOrientation.up) * model.rotation;
+        }
     }
 
     void GetSwingInput()
