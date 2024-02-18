@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,12 @@ using UnityEngine;
 public class OrangeBossAnimationManager : MonoBehaviour
 {
     public OrangeBoss instance;
+
+    [Header("Screen Shaking")]
+    public float intensity;
+    public float frequency;
+    public float time;
+
     public void ShowWeakSpot(int weakSpotIndex)
     {
         instance.ShowWeakSpot(weakSpotIndex);
@@ -18,5 +25,10 @@ public class OrangeBossAnimationManager : MonoBehaviour
     public void HideWeakSpots()
     {
         instance.HideWeakSpots();
+    }
+
+    public void ShakeCamera()
+    {
+        ScreenShakeManager.Instance.ShakeCamera(4, 2, 0.1f);
     }
 }

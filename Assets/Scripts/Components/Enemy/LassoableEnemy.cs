@@ -21,7 +21,7 @@ public class LassoableEnemy : LassoObject
             transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 10 * Time.deltaTime);
         }*/
 
-    private void OnCollisionStay(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
         // TODO: Handle orange, blueberry, strawberry enemies and bosses, and blender
         if (thrown)
@@ -34,19 +34,20 @@ public class LassoableEnemy : LassoObject
                     if (collision.transform.name.Contains("Weak Spot"))
                     {
                         print("Weak Spot Damage");
-                        Destroy(gameObject);
+                        ScreenShakeManager.Instance.ShakeCamera(6, 4, 1.5f);
                         boss.Damage(2);
                     } 
                     else
                     {
                         print("Normal Damage");
-                        Destroy(gameObject);
+                        ScreenShakeManager.Instance.ShakeCamera(2, 1, 0.1f);
                         boss.Damage(1);
                         
 
                     }
                 }
             }
+            Destroy(gameObject);
             SoundManager.Instance().PlaySFX("EnemySplat");
         }
     }
