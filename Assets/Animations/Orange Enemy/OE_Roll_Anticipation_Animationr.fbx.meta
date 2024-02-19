@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fde8053dc2097b44bbb739bbe5c30ae2
+guid: 984b96dbef5a4e14781290fac632ef8a
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: OE_Stun
+      name: OE_Roll_Anticipation
       takeName: Take 001
       internalID: 1827226128182048838
-      firstFrame: 0
-      lastFrame: 29
+      firstFrame: 55
+      lastFrame: 59
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

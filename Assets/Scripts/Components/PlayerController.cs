@@ -747,8 +747,8 @@ public class PlayerController : MonoBehaviour
         UpdateState(PlayerState.SWING);
 
 
-        _lassoHitPointTransform.rotation = Quaternion.FromToRotation(_lassoHitPointTransform.up, axisOfSwing) * _lassoHitPointTransform.rotation;
-        _lassoHitPointTransform.rotation = Quaternion.FromToRotation(_lassoHitPointTransform.forward, dirToPlayer) * _lassoHitPointTransform.rotation;
+        //_lassoHitPointTransform.rotation = Quaternion.FromToRotation(_lassoHitPointTransform.up, _gravityObject.gravityOrientation.up) * _lassoHitPointTransform.rotation;
+        _lassoHitPointTransform.rotation = Quaternion.FromToRotation(_lassoHitPointTransform.forward, Vector3.ProjectOnPlane(dirToPlayer, _gravityObject.gravityOrientation.up)) * _lassoHitPointTransform.rotation;
 
         _swingProgress = 0.0f;
     }
@@ -759,7 +759,7 @@ public class PlayerController : MonoBehaviour
         // For now, lock the player right where they need to be.
         Vector3 prev = transform.position;
         transform.position = _lassoHitObjectTransform.position
-                + swingRadius * (-(Mathf.Cos(_swingProgress * swingSpeed * 2f) + 1f) * 0.5f + 1f) * -_lassoHitPointTransform.right
+                + swingRadius * (-(Mathf.Cos(_swingProgress * swingSpeed * 2f) + 1f) * 0.5f + 1f) * -_lassoHitPointTransform.up
                 + swingRadius * Mathf.Cos(_swingProgress * swingSpeed) * _lassoHitPointTransform.forward;
         _swingProgress += Time.deltaTime;
         
