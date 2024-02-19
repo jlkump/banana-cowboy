@@ -493,7 +493,7 @@ public class PlayerController : MonoBehaviour
         // Spin player model and orientation to right direction to face
         if (_moveInput.magnitude > 0 && model != null)
         {
-            model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(targetVelocity.normalized, _gravityObject.gravityOrientation.up), Time.deltaTime * 8);
+            model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(targetVelocity.normalized, model.transform.up), Time.deltaTime * 8);
         }
     }
 
@@ -747,8 +747,8 @@ public class PlayerController : MonoBehaviour
         UpdateState(PlayerState.SWING);
 
 
-        //_lassoHitPointTransform.rotation = Quaternion.FromToRotation(_lassoHitPointTransform.up, _gravityObject.gravityOrientation.up) * _lassoHitPointTransform.rotation;
-        _lassoHitPointTransform.rotation = Quaternion.FromToRotation(_lassoHitPointTransform.forward, Vector3.ProjectOnPlane(dirToPlayer, _gravityObject.gravityOrientation.up)) * _lassoHitPointTransform.rotation;
+        _lassoHitPointTransform.rotation = Quaternion.FromToRotation(_lassoHitPointTransform.up, _gravityObject.gravityOrientation.up) * _lassoHitPointTransform.rotation;
+        _lassoHitPointTransform.rotation = Quaternion.FromToRotation(_lassoHitPointTransform.forward, Vector3.ProjectOnPlane(_cameraTransform.forward, _gravityObject.gravityOrientation.up)) * _lassoHitPointTransform.rotation;
 
         _swingProgress = 0.0f;
     }
