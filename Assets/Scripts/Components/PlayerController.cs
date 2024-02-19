@@ -971,8 +971,8 @@ public class PlayerController : MonoBehaviour
             if (health <= 0)
             {
                 // TODO: for now reload the scene, it should be reload to checkpoint
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
                 SoundManager.Instance().StopAllSFX();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
             else
             {
