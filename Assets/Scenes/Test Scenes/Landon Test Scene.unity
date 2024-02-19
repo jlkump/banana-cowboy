@@ -634,7 +634,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6463939426268983136, guid: 2c142e73a8d31cb4e85b57ffa4bb0d4e, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -710,6 +710,18 @@ PrefabInstance:
       propertyPath: _cinemachineCamController
       value: 
       objectReference: {fileID: 267684991}
+    - target: {fileID: 9187660138696086715, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: swingSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 9187660138696086715, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: maxSwingSpeed
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9187660138696086715, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: startingSwingSpeed
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -116,9 +116,14 @@ public class PlayerController : MonoBehaviour
     public float endSwingVerticalBoostForce = 2.0f;
     [Range(1.0f, 100.0f)]
     public float swingRadius = 10.0f;
-    public float swingSpeed = 5f;
+    public float swingSpeed = 10f;
+    public float maxTiltAngle = 30f;
+    public float tiltSpeed = 0.5f;
 
     private float _swingProgress;
+    private float _startingDegree;
+    private float _offsetFromUp;
+    private float _swingTiltAngle;
 
     [Header("Lasso Holding")]
     public float holdHeight = 4.0f;
@@ -503,7 +508,8 @@ public class PlayerController : MonoBehaviour
         // Do a simple raycast from the camera out forward where the camera is looking
         RaycastHit hit;
         if (Physics.SphereCast(_cameraTransform.position, _cameraRaycastRadius, _cameraTransform.forward,
-            out hit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) &&
+            out hit, lassoAimRange + Vector3.Distance(_cameraTransform.position, transform.position), 
+            lassoLayerMask, QueryTriggerInteraction.Ignore) &&
             hit.collider != null && hit.collider.gameObject != null &&
             hit.collider.gameObject.GetComponentInParent<LassoObject>() != null &&
             hit.collider.gameObject.GetComponentInParent<LassoObject>().isLassoable)
@@ -530,7 +536,8 @@ public class PlayerController : MonoBehaviour
 
                 RaycastHit raycastHit;
                 if (Physics.SphereCast(_cameraTransform.position, raycastRadius, _cameraTransform.forward,
-                    out raycastHit, lassoAimRange, lassoLayerMask, QueryTriggerInteraction.Ignore) &&
+                    out raycastHit, lassoAimRange + Vector3.Distance(_cameraTransform.position, transform.position), 
+                    lassoLayerMask, QueryTriggerInteraction.Ignore) &&
                     raycastHit.collider != null && raycastHit.collider.gameObject != null &&
                     raycastHit.collider.gameObject.GetComponentInParent<LassoObject>() != null &&
                     raycastHit.collider.gameObject.GetComponentInParent<LassoObject>().isLassoable &&
@@ -738,12 +745,6 @@ public class PlayerController : MonoBehaviour
         if (_cancelLassoAction) { return; }
         SoundManager.Instance().PlaySFX("LassoSwing");
 
-        Vector3 dirToPlayer = (transform.position - _lassoRaycastHit.point).normalized;
-        Vector3 axisOfSwing = Vector3.Cross(_cameraTransform.forward, dirToPlayer);
-        if (axisOfSwing.magnitude == 0)
-        {
-            return;
-        }
         UpdateState(PlayerState.SWING);
 
 
@@ -751,44 +752,88 @@ public class PlayerController : MonoBehaviour
         _lassoHitPointTransform.rotation = Quaternion.FromToRotation(_lassoHitPointTransform.forward, Vector3.ProjectOnPlane(_cameraTransform.forward, _gravityObject.gravityOrientation.up)) * _lassoHitPointTransform.rotation;
 
         _swingProgress = 0.0f;
+
+        Vector3 p = transform.position;
+        Vector3 O = _lassoHitObjectTransform.position;
+        Vector3 posVec = (p - O);
+
+        Vector3 xVec = Vector3.Project(posVec, _lassoHitPointTransform.forward);
+        Vector3 yVec = Vector3.Project(posVec, _lassoHitPointTransform.up);
+
+        float x = Vector3.Dot(xVec, _lassoHitPointTransform.forward) < 0 ? -xVec.magnitude : xVec.magnitude;
+        float y = Vector3.Dot(yVec, _lassoHitPointTransform.up) < 0 ? -yVec.magnitude : yVec.magnitude;
+
+        float r = Mathf.Sqrt(x * x + y * y); // Could also use "(p - O).magnitude;" // This should be roughly swingRadius
+        _startingDegree = Mathf.Acos(x / r);
+
+        // This is b/c Acos does not tell us which quadrant the point lies in. We have to figure that out
+        // ourselves. (PAIN!)
+        if (y < 0.0f)
+        {
+            if (x > 0.0f)
+            {
+                _startingDegree = (2f * Mathf.PI) - _startingDegree;
+            }
+            else
+            {
+                _startingDegree = ((Mathf.PI) - _startingDegree) + Mathf.PI;
+            }
+        }
+        _offsetFromUp = _startingDegree - (Mathf.PI / 2f); // Yes, this is supposed to be Acos, not Asin
+        _swingTiltAngle = 0.0f;
     }
 
     void Swing()
     {
         // Move along a parametric curve
         // For now, lock the player right where they need to be.
-        Vector3 prev = transform.position;
-        transform.position = _lassoHitObjectTransform.position
-                + swingRadius * (-(Mathf.Cos(_swingProgress * swingSpeed * 2f) + 1f) * 0.5f + 1f) * -_lassoHitPointTransform.up
-                + swingRadius * Mathf.Cos(_swingProgress * swingSpeed) * _lassoHitPointTransform.forward;
-        _swingProgress += Time.deltaTime;
-        
-        // Move input
-        if (_moveInput.x > 0)
+
+
+        if ((2f * Mathf.PI - 2 * _offsetFromUp) < 0.6f)
         {
-            _lassoHitPointTransform.Rotate(_gravityObject.gravityOrientation.up, 0.5f);
+            // TODO: Bouncy hanging animation?
         } 
-        else if (_moveInput.x < 0)
+        else
         {
-            _lassoHitPointTransform.Rotate(_gravityObject.gravityOrientation.up, -0.5f);
-        }
+            float arcLength = (2f * Mathf.PI - 2 * _offsetFromUp) * swingRadius;
+            float timeOscilation = (-Mathf.Cos(_swingProgress * (swingSpeed / arcLength) * Mathf.PI) + 1.0f) / 2.0f;
+            float theta = (2f * Mathf.PI - 2f * _offsetFromUp) * timeOscilation;
+            float x = swingRadius * Mathf.Cos(_startingDegree + theta);
+            float y = swingRadius * Mathf.Sin(_startingDegree + theta);
 
-        // Re-orienting model
-        Vector3 dirToPoint = (_lassoHitPointTransform.position - transform.position).normalized;
-        Vector3 newModelForward = (transform.position - prev).normalized;
 
-        if (newModelForward.magnitude > 0)
-        {
-            model.rotation = Quaternion.FromToRotation(model.up, dirToPoint) * model.rotation;
-            model.rotation = Quaternion.FromToRotation(model.forward, newModelForward) * model.rotation;
-        }
-        if (!_gravityObject.IsInSpace())
-        {
-            model.rotation = Quaternion.Slerp(
-                Quaternion.FromToRotation(model.up, _gravityObject.GetGravityDirection()) * model.rotation, 
-                model.rotation, 
-                0.5f
-            );
+            Vector3 prev = transform.position;
+
+            transform.position = _lassoHitObjectTransform.position
+                    + y * _lassoHitPointTransform.up
+                    + x * _lassoHitPointTransform.forward;
+
+
+            _swingProgress += Time.deltaTime;
+
+            // Move input
+            if (_moveInput.x > 0 && _swingTiltAngle < maxTiltAngle)
+            {
+                _lassoHitPointTransform.Rotate(Vector3.forward, tiltSpeed);
+                _swingTiltAngle += tiltSpeed;
+            }
+            else if (_moveInput.x < 0 && _swingTiltAngle > -maxTiltAngle)
+            {
+                _lassoHitPointTransform.Rotate(Vector3.forward, -tiltSpeed);
+                _swingTiltAngle -= tiltSpeed;
+            }
+
+            // Re-orienting model
+            Vector3 dirToPoint = (_lassoHitPointTransform.position - transform.position).normalized;
+            Vector3 newModelForward = (transform.position - prev).normalized;
+
+            if (newModelForward.magnitude > 0)
+            {
+                Quaternion target = model.rotation;
+                target = Quaternion.FromToRotation(model.up, dirToPoint) * target;
+                target = Quaternion.FromToRotation(model.forward, newModelForward) * target;
+                model.rotation = Quaternion.Slerp(model.rotation, target, Time.deltaTime * 8f);
+            }
         }
 
     }
