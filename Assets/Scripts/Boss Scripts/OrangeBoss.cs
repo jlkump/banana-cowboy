@@ -44,12 +44,14 @@ public class OrangeBoss : MonoBehaviour
 
     public enum BossStates
     {
-        IDLE, BOOMERANG, PEEL, SPAWN, COOLDOWN
+        IDLE, BOOMERANG, PEEL, SPAWN, COOLDOWN, NONE
     };
 
     private void Start()
     {
-        state = BossStates.IDLE;
+        state = BossStates.NONE;
+        StartCoroutine(BoomerangStartUpHelper()); // Give a pause before boss battle starts
+
         //state = BossStates.PEEL;
 
         health = maxHealth;
@@ -108,7 +110,7 @@ public class OrangeBoss : MonoBehaviour
 
     void SpawnBoomerangs()
     {
-        cooldownTimer = 5f + boomerangCooldown;
+        cooldownTimer = 5f + boomerangCooldown + 1.5f; // for startup
         state = BossStates.COOLDOWN;
         StartCoroutine(BoomerangStartup());
     }
@@ -121,10 +123,16 @@ public class OrangeBoss : MonoBehaviour
             SoundManager.Instance().PlaySFX("OrangeBossBoomerangs");
         }
     }
+    IEnumerator BoomerangStartUpHelper()
+    {
+        yield return new WaitForSeconds(2f);
+        state = BossStates.IDLE;
+    }
 
     IEnumerator BoomerangStartup()
     {
         modelAnimator.SetTrigger("Boomerang Attack");
+        SoundManager.Instance().PlaySFX("OrangeBossBoomerangStartup");
         yield return new WaitForSeconds(2.5f);
         for (int i = 0; i < 5; i++)
         {
