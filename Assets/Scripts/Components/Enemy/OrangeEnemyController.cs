@@ -13,7 +13,6 @@ public class OrangeEnemyController : EnemyController
         REV_UP,
         CHARGE,
         SLOW_DOWN,
-        RUN_AWAY,
         DIZZY,
         HELD,
         THROWN
@@ -33,7 +32,6 @@ public class OrangeEnemyController : EnemyController
     public float timeToBeginCharge = 0.3f;
     public float timeSpentCharging = 0.8f;
     public float dizzyTime = 1.0f;
-    public float timeSpentRunningAway = 0.4f;
 
     private float spottedParam = 0.0f;
 
@@ -97,9 +95,6 @@ public class OrangeEnemyController : EnemyController
                     GetComponent<Rigidbody>().AddForce(_chargeDirection * chargeSpeed);
                 }
                 break;
-            case OrangeState.RUN_AWAY:
-                // TODO
-                break;
             case OrangeState.IDLE:
             default:
 
@@ -109,7 +104,7 @@ public class OrangeEnemyController : EnemyController
 
     void UpdateState(OrangeState newState)
     {
-        if (_state == OrangeState.HELD) { return; }
+        if (_state == OrangeState.HELD && newState != OrangeState.THROWN) { return; }
         if (_state != newState)
         {
             _state = newState;
@@ -131,21 +126,17 @@ public class OrangeEnemyController : EnemyController
                     SoundManager.Instance().PlaySFX("OrangeCharge");
                     Invoke("EndCharge", timeSpentCharging);
                     break;
-                case OrangeState.RUN_AWAY:
-                    Invoke("EndRunAway", timeSpentRunningAway);
-                    break;
-                case OrangeState.SLOW_DOWN:
-                    Invoke("EndSlowDown", timeSpentRunningAway);
-                    break;
                 case OrangeState.DIZZY:
+                    SoundManager.Instance().PlaySFX("OrangeDizzy");
                     Invoke("EndDizzy", dizzyTime);
                     break;
                 case OrangeState.IDLE:
                     GetComponent<Rigidbody>().velocity = Vector3.zero;
                     break;
-                case OrangeState.ROAM:
+                case OrangeState.THROWN:
                     break;
                 case OrangeState.HELD:
+                    SoundManager.Instance().StopSFX("OrangeDizzy");
                     break;
             }
             if (newState == OrangeState.DIZZY || newState == OrangeState.HELD)
@@ -198,10 +189,6 @@ public class OrangeEnemyController : EnemyController
         {
             print("ROAM");
         }
-        if (_state == OrangeState.RUN_AWAY)
-        {
-            print("RUN AWAY");
-        }
         if (_state == OrangeState.SLOW_DOWN)
         {
             print("SLOW DOWN");
@@ -232,29 +219,10 @@ public class OrangeEnemyController : EnemyController
         UpdateState(OrangeState.SLOW_DOWN);
     }
 
-    void EndSlowDown()
-    {
-        if (_state != OrangeState.SLOW_DOWN) { return; }
-        UpdateState(OrangeState.RUN_AWAY);
-    }
-
-    void EndRunAway()
-    {
-        if (_state != OrangeState.RUN_AWAY) { return; }
-        if (_spottedPlayerTransform != null)
-        {
-            UpdateState(OrangeState.PLAYER_SPOTTED);
-        }
-        else
-        {
-            UpdateState(OrangeState.IDLE);
-        }
-    }
-
     void EndDizzy()
     {
-        if (_state != OrangeState.DIZZY) { return; }
-        //UpdateState(OrangeState.RUN_AWAY);
+        if (_state != OrangeState.DIZZY || _state != OrangeState.THROWN) { return; }
+        SoundManager.Instance().StopSFX("OrangeDizzy");
         if (playerInView)
         {
             UpdateState(OrangeState.PLAYER_SPOTTED);
@@ -262,7 +230,7 @@ public class OrangeEnemyController : EnemyController
         else
         {
             _spottedPlayerTransform = null;
-            UpdateState(OrangeState.IDLE); // should be run away but make idle for testing
+            UpdateState(OrangeState.IDLE); 
         }
     }
 
@@ -270,18 +238,17 @@ public class OrangeEnemyController : EnemyController
     {
         if (collision != null && collision.gameObject != null)
         {
-            if (collision.gameObject.GetComponent<Obstacle>() != null)
+            if (collision.gameObject.GetComponent<Obstacle>() != null && _state != OrangeState.THROWN)
             {
                 collision.gameObject.GetComponent<Obstacle>().Hit();
                 SoundManager.Instance().StopSFX("OrangeCharge");
-                // TODO: Add a crash sound here
+                SoundManager.Instance().PlaySFX("OrangeHitWall");
                 UpdateState(OrangeState.DIZZY);
             }
             else if (collision.gameObject.tag == "Player" && _state == OrangeState.CHARGE)
             {
                 collision.gameObject.GetComponentInParent<PlayerController>().Damage(1, (collision.gameObject.transform.position - transform.position).normalized * knockbackForce);
-/*                UpdateState(OrangeState.RUN_AWAY);
-*/            }
+            }
         }
     }
 

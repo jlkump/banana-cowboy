@@ -150,7 +150,7 @@ MonoBehaviour:
     type: 0
     src: {fileID: 0}
   - name: OrangeBossBoomerangs
-    audioClip: {fileID: 8300000, guid: 3eb05bb6f51ba1d4280155845688a173, type: 3}
+    audioClip: {fileID: 8300000, guid: 093e9e07ad9029a47b75bcf192163d5d, type: 3}
     volume: 1
     pitch: 1
     pitchVariance: 0
@@ -167,6 +167,30 @@ MonoBehaviour:
     src: {fileID: 0}
   - name: OrangeBossPeelSlam
     audioClip: {fileID: 8300000, guid: c8e930362c4701841a255c00171ef4d5, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    type: 0
+    src: {fileID: 0}
+  - name: OrangeBossBoomerangStartup
+    audioClip: {fileID: 8300000, guid: 7860d5b2857f9014db7f627b974b4831, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    type: 0
+    src: {fileID: 0}
+  - name: OrangeDizzy
+    audioClip: {fileID: 8300000, guid: 61017e58d5e4ad94cbbfa379e5b4a852, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    type: 0
+    src: {fileID: 0}
+  - name: OrangeHitWall
+    audioClip: {fileID: 8300000, guid: 624888070d817e34882657d9d1ece3fa, type: 3}
     volume: 1
     pitch: 1
     pitchVariance: 0
