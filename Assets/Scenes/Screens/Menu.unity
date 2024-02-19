@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -175,58 +175,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8841741469219348181, guid: 58a7fb2fab46faf4aae6d15f8370e65b, type: 3}
-      propertyPath: music.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8841741469219348181, guid: 58a7fb2fab46faf4aae6d15f8370e65b, type: 3}
-      propertyPath: music.Array.data[0].name
-      value: Main Menu
-      objectReference: {fileID: 0}
-    - target: {fileID: 8841741469219348181, guid: 58a7fb2fab46faf4aae6d15f8370e65b, type: 3}
-      propertyPath: music.Array.data[1].name
-      value: Orange Planet
-      objectReference: {fileID: 0}
-    - target: {fileID: 8841741469219348181, guid: 58a7fb2fab46faf4aae6d15f8370e65b, type: 3}
-      propertyPath: music.Array.data[2].name
-      value: Orange Boss
-      objectReference: {fileID: 0}
-    - target: {fileID: 8841741469219348181, guid: 58a7fb2fab46faf4aae6d15f8370e65b, type: 3}
-      propertyPath: music.Array.data[0].pitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8841741469219348181, guid: 58a7fb2fab46faf4aae6d15f8370e65b, type: 3}
-      propertyPath: music.Array.data[1].pitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8841741469219348181, guid: 58a7fb2fab46faf4aae6d15f8370e65b, type: 3}
-      propertyPath: music.Array.data[2].pitch
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8841741469219348181, guid: 58a7fb2fab46faf4aae6d15f8370e65b, type: 3}
-      propertyPath: music.Array.data[0].volume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8841741469219348181, guid: 58a7fb2fab46faf4aae6d15f8370e65b, type: 3}
-      propertyPath: music.Array.data[1].volume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8841741469219348181, guid: 58a7fb2fab46faf4aae6d15f8370e65b, type: 3}
-      propertyPath: music.Array.data[2].volume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8841741469219348181, guid: 58a7fb2fab46faf4aae6d15f8370e65b, type: 3}
-      propertyPath: music.Array.data[0].audioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 999e7316a58c7d948a214205bc5d2170, type: 3}
-    - target: {fileID: 8841741469219348181, guid: 58a7fb2fab46faf4aae6d15f8370e65b, type: 3}
-      propertyPath: music.Array.data[1].audioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 04f99ae264fc0d94d96367ea7411f440, type: 3}
-    - target: {fileID: 8841741469219348181, guid: 58a7fb2fab46faf4aae6d15f8370e65b, type: 3}
-      propertyPath: music.Array.data[2].audioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: b0ae1fb3b6c35d248ba93766b787b3c6, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -562,6 +510,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: de604084a97c20446aa89319301e55cc, type: 3}
+    - target: {fileID: 2422935061001736375, guid: 82e4acab47505b14e89f3f49c4f77062, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 680
+      objectReference: {fileID: 0}
     - target: {fileID: 4656086260297082710, guid: 82e4acab47505b14e89f3f49c4f77062, type: 3}
       propertyPath: m_Type
       value: 0
@@ -602,6 +554,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 389ffa4ab3d4beb45b17291b20040a58, type: 3}
+    - target: {fileID: 5058791182195065537, guid: 82e4acab47505b14e89f3f49c4f77062, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5114410879702575367, guid: 82e4acab47505b14e89f3f49c4f77062, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -922,6 +878,26 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: a6820f5b1c388ac43bb57549cea1e893, type: 3}
+    - target: {fileID: 8864742269341767112, guid: 82e4acab47505b14e89f3f49c4f77062, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8864742269341767112, guid: 82e4acab47505b14e89f3f49c4f77062, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8ae55b3cc633a0f4e9418d0f63468032, type: 3}
+    - target: {fileID: 8864742269341767112, guid: 82e4acab47505b14e89f3f49c4f77062, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8864742269341767112, guid: 82e4acab47505b14e89f3f49c4f77062, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8864742269341767112, guid: 82e4acab47505b14e89f3f49c4f77062, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8937187910038116516, guid: 82e4acab47505b14e89f3f49c4f77062, type: 3}
       propertyPath: m_SizeDelta.x
       value: 495

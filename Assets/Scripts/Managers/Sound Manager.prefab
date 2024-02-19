@@ -149,6 +149,14 @@ MonoBehaviour:
     loop: 0
     type: 0
     src: {fileID: 0}
+  - name: Boss Hurt
+    audioClip: {fileID: 8300000, guid: a4c2d6a8be9fa0b46927490ee5ebe9bb, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariance: 0
+    loop: 0
+    type: 0
+    src: {fileID: 0}
   - name: OrangeBossBoomerangs
     audioClip: {fileID: 8300000, guid: 093e9e07ad9029a47b75bcf192163d5d, type: 3}
     volume: 1
@@ -174,7 +182,7 @@ MonoBehaviour:
     type: 0
     src: {fileID: 0}
   - name: OrangeBossBoomerangStartup
-    audioClip: {fileID: 8300000, guid: 7860d5b2857f9014db7f627b974b4831, type: 3}
+    audioClip: {fileID: 8300000, guid: 7270f05ac9ed6fe45ab621633775cdf5, type: 3}
     volume: 1
     pitch: 1
     pitchVariance: 0
