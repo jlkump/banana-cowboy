@@ -96,6 +96,8 @@ public class OrangeEnemyController : EnemyController
                 }
                 break;
             case OrangeState.IDLE:
+
+                break;
             default:
 
                 break;
@@ -216,12 +218,18 @@ public class OrangeEnemyController : EnemyController
     void EndCharge()
     {
         if (_state != OrangeState.CHARGE) { return; }
-        UpdateState(OrangeState.SLOW_DOWN);
+        //TODO: TEST MORE
+        if (playerInView)
+        {
+            UpdateState(OrangeState.PLAYER_SPOTTED);
+        }
+        //UpdateState(OrangeState.DIZZY);
     }
 
     void EndDizzy()
     {
-        if (_state != OrangeState.DIZZY || _state != OrangeState.THROWN) { return; }
+        if (_state != OrangeState.DIZZY) { return; }
+
         SoundManager.Instance().StopSFX("OrangeDizzy");
         if (playerInView)
         {
@@ -230,7 +238,7 @@ public class OrangeEnemyController : EnemyController
         else
         {
             _spottedPlayerTransform = null;
-            UpdateState(OrangeState.IDLE); 
+            UpdateState(OrangeState.IDLE);
         }
     }
 
@@ -238,7 +246,7 @@ public class OrangeEnemyController : EnemyController
     {
         if (collision != null && collision.gameObject != null)
         {
-            if (collision.gameObject.GetComponent<Obstacle>() != null && _state != OrangeState.THROWN)
+            if (collision.gameObject.GetComponent<Obstacle>() != null && _state != OrangeState.THROWN && _state != OrangeState.REV_UP)
             {
                 collision.gameObject.GetComponent<Obstacle>().Hit();
                 SoundManager.Instance().StopSFX("OrangeCharge");
@@ -262,7 +270,7 @@ public class OrangeEnemyController : EnemyController
                 playerInView = true;
                 // was a bug where when a player jumps while enemy is charging (escapes the triggerbox), then enters again
                 // if the player gets hit, would not take damage.
-                if (_state != OrangeState.CHARGE && _state != OrangeState.DIZZY)
+                if (_state == OrangeState.IDLE)
                 {
                     UpdateState(OrangeState.PLAYER_SPOTTED);
                 }

@@ -191,7 +191,7 @@ MonoBehaviour:
     src: {fileID: 0}
   - name: OrangeDizzy
     audioClip: {fileID: 8300000, guid: 61017e58d5e4ad94cbbfa379e5b4a852, type: 3}
-    volume: 1
+    volume: 0.5
     pitch: 1
     pitchVariance: 0
     loop: 0
