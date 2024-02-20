@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -55,7 +57,7 @@ public class OrangeBoss : MonoBehaviour
         //state = BossStates.PEEL;
 
         health = maxHealth;
-        currMove = 1;
+        currMove = 0;
 
         player = GameObject.FindWithTag("Player");
         indicating = false;
@@ -233,12 +235,7 @@ public class OrangeBoss : MonoBehaviour
         {
             print("BOSS DEFEATED");
             // TODO: GO TO SOME SORT OF WIN SCREEN. FOR NOW GO TO MAIN MENU
-            UnityEngine.Cursor.lockState = CursorLockMode.None;
-            UnityEngine.Cursor.visible = true;
-            SoundManager.Instance().StopMusic("Orange Boss");
-            SoundManager.Instance().PlayMusic("Main Menu");
-            SoundManager.Instance().StopAllSFX();
-            SceneManager.LoadScene(0);
+            LevelSwitch.ChangeScene("Menu");
         }
     }
 

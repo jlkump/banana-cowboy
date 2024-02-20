@@ -53,8 +53,8 @@ public class OrangeEnemyController : EnemyController
         _gravObject = GetComponent<GravityObject>();
     }
 
-    // Update is called once per frame
-    void Update()
+    // TODO: Changed from Update. Make sure things still work
+    void FixedUpdate()
     {
         if (_lassoComp.currentlyLassoed) { UpdateState(OrangeState.HELD); }
         if (_state == OrangeState.HELD)
@@ -160,45 +160,36 @@ public class OrangeEnemyController : EnemyController
         if (_state == OrangeState.IDLE)
         {
             orangeEnemyAnimator.Play("Base Layer.OE_Idle");
-            print("IDLE");
         }
         if (_state == OrangeState.PLAYER_SPOTTED)
         {
             orangeEnemyAnimator.Play("Base Layer.OE_Player_Spotted");
-            print("PLAYER SPOTTED");
         }
         if (_state == OrangeState.CHARGE)
         {
             orangeEnemyAnimator.Play("Base Layer.OE_Roll_Anticipation");
-            print("CHARGE");
         }
         if (_state == OrangeState.DIZZY)
         {
             orangeEnemyAnimator.Play("Base Layer.OE_Stun");
-            print("DIZZY");
         }
         if (_state == OrangeState.HELD)
         {
             orangeEnemyAnimator.Play("Base Layer.OE_Lassoed");
-            print("HELD");
         }
         if (_state == OrangeState.REV_UP)
         {
             orangeEnemyAnimator.Play("Base Layer.OE_Rev_Up"); // CHANGE
-            print("REV UP");
         }
         if (_state == OrangeState.ROAM)
         {
-            print("ROAM");
         }
         if (_state == OrangeState.SLOW_DOWN)
         {
-            print("SLOW DOWN");
         }
         if (_state == OrangeState.THROWN)
         {
             orangeEnemyAnimator.Play("Base Layer.OE_Thrown");
-            print("THROWN");
         }
     }
 
