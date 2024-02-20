@@ -12,7 +12,7 @@ public static class LevelData
 {
     // set these manually
     private static Vector3[] OrangeRespawnArray = new[] {
-        new Vector3(-40.4f, 22.3f, 41.2f),
+        new Vector3(-40.4f, 26.1f, 38.65f),
         new Vector3(144.26f, 66.95f, 42.81f)
     };
 
