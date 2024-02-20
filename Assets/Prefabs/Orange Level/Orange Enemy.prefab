@@ -247,14 +247,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _model: {fileID: 4115535371960722218}
   knockbackForce: 20
-  chargeSpeed: 50
+  chargeSpeed: 100
   maxChargeDistance: 50
   walkSpeed: 10
   timeToBeginRev: 0.5
   timeToBeginCharge: 1.5
   timeSpentCharging: 2
   dizzyTime: 4
-  timeSpentRunningAway: 0.1
   playerInView: 0
   orangeEnemyAnimator: {fileID: 3427894436404194328}
 --- !u!1 &8840307380029692700

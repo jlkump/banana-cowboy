@@ -36,19 +36,27 @@ public class LassoableEnemy : LassoObject
                         print("Weak Spot Damage");
                         ScreenShakeManager.Instance.ShakeCamera(6, 4, 1.5f);
                         boss.Damage(2);
+                        DestroySelf(); // TODO: There's a bug where sometimes you hit multiple collision. Need a better(?) way to fix
                     } 
                     else
                     {
                         print("Normal Damage");
                         ScreenShakeManager.Instance.ShakeCamera(2, 1, 0.1f);
                         boss.Damage(1);
-                        
-
+                        DestroySelf();
                     }
                 }
             }
-            Destroy(gameObject);
-            SoundManager.Instance().PlaySFX("EnemySplat");
+            else
+            {
+                DestroySelf();
+            }
         }
+    }
+
+    void DestroySelf()
+    {
+        Destroy(gameObject);
+        SoundManager.Instance().PlaySFX("EnemySplat");
     }
 }

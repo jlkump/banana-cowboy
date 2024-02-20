@@ -47,7 +47,7 @@ public class DialogueManager : MonoBehaviour
 
     public static void StartText(string sentence, string name, Enum type)
     {
-        if (s_text.CompareTo(sentence) == 0) { return; }
+        //if (s_text.CompareTo(sentence) == 0) { return; }
         s_text = sentence;
         s_instance.nameOfCharacter.text = name;
         // TODO Depending on what the enemy is, put the image here. For now change color and use enum
