@@ -117,6 +117,8 @@ public class PlayerController : MonoBehaviour
     [Range(1.0f, 100.0f)]
     public float swingRadius = 10.0f;
     public float swingSpeed = 10f;
+    public float minArcSize = 0.3f;
+    public float maxArcSize = Mathf.PI + 1.3f;
     public float maxTiltAngle = 30f;
     public float tiltSpeed = 0.5f;
 
@@ -124,6 +126,7 @@ public class PlayerController : MonoBehaviour
     private float _startingDegree;
     private float _offsetFromUp;
     private float _swingTiltAngle;
+    private float _arcIncrease;
 
     [Header("Lasso Holding")]
     public float holdHeight = 4.0f;
@@ -781,6 +784,7 @@ public class PlayerController : MonoBehaviour
         }
         _offsetFromUp = _startingDegree - (Mathf.PI / 2f); // Yes, this is supposed to be Acos, not Asin
         _swingTiltAngle = 0.0f;
+        _arcIncrease = 0.0f;
     }
 
     void Swing()
@@ -795,9 +799,20 @@ public class PlayerController : MonoBehaviour
         } 
         else
         {
-            float arcLength = (2f * Mathf.PI - 2 * _offsetFromUp) * swingRadius;
-            float timeOscilation = (-Mathf.Cos(_swingProgress * (swingSpeed / arcLength) * Mathf.PI) + 1.0f) / 2.0f;
-            float theta = (2f * Mathf.PI - 2f * _offsetFromUp) * timeOscilation;
+            if (_moveInput.z > 0.0f)
+            {
+                _arcIncrease = Mathf.Clamp(_arcIncrease + 0.05f, -0.6f, 0.6f);
+            } 
+            else
+            {
+                _arcIncrease = Mathf.Clamp(_arcIncrease - 0.05f, -0.6f, 0.6f);
+            }
+
+            float arcAngle = Mathf.Clamp((2f * Mathf.PI - 2 * _offsetFromUp) + _arcIncrease, minArcSize, maxArcSize);
+
+            print("Current arc length: " + arcAngle);
+            float timeOscilation = (-Mathf.Cos(_swingProgress * swingSpeed * Mathf.PI) + 1.0f) / 2.0f;
+            float theta = arcAngle * timeOscilation;
             float x = swingRadius * Mathf.Cos(_startingDegree + theta);
             float y = swingRadius * Mathf.Sin(_startingDegree + theta);
 

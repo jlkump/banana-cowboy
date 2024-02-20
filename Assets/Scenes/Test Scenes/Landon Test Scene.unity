@@ -712,7 +712,7 @@ PrefabInstance:
       objectReference: {fileID: 267684991}
     - target: {fileID: 9187660138696086715, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
       propertyPath: swingSpeed
-      value: 30
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9187660138696086715, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
       propertyPath: maxSwingSpeed
