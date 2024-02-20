@@ -310,7 +310,13 @@ public class PlayerController : MonoBehaviour
     {
         if (playerAnimator == null) { return; }
         // This handles the changes to the animimations based on the player state
-        
+
+        if (_state == PlayerState.IDLE)
+        {
+            playerAnimator.Play("Base Layer.BC_Idle");
+            playerAnimator.speed = 1.0f;
+            playerAnimator.SetLayerWeight(1, 0.0f);
+        }
         if (_state == PlayerState.WALK)
         {
             playerAnimator.Play("Base Layer.BC_Walk");
@@ -327,7 +333,6 @@ public class PlayerController : MonoBehaviour
         {
             playerAnimator.Play("Base Layer.BC_Swing");
             // playerAnimator.SetLayerWeight(1, 1.0f);
-
         }
         if (_state == PlayerState.AIR)
         {
@@ -354,12 +359,7 @@ public class PlayerController : MonoBehaviour
             playerAnimator.speed = 1.5f;
             print("TOSSSSSS");
         }
-        if (_state == PlayerState.IDLE)
-        {
-            playerAnimator.Play("Base Layer.BC_Idle");
-            playerAnimator.speed = 1.0f;
-            playerAnimator.SetLayerWeight(1, 0.0f);
-        }
+        
     }
 
     void UpdateMoveHoldAnim()
