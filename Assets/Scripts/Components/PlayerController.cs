@@ -329,7 +329,8 @@ public class PlayerController : MonoBehaviour
         }
         if (_state == PlayerState.SWING)
         {
-            playerAnimator.SetLayerWeight(1, 1.0f);
+            playerAnimator.Play("Base Layer.BC_Swing");
+            // playerAnimator.SetLayerWeight(1, 1.0f);
 
         }
         if (_state == PlayerState.AIR)
@@ -337,6 +338,13 @@ public class PlayerController : MonoBehaviour
             playerAnimator.Play("Base Layer.BC_Fall");
             playerAnimator.speed = 1.5f;
             playerAnimator.SetLayerWeight(1, 0.0f);
+        }
+
+        if (_state == PlayerState.THROW_LASSO)
+        {
+            playerAnimator.Play("Base Layer.BC_Lasso");
+            playerAnimator.SetLayerWeight(1, 0.0f);
+            playerAnimator.speed = 1.5f;
         }
     }
 
