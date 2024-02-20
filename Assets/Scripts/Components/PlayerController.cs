@@ -251,7 +251,7 @@ public class PlayerController : MonoBehaviour
                     UpdateMoveHoldAnim();
                     break;
                 case PlayerState.TOSS:
-                    GetMoveInput();
+                    // GetMoveInput();
                     break;
                 default:
                     GetMoveInput();
@@ -324,12 +324,7 @@ public class PlayerController : MonoBehaviour
     {
         if (playerAnimator == null) { return; }
         // This handles the changes to the animimations based on the player state
-        if (_state == PlayerState.IDLE)
-        {
-            playerAnimator.Play("Base Layer.BC_Idle");
-            playerAnimator.speed = 1.0f;
-            playerAnimator.SetLayerWeight(1, 0.0f);
-        }
+        
         if (_state == PlayerState.WALK)
         {
             playerAnimator.Play("Base Layer.BC_Walk");
@@ -354,12 +349,30 @@ public class PlayerController : MonoBehaviour
             playerAnimator.speed = 1.5f;
             playerAnimator.SetLayerWeight(1, 0.0f);
         }
-
         if (_state == PlayerState.THROW_LASSO)
         {
             playerAnimator.Play("Base Layer.BC_Lasso");
             playerAnimator.SetLayerWeight(1, 0.0f);
             playerAnimator.speed = 1.5f;
+        }
+        if (_state == PlayerState.HOLD)
+        {
+            playerAnimator.Play("Lasso Layer.BC_Hold");
+            playerAnimator.SetLayerWeight(1, 1.0f);
+            playerAnimator.speed = 1.5f;
+        }
+        if (_state == PlayerState.TOSS)
+        {
+            playerAnimator.Play("Base Layer.BC_Lasso");
+            playerAnimator.SetLayerWeight(1, 0.0f);
+            playerAnimator.speed = 1.5f;
+            print("TOSSSSSS");
+        }
+        if (_state == PlayerState.IDLE)
+        {
+            playerAnimator.Play("Base Layer.BC_Idle");
+            playerAnimator.speed = 1.0f;
+            playerAnimator.SetLayerWeight(1, 0.0f);
         }
     }
 
