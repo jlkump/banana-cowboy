@@ -105,28 +105,13 @@ public class PlayerController : MonoBehaviour
 
     private LassoRenderer _lassoRenderer;
 
-    [Header("Lasso Grappling")]
-    public float lassoTimeToGrapple = 0.2f;
-    private Vector3 _grappleStartingPoint;
-    private float _accumLassoGrappleTime;
-
-
     [Header("Lasso Swinging")]
-    public float endSwingBoostForce = 5.0f;
-    public float endSwingVerticalBoostForce = 2.0f;
-    [Range(1.0f, 100.0f)]
-    public float swingRadius = 10.0f;
-    public float swingSpeed = 10f;
-    public float minArcSize = 0.3f;
-    public float maxArcSize = Mathf.PI + 1.3f;
-    public float maxTiltAngle = 30f;
-    public float tiltSpeed = 0.5f;
+    [SerializeField]
+    float swingRadius;
+    [SerializeField]
+    CharacterJoint _swingJointPrefab;
+    CharacterJoint _activeSwingJoint;
 
-    private float _swingProgress;
-    private float _startingDegree;
-    private float _offsetFromUp;
-    private float _swingTiltAngle;
-    private float _arcIncrease;
 
     [Header("Lasso Holding")]
     public float holdHeight = 4.0f;
@@ -251,7 +236,7 @@ public class PlayerController : MonoBehaviour
                     UpdateMoveHoldAnim();
                     break;
                 case PlayerState.TOSS:
-                    GetMoveInput();
+                    GetTossInput();
                     break;
                 default:
                     GetMoveInput();
@@ -471,7 +456,7 @@ public class PlayerController : MonoBehaviour
         _moveInput = 
             Vector3.Dot(_gravityObject.gravityOrientation.right, _moveInput) * _gravityObject.gravityOrientation.right 
             + Vector3.Dot(_gravityObject.gravityOrientation.forward, _moveInput) * _gravityObject.gravityOrientation.forward;
-        Vector3 targetVelocity = _moveInput * walkSpeed;
+        Vector3 targetVelocity = _moveInput * (_state == PlayerState.RUN ? runSpeed : walkSpeed);
         float targetSpeed = targetVelocity.magnitude;
 
         float accelRate;
@@ -622,7 +607,7 @@ public class PlayerController : MonoBehaviour
 
             if (_hitLassoTarget == HitLassoTarget.SWINGABLE)
             {
-                Invoke("StartGrapple", lassoTimeToHit);
+                Invoke("StartSwing", lassoTimeToHit);
             } 
             else if (_hitLassoTarget == HitLassoTarget.ENEMY)
             {
@@ -694,181 +679,112 @@ public class PlayerController : MonoBehaviour
 
     void StartGrapple()
     {
-        if (_cancelLassoAction) { return; }
-        _rigidBody.isKinematic = true; // Allows us to directly control the player's position so we can move them in a perfect arc
-        // We grapple if we are outside the current max-range of a swing
-        // pulling the player to the swing object
-        if (Vector3.Distance(_lassoHitPointTransform.position, transform.position) > swingRadius || 
-            Vector3.Distance(_lassoHitPointTransform.position, transform.position) < swingRadius)
-        {
-            _accumLassoGrappleTime = 0.0f;
-            _grappleStartingPoint = transform.position;
-            UpdateState(PlayerState.GRAPPLE);
-        } 
-        else
-        {
-            StartSwing();
-        }
+
     }
 
     void Grapple()
     {
-        _accumLassoGrappleTime += Time.deltaTime;
 
-        Vector3 targetPoint = (_grappleStartingPoint - _lassoHitPointTransform.position).normalized * swingRadius + _lassoHitPointTransform.position;
-        float t = 1 - Mathf.Cos(((_accumLassoGrappleTime / lassoTimeToGrapple) * Mathf.PI) / 2);
-
-        if (t > 1.0f)
-        {
-            EndGrapple();
-        } 
-        else
-        {
-            transform.position = Vector3.Lerp(_grappleStartingPoint, targetPoint, t);
-        }
     }
 
     void EndGrapple()
     {
-        StartSwing();
+
     }
+
     void GetGrappleInput()
     {
-        if (Input.GetKeyUp(lassoKey)) {
-            UpdateState(PlayerState.AIR); // Will be updated next update
-            _cancelLassoAction = true;
-            _lassoSelectedObject.currentlyLassoed = false;
-            _rigidBody.isKinematic = false;
-            _rigidBody.AddForce((_lassoHitPointTransform.position - transform.position).normalized * 10.0f, ForceMode.Impulse);
+        if (Input.GetKeyUp(lassoKey))
+        {
+            EndGrapple();
         }
     }
 
     void StartSwing()
     {
-        if (_cancelLassoAction) { return; }
-        SoundManager.Instance().PlaySFX("LassoSwing");
-
         UpdateState(PlayerState.SWING);
+        _activeSwingJoint = Instantiate(_swingJointPrefab);
+        _activeSwingJoint.autoConfigureConnectedAnchor = false;
+        _activeSwingJoint.anchor = (_lassoHitObjectTransform.position - transform.position).normalized * swingRadius;
+        _activeSwingJoint.connectedAnchor = _lassoHitObjectTransform.position;
+        _activeSwingJoint.transform.position = (transform.position - _lassoHitObjectTransform.position).normalized * swingRadius + _lassoHitObjectTransform.position;
 
+        _rigidBody.isKinematic = true;
+        transform.position = _activeSwingJoint.transform.position;
+        _rigidBody.isKinematic = false;
 
-        _lassoHitPointTransform.rotation = Quaternion.FromToRotation(_lassoHitPointTransform.up, _gravityObject.gravityOrientation.up) * _lassoHitPointTransform.rotation;
-        _lassoHitPointTransform.rotation = Quaternion.FromToRotation(_lassoHitPointTransform.forward, Vector3.ProjectOnPlane(_cameraTransform.forward, _gravityObject.gravityOrientation.up)) * _lassoHitPointTransform.rotation;
+        FixedJoint playerJoint = gameObject.AddComponent<FixedJoint>();
+        playerJoint.connectedBody = _activeSwingJoint.GetComponent<Rigidbody>();
 
-        _swingProgress = 0.0f;
-
-        Vector3 p = transform.position;
-        Vector3 O = _lassoHitObjectTransform.position;
-        Vector3 posVec = (p - O);
-
-        Vector3 xVec = Vector3.Project(posVec, _lassoHitPointTransform.forward);
-        Vector3 yVec = Vector3.Project(posVec, _lassoHitPointTransform.up);
-
-        float x = Vector3.Dot(xVec, _lassoHitPointTransform.forward) < 0 ? -xVec.magnitude : xVec.magnitude;
-        float y = Vector3.Dot(yVec, _lassoHitPointTransform.up) < 0 ? -yVec.magnitude : yVec.magnitude;
-
-        float r = Mathf.Sqrt(x * x + y * y); // Could also use "(p - O).magnitude;" // This should be roughly swingRadius
-        _startingDegree = Mathf.Acos(x / r);
-
-        // This is b/c Acos does not tell us which quadrant the point lies in. We have to figure that out
-        // ourselves. (PAIN!)
-        if (y < 0.0f)
-        {
-            if (x > 0.0f)
-            {
-                _startingDegree = (2f * Mathf.PI) - _startingDegree;
-            }
-            else
-            {
-                _startingDegree = ((Mathf.PI) - _startingDegree) + Mathf.PI;
-            }
-        }
-        _offsetFromUp = _startingDegree - (Mathf.PI / 2f); // Yes, this is supposed to be Acos, not Asin
-        _swingTiltAngle = 0.0f;
-        _arcIncrease = 0.0f;
+        _rigidBody.AddForce(_cameraTransform.forward * 10f, ForceMode.Impulse);
     }
 
     void Swing()
     {
-        // Move along a parametric curve
-        // For now, lock the player right where they need to be.
+        _moveInput = _cameraTransform.TransformDirection(_moveInput);
+        // Transform the move input relative to the player
+        _moveInput =
+            Vector3.Dot(_gravityObject.gravityOrientation.right, _moveInput) * _gravityObject.gravityOrientation.right
+            + Vector3.Dot(_gravityObject.gravityOrientation.forward, _moveInput) * _gravityObject.gravityOrientation.forward;
+        Vector3 targetVelocity = _moveInput * (_state == PlayerState.RUN ? runSpeed : walkSpeed);
+        float targetSpeed = targetVelocity.magnitude;
+
+        float accelRate;
+        // Gets an acceleration value based on if we are accelerating (includes turning) 
+        // or trying to decelerate (stop). As well as applying a multiplier if we're air borne.
+        if (_lastTimeOnGround > 0)
+            accelRate = (Vector3.Dot(targetVelocity, _gravityObject.GetMoveVelocity()) > 0) ? accelerationRate : deccelerationRate;
+        else
+            accelRate = (Vector3.Dot(targetVelocity, _gravityObject.GetMoveVelocity()) > 0) ? accelerationRate * accelAirControlRatio : deccelerationRate * deccelAirControlRatio;
 
 
-        if ((2f * Mathf.PI - 2 * _offsetFromUp) < 0.6f)
+        //We won't slow the player down if they are moving in their desired direction but at a greater speed than their maxSpeed
+        if (conserveMomentum &&
+            Mathf.Abs(_gravityObject.GetMoveVelocity().magnitude) > Mathf.Abs(targetSpeed) &&
+            Vector3.Dot(targetVelocity, _gravityObject.GetMoveVelocity()) > 0 &&
+            Mathf.Abs(targetSpeed) > 0.01f && _lastTimeOnGround < 0)
         {
-            // TODO: Bouncy hanging animation?
+            //Prevent any deceleration from happening, or in other words conserve are current momentum
+            //You could experiment with allowing for the player to slightly increae their speed whilst in this "state"
+            accelRate = 0;
+        }
+
+        Vector3 speedDiff = targetVelocity - _gravityObject.GetMoveVelocity();
+        Vector3 movement = speedDiff * accelRate;
+        _rigidBody.AddForce(movement);
+
+        // Spin player model and orientation to right direction to face
+        if (_gravityObject.IsInSpace())
+        {
+            model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(_cameraTransform.up, model.up), Time.deltaTime * 8);
         } 
         else
         {
-            if (_moveInput.z > 0.0f)
+            if (_moveInput.magnitude > 0 && model != null)
             {
-                _arcIncrease = Mathf.Clamp(_arcIncrease + 0.05f, -0.6f, 0.6f);
-            } 
-            else
-            {
-                _arcIncrease = Mathf.Clamp(_arcIncrease - 0.05f, -0.6f, 0.6f);
-            }
-
-            float arcAngle = Mathf.Clamp((2f * Mathf.PI - 2 * _offsetFromUp) + _arcIncrease, minArcSize, maxArcSize);
-
-            print("Current arc length: " + arcAngle);
-            float timeOscilation = (-Mathf.Cos(_swingProgress * swingSpeed * Mathf.PI) + 1.0f) / 2.0f;
-            float theta = arcAngle * timeOscilation;
-            float x = swingRadius * Mathf.Cos(_startingDegree + theta);
-            float y = swingRadius * Mathf.Sin(_startingDegree + theta);
-
-
-            Vector3 prev = transform.position;
-
-            transform.position = _lassoHitObjectTransform.position
-                    + y * _lassoHitPointTransform.up
-                    + x * _lassoHitPointTransform.forward;
-
-
-            _swingProgress += Time.deltaTime;
-
-            // Move input
-            if (_moveInput.x > 0 && _swingTiltAngle < maxTiltAngle)
-            {
-                _lassoHitPointTransform.Rotate(Vector3.forward, tiltSpeed);
-                _swingTiltAngle += tiltSpeed;
-            }
-            else if (_moveInput.x < 0 && _swingTiltAngle > -maxTiltAngle)
-            {
-                _lassoHitPointTransform.Rotate(Vector3.forward, -tiltSpeed);
-                _swingTiltAngle -= tiltSpeed;
-            }
-
-            // Re-orienting model
-            Vector3 dirToPoint = (_lassoHitPointTransform.position - transform.position).normalized;
-            Vector3 newModelForward = (transform.position - prev).normalized;
-
-            if (newModelForward.magnitude > 0)
-            {
-                Quaternion target = model.rotation;
-                target = Quaternion.FromToRotation(model.up, dirToPoint) * target;
-                target = Quaternion.FromToRotation(model.forward, newModelForward) * target;
-                model.rotation = Quaternion.Slerp(model.rotation, target, Time.deltaTime * 8f);
+                model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(targetVelocity.normalized, model.up), Time.deltaTime * 8);
             }
         }
-
     }
 
     void EndSwing()
     {
         UpdateState(PlayerState.AIR);
 
-        _rigidBody.isKinematic = false;
-
         _lassoRenderer.StopRendering();
 
+        Destroy(GetComponent<FixedJoint>());
+        Destroy(_activeSwingJoint.gameObject);
+
+        _rigidBody.AddForce(model.forward * 30f, ForceMode.Impulse);
+
+        Invoke("SwingBoost", 0.1f);
+
         SoundManager.Instance().StopSFX("LassoSwing");
+    }
 
-        _rigidBody.AddForce(model.transform.forward * endSwingBoostForce, ForceMode.Impulse);
-
-        if (!_gravityObject.IsInSpace())
-        {
-            model.rotation = Quaternion.FromToRotation(model.up, _gravityObject.gravityOrientation.up) * model.rotation;
-        }
+    void SwingBoost()
+    {
     }
 
     void GetSwingInput()
@@ -993,6 +909,17 @@ public class PlayerController : MonoBehaviour
         UpdateState(PlayerState.IDLE);
 
         playerUI.HideThrowBar();
+    }
+
+    void GetTossInput()
+    {
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        _moveInput = new Vector3(horizontal, 0, vertical).normalized;
+        if (_moveInput.magnitude > 0 || Input.anyKeyDown)
+        {
+            EndToss();
+        }
     }
 
 
