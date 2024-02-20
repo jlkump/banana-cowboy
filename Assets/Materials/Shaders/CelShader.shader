@@ -102,7 +102,7 @@ Shader "BananaCowboyCustom/CelShader"
                 // decides whether the pixel is in shadow or not
                 float intensity = smoothstep(0, 0.01, diffuse * shadow);
                 // includes the color of the main light source
-                float4 light = intensity * _LightColor0;
+                float4 light = (intensity) * _LightColor0;
                 // blinn-phong specularity
                 float specularStr = dot(norm, halfDir);
                 float specularSmooth= smoothstep(0.005, 0.01, pow(specularStr * intensity, _Glossiness * _Glossiness));
