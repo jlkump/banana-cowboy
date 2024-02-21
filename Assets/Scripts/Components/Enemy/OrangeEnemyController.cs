@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,9 @@ public class OrangeEnemyController : EnemyController
 
     [SerializeField]
     Transform _model = null;
+
+    public GameObject body;
+    public GameObject feet;
 
     public float knockbackForce = 4.0f;
     public float chargeSpeed = 30.0f;
@@ -237,7 +241,7 @@ public class OrangeEnemyController : EnemyController
     {
         if (collision != null && collision.gameObject != null)
         {
-            if (collision.gameObject.GetComponent<Obstacle>() != null && _state != OrangeState.THROWN && _state != OrangeState.REV_UP)
+            if (collision.gameObject.GetComponent<Obstacle>() != null && _state != OrangeState.THROWN && _state != OrangeState.REV_UP && _state == OrangeState.CHARGE)
             {
                 collision.gameObject.GetComponent<Obstacle>().Hit();
                 SoundManager.Instance().StopSFX("OrangeCharge");
@@ -247,8 +251,28 @@ public class OrangeEnemyController : EnemyController
             else if (collision.gameObject.tag == "Player" && _state == OrangeState.CHARGE)
             {
                 collision.gameObject.GetComponentInParent<PlayerController>().Damage(1, (collision.gameObject.transform.position - transform.position).normalized * knockbackForce);
+                StartCoroutine("ChangeCollisionInteraction", collision.collider);
             }
         }
+    }
+
+    // Needed to make character not stick to walls. TODO: Test to see if it breaks things.
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<Obstacle>() != null && _state == OrangeState.DIZZY)
+        {
+            StartCoroutine("ChangeCollisionInteraction", collision.collider);
+            //GetComponent<Rigidbody>().AddForce((transform.position - collision.transform.position).normalized * 2, ForceMode.Impulse);
+        }
+    }
+
+    private IEnumerator ChangeCollisionInteraction(Collider collider)
+    {
+        Physics.IgnoreCollision(body.GetComponent<Collider>(), collider, true);
+        Physics.IgnoreCollision(feet.GetComponent<Collider>(), collider, true);
+        yield return new WaitForSeconds(1f);
+        Physics.IgnoreCollision(body.GetComponent<Collider>(), collider, false);
+        Physics.IgnoreCollision(feet.GetComponent<Collider>(), collider, false);
     }
 
     private void OnTriggerEnter(Collider other)

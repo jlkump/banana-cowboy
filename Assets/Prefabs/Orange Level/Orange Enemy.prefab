@@ -246,6 +246,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _model: {fileID: 4115535371960722218}
+  body: {fileID: 8840307380029692700}
+  feet: {fileID: 1436214144720959830}
   knockbackForce: 20
   chargeSpeed: 100
   maxChargeDistance: 50
