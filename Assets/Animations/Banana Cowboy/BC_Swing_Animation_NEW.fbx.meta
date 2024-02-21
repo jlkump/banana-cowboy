@@ -1,0 +1,852 @@
+fileFormatVersion: 2
+guid: 0cbe0bc9447f08843a07e3fe35b6cd06
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable: []
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: BC_Swing
+      takeName: Take 001
+      internalID: 1827226128182048838
+      firstFrame: 0
+      lastFrame: 29
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human:
+    - boneName: BananaCowboy_Rig:Root_Joint
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:L_Hip_Joint
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:R_Hip_Joint
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:L_Knee_Joint
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:R_Knee_Joint
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:L_Ankle_Joint
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:R_Ankle_Joint
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:Chest_Joint
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:Face_Joint
+      humanName: Head
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:L_Shoulder_Joint
+      humanName: LeftUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:R_Shoulder_Joint
+      humanName: RightUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:L_Elbow_Joint
+      humanName: LeftLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:R_Elbow_Joint
+      humanName: RightLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:L_Wrist_Joint
+      humanName: LeftHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:R_Wrist_Joint
+      humanName: RightHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:L_Toe_Joint
+      humanName: LeftToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:R_Toe_Joint
+      humanName: RightToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:L_Eye_Joint
+      humanName: LeftEye
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:R_Eye_Joint
+      humanName: RightEye
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:Center_Mouth_Joint
+      humanName: Jaw
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:L_Thumb_Joint
+      humanName: Left Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:L_Thumb_End_Joint
+      humanName: Left Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:L_Hand_Joint
+      humanName: Left Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:L_Hand_End_Joint
+      humanName: Left Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:R_Thumb_Joint
+      humanName: Right Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:R_Thumb_End_Joint
+      humanName: Right Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:R_Hand_Joint
+      humanName: Right Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: BananaCowboy_Rig:R_Hand_End_Joint
+      humanName: Right Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: BC_Idle_Animation_NEW(Clone)
+      parentName: 
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Model
+      parentName: BC_Idle_Animation_NEW(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:BananaCowboy
+      parentName: BananaCowboy_Rig:Model
+      position: {x: -0, y: 6.43746, z: 0.4498537}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 24.436575, y: 24.436575, z: 24.436575}
+    - name: BananaCowboy_Rig:belt:Belt
+      parentName: BananaCowboy_Rig:BananaCowboy
+      position: {x: -0, y: -0.26343548, z: -0.018409032}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 0.040922265, y: 0.040922265, z: 0.040922265}
+    - name: BananaCowboy_Rig:Eyes
+      parentName: BananaCowboy_Rig:BananaCowboy
+      position: {x: 0.011200962, y: -0.07809861, z: 0.0106905615}
+      rotation: {x: 0.07905562, y: -0, z: -0, w: 0.9968702}
+      scale: {x: 0.0044475645, y: 0.0069334786, z: 0.0021948551}
+    - name: BananaCowboy_Rig:R_Eye
+      parentName: BananaCowboy_Rig:Eyes
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Eye
+      parentName: BananaCowboy_Rig:Eyes
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:transform5
+      parentName: BananaCowboy_Rig:Eyes
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Mouth
+      parentName: BananaCowboy_Rig:BananaCowboy
+      position: {x: 2.840786, y: -3.9984007, z: -1.0101273}
+      rotation: {x: 0.03391032, y: -0, z: -0, w: 0.9994249}
+      scale: {x: 0.040922265, y: 0.040922265, z: 0.040922265}
+    - name: BananaCowboy_Rig:pCylinder3
+      parentName: BananaCowboy_Rig:Mouth
+      position: {x: -2.9005845, y: 0.17382874, z: 0.1067292}
+      rotation: {x: -0.029781008, y: -0.016217317, z: -0.47796628, w: 0.8777234}
+      scale: {x: 0.02330365, y: 0.02330365, z: 0.02330365}
+    - name: BananaCowboy_Rig:transform3
+      parentName: BananaCowboy_Rig:pCylinder3
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:group1
+      parentName: BananaCowboy_Rig:Mouth
+      position: {x: -3.2601378, y: 0.1738288, z: 0.10672928}
+      rotation: {x: 5.9120716e-17, y: 0.9994249, z: -0.03391032, w: -6.327353e-17}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:pasted__pCylinder3
+      parentName: BananaCowboy_Rig:group1
+      position: {x: -0.0056607053, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0.47824132, w: 0.8782285}
+      scale: {x: 0.02330365, y: 0.02330365, z: 0.02330365}
+    - name: BananaCowboy_Rig:transform4
+      parentName: BananaCowboy_Rig:pasted__pCylinder3
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:group
+      parentName: BananaCowboy_Rig:Mouth
+      position: {x: 0.37284544, y: -3.8726504, z: -0.02565487}
+      rotation: {x: 0.6763646, y: -0, z: -0, w: 0.73656696}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:pasted__pCylinder2
+      parentName: BananaCowboy_Rig:group
+      position: {x: -0, y: 0.029712103, z: 0.000000023841856}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 0.17694543, y: 0.17694543, z: 0.17694543}
+    - name: BananaCowboy_Rig:transform2
+      parentName: BananaCowboy_Rig:pasted__pCylinder2
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Hat
+      parentName: BananaCowboy_Rig:BananaCowboy
+      position: {x: -0.000669518, y: 0.010044729, z: -0.006966393}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 0.033785045, y: 0.033785045, z: 0.033785045}
+    - name: BananaCowboy_Rig:Boots1
+      parentName: BananaCowboy_Rig:BananaCowboy
+      position: {x: -0.012549294, y: -0.2533266, z: -0.019073557}
+      rotation: {x: 0, y: -0, z: -0.104144685, w: 0.99456215}
+      scale: {x: 0.040922265, y: 0.040922265, z: 0.040922265}
+    - name: BananaCowboy_Rig:Skeleton
+      parentName: BC_Idle_Animation_NEW(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_IK_Handle
+      parentName: BananaCowboy_Rig:Skeleton
+      position: {x: 0.8094595, y: 0.17527637, z: -0.100195}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_IK_Handle
+      parentName: BananaCowboy_Rig:Skeleton
+      position: {x: -0.8010456, y: 0.16532333, z: -0.10019472}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Root_Joint
+      parentName: BananaCowboy_Rig:Skeleton
+      position: {x: -0.000000029802322, y: 2.4206347, z: 0.27839988}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Lower_Body_Joint
+      parentName: BananaCowboy_Rig:Root_Joint
+      position: {x: -0.00093762897, y: -0.7308647, z: 0.3205255}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Tip_Joint
+      parentName: BananaCowboy_Rig:Lower_Body_Joint
+      position: {x: -1.7763567e-16, y: -0.8127487, z: 0.46215305}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Chest_Joint
+      parentName: BananaCowboy_Rig:Root_Joint
+      position: {x: -0.011229305, y: 0.83096856, z: -0.1321812}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Shoulder_Joint
+      parentName: BananaCowboy_Rig:Chest_Joint
+      position: {x: -0.6491083, y: 0.50910294, z: -0.15200834}
+      rotation: {x: 7.456272e-17, y: 0.000000007050425, z: 0.000000031726913, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Elbow_Joint
+      parentName: BananaCowboy_Rig:L_Shoulder_Joint
+      position: {x: -0.5443883, y: -0.02300234, z: 0.000000039407922}
+      rotation: {x: -2.012279e-16, y: -0.00000000873115, z: -0.000000035390254, w: 1}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1}
+    - name: BananaCowboy_Rig:L_Wrist_Joint
+      parentName: BananaCowboy_Rig:L_Elbow_Joint
+      position: {x: -0.4677139, y: -0.0076674405, z: -0.027439665}
+      rotation: {x: 0.000000014100851, y: -0.0000000018444872, z: -0.00000001043751, w: 1}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1}
+    - name: BananaCowboy_Rig:L_Hand_Joint
+      parentName: BananaCowboy_Rig:L_Wrist_Joint
+      position: {x: -0.23975356, y: -0.052612904, z: 0.06815698}
+      rotation: {x: -9.4518586e-32, y: 0.000000015244732, z: 0.000000022867097, w: 1}
+      scale: {x: 1, y: 1.0000002, z: 1.0000002}
+    - name: BananaCowboy_Rig:L_Hand_End_Joint
+      parentName: BananaCowboy_Rig:L_Hand_Joint
+      position: {x: -0.1683717, y: -0.00295389, z: -0.010542614}
+      rotation: {x: -0, y: -0, z: 1.44091e-39, w: 1}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1.0000001}
+    - name: BananaCowboy_Rig:L_Thumb_Joint
+      parentName: BananaCowboy_Rig:L_Wrist_Joint
+      position: {x: -0.069006965, y: 0.1717222, z: 0.047706414}
+      rotation: {x: 0.38058928, y: -0.09326794, z: 0.3805892, w: 0.8376185}
+      scale: {x: 1.0000001, y: 0.9999999, z: 1.0000002}
+    - name: BananaCowboy_Rig:L_Thumb_End_Joint
+      parentName: BananaCowboy_Rig:L_Thumb_Joint
+      position: {x: -0.01098925, y: 0.10722969, z: 0.037267104}
+      rotation: {x: -0, y: -0, z: 2.7339674e-16, w: 1}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: BananaCowboy_Rig:R_Shoulder_Joint
+      parentName: BananaCowboy_Rig:Chest_Joint
+      position: {x: 0.6491086, y: 0.5254482, z: -0.15200832}
+      rotation: {x: 1, y: -0.000000003525213, z: 0.000000010575638, w: 6.617445e-24}
+      scale: {x: 1.0000001, y: 1.0000004, z: 1.0000004}
+    - name: BananaCowboy_Rig:R_Elbow_Joint
+      parentName: BananaCowboy_Rig:R_Shoulder_Joint
+      position: {x: 0.544392, y: 0.022999998, z: 0.000000002314281}
+      rotation: {x: 0.000000023283064, y: 0.000000002910384, z: 0.0000000043655746, w: 1}
+      scale: {x: 1.0000002, y: 1.0000004, z: 1.0000002}
+    - name: BananaCowboy_Rig:R_Wrist_Joint
+      parentName: BananaCowboy_Rig:R_Elbow_Joint
+      position: {x: 0.4996267, y: 0.00767, z: 0.02743971}
+      rotation: {x: -0, y: -0, z: -1.3540042e-23, w: 1}
+      scale: {x: 1.0000001, y: 1.0000005, z: 1.0000005}
+    - name: BananaCowboy_Rig:R_Hand_Joint
+      parentName: BananaCowboy_Rig:R_Wrist_Joint
+      position: {x: 0.2100406, y: 0.04251726, z: -0.03374235}
+      rotation: {x: 0.000000015244732, y: -0.000000007622364, z: 8.8817837e-16, w: 1}
+      scale: {x: 1.000001, y: 1.0000005, z: 1}
+    - name: BananaCowboy_Rig:R_Hand_End_Joint
+      parentName: BananaCowboy_Rig:R_Hand_Joint
+      position: {x: 0.16837, y: 0.00296, z: 0.0105425995}
+      rotation: {x: -0, y: -0, z: -1.323489e-23, w: 1}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: BananaCowboy_Rig:R_Thumb_Joint
+      parentName: BananaCowboy_Rig:R_Wrist_Joint
+      position: {x: 0.06901, y: -0.17171998, z: -0.047706503}
+      rotation: {x: 0.38058773, y: -0.09326435, z: 0.38058785, w: 0.83762026}
+      scale: {x: 1.0000001, y: 1.0000002, z: 1.0000004}
+    - name: BananaCowboy_Rig:R_Thumb_End_Joint
+      parentName: BananaCowboy_Rig:R_Thumb_Joint
+      position: {x: 0.010989999, y: -0.10722999, z: -0.0372671}
+      rotation: {x: -0, y: -0, z: -2.3332722e-16, w: 1}
+      scale: {x: 1, y: 0.99999994, z: 0.99999994}
+    - name: BananaCowboy_Rig:Face_Joint
+      parentName: BananaCowboy_Rig:Chest_Joint
+      position: {x: 0.011229305, y: 1.3025993, z: 0.02643624}
+      rotation: {x: 0.0000000011574616, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Center_Mouth_Joint
+      parentName: BananaCowboy_Rig:Face_Joint
+      position: {x: 0.006227981, y: -0.763615, z: 0.55211484}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Mouth_Joint_C
+      parentName: BananaCowboy_Rig:Center_Mouth_Joint
+      position: {x: -0.094021164, y: 0.024676425, z: -0.0033529592}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Mouth_Joint_B
+      parentName: BananaCowboy_Rig:L_Mouth_Joint_C
+      position: {x: -0.06591319, y: 0.050932918, z: 0.0019598638}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Mouth_Joint_A
+      parentName: BananaCowboy_Rig:L_Mouth_Joint_B
+      position: {x: -0.04868588, y: 0.037450675, z: 0.0037659977}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_Mouth_Joint_C
+      parentName: BananaCowboy_Rig:Center_Mouth_Joint
+      position: {x: 0.08873812, y: 0.023178399, z: -0.0033529592}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_Mouth_Joint_B
+      parentName: BananaCowboy_Rig:R_Mouth_Joint_C
+      position: {x: 0.067411214, y: 0.051681932, z: 0.0030837434}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_Mouth_Joint_A
+      parentName: BananaCowboy_Rig:R_Mouth_Joint_B
+      position: {x: 0.044191796, y: 0.03670166, z: 0.0028569307}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Head_Joint
+      parentName: BananaCowboy_Rig:Face_Joint
+      position: {x: 7.4606985e-16, y: 0.98817885, z: 0.18505366}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Stem_Joint
+      parentName: BananaCowboy_Rig:Head_Joint
+      position: {x: 3.907985e-16, y: 0.53900665, z: 0.09252683}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_Eye_Joint
+      parentName: BananaCowboy_Rig:Face_Joint
+      position: {x: 0.27890432, y: -0.35577986, z: 0.53843945}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_Eye_End_Joint
+      parentName: BananaCowboy_Rig:R_Eye_Joint
+      position: {x: 0.0019193367, y: -0.011679854, z: 0.085907966}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Eye_Joint
+      parentName: BananaCowboy_Rig:Face_Joint
+      position: {x: -0.2789048, y: -0.3557778, z: 0.53843904}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Eye_End_Joint
+      parentName: BananaCowboy_Rig:L_Eye_Joint
+      position: {x: -0.001919, y: -0.0116799995, z: 0.085908}
+      rotation: {x: -0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Hip_Joint
+      parentName: BananaCowboy_Rig:Root_Joint
+      position: {x: -0.5026731, y: -0.4326048, z: -0.38827276}
+      rotation: {x: -0.000060497012, y: 0.026502088, z: -0.00012048151, w: 0.99964875}
+      scale: {x: 0.99999976, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Knee_Joint
+      parentName: BananaCowboy_Rig:L_Hip_Joint
+      position: {x: -0.004858044, y: -0.9861829, z: 0.10968608}
+      rotation: {x: 0.000000046467903, y: -0.000000007450581, z: 0.000000009156224, w: 1}
+      scale: {x: 1, y: 0.9999998, z: 1.0000001}
+    - name: BananaCowboy_Rig:L_Ankle_Joint
+      parentName: BananaCowboy_Rig:L_Knee_Joint
+      position: {x: 0.009716088, y: -1.1427038, z: -0.10000789}
+      rotation: {x: -0, y: -0, z: 3.4621286e-16, w: 1}
+      scale: {x: 1, y: 0.9999999, z: 1}
+    - name: BananaCowboy_Rig:L_Toe_Joint
+      parentName: BananaCowboy_Rig:L_Ankle_Joint
+      position: {x: 0.03811633, y: 0.17374775, z: 0.7763034}
+      rotation: {x: -0.00000002332672, y: 0.00000001117587, z: -0.000000027487886, w: 1}
+      scale: {x: 1, y: 0.99999994, z: 1}
+    - name: BananaCowboy_Rig:R_Hip_Joint
+      parentName: BananaCowboy_Rig:Root_Joint
+      position: {x: 0.50267315, y: -0.43259987, z: -0.38827288}
+      rotation: {x: 0.99948066, y: 0.00014650323, z: 0.032224786, w: 0.000073526055}
+      scale: {x: 1, y: 1.0000014, z: 1.0000008}
+    - name: BananaCowboy_Rig:R_Knee_Joint
+      parentName: BananaCowboy_Rig:R_Hip_Joint
+      position: {x: 0.0048579997, y: 0.98619, z: -0.10968617}
+      rotation: {x: 0.000000046464258, y: 0.000000014908634, z: -0.0000000081781755, w: 1}
+      scale: {x: 0.99999994, y: 1.0000011, z: 1.0000006}
+    - name: BananaCowboy_Rig:R_Ankle_Joint
+      parentName: BananaCowboy_Rig:R_Knee_Joint
+      position: {x: -0.0097159995, y: 1.142702, z: 0.10000817}
+      rotation: {x: -0, y: -0, z: 1.9545966e-16, w: 1}
+      scale: {x: 0.9999999, y: 1.0000011, z: 1.0000007}
+    - name: BananaCowboy_Rig:R_Toe_Joint
+      parentName: BananaCowboy_Rig:R_Ankle_Joint
+      position: {x: 0.05600279, y: -0.23208459, z: -0.7578124}
+      rotation: {x: -0.000000051622912, y: -0.000000014909796, z: 0.000000013926181, w: 1}
+      scale: {x: 0.99999994, y: 1.0000011, z: 1.0000007}
+    - name: BananaCowboy_Rig:Controls
+      parentName: BC_Idle_Animation_NEW(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Main_Control
+      parentName: BananaCowboy_Rig:Controls
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Root_Control
+      parentName: BananaCowboy_Rig:Main_Control
+      position: {x: 0.20352435, y: 2.420635, z: 0.27839988}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Chest_Control
+      parentName: BananaCowboy_Rig:Root_Control
+      position: {x: -0.011229305, y: 0.8309683, z: -0.1321812}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Shoulder_Control
+      parentName: BananaCowboy_Rig:Chest_Control
+      position: {x: -0.6491082, y: 0.509103, z: -0.15200837}
+      rotation: {x: 0.17715378, y: 0.12604553, z: 0.369021, w: 0.903633}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Elbow_Control
+      parentName: BananaCowboy_Rig:L_Shoulder_Control
+      position: {x: -0.54438823, y: -0.023002319, z: -4.440892e-18}
+      rotation: {x: 0.23432313, y: 0.16389343, z: 0.14714642, w: 0.94687885}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Wrist_Control
+      parentName: BananaCowboy_Rig:L_Elbow_Control
+      position: {x: -0.46771392, y: -0.007667236, z: -0.027439665}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Hand_Control
+      parentName: BananaCowboy_Rig:L_Wrist_Control
+      position: {x: -0.23402748, y: -0.05014881, z: 0.07506444}
+      rotation: {x: 0, y: 0.33921003, z: -0, w: 0.94071066}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Thumb_Control
+      parentName: BananaCowboy_Rig:L_Wrist_Control
+      position: {x: -0.06900696, y: 0.1717221, z: 0.047706477}
+      rotation: {x: 0.46291867, y: -0, z: -0, w: 0.88640076}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_Shoulder_Control
+      parentName: BananaCowboy_Rig:Chest_Control
+      position: {x: 0.64910847, y: 0.52544826, z: -0.15200837}
+      rotation: {x: 0.15534168, y: -0.10567677, z: -0.3675619, w: 0.9108236}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_Elbow_Control
+      parentName: BananaCowboy_Rig:R_Shoulder_Control
+      position: {x: 0.544392, y: -0.022999877, z: 0}
+      rotation: {x: 0.1500371, y: -0.20419376, z: -0.13250667, w: 0.95824623}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_Wrist_Control
+      parentName: BananaCowboy_Rig:R_Elbow_Control
+      position: {x: 0.4996267, y: -0.007669983, z: -0.02743971}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_Hand_Control
+      parentName: BananaCowboy_Rig:R_Wrist_Control
+      position: {x: 0.21004058, y: -0.042517286, z: 0.03374232}
+      rotation: {x: 0, y: -0.41620037, z: -0, w: 0.90927297}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_Thumb_Control
+      parentName: BananaCowboy_Rig:R_Wrist_Control
+      position: {x: 0.06901001, y: 0.17171997, z: 0.0477065}
+      rotation: {x: 0.6868798, y: -0, z: -0, w: 0.7267711}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Face_Control
+      parentName: BananaCowboy_Rig:Chest_Control
+      position: {x: 0.011229305, y: 1.3025994, z: 0.026436232}
+      rotation: {x: -0.046963725, y: 0, z: -0, w: 0.9988966}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Center_Mouth_Control
+      parentName: BananaCowboy_Rig:Face_Control
+      position: {x: 0.006227981, y: -0.7636151, z: 1.2358844}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_C_Mouth_Control
+      parentName: BananaCowboy_Rig:Center_Mouth_Control
+      position: {x: -0.094021164, y: 0.024676513, z: -0.0033529662}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_B_Mouth_Control
+      parentName: BananaCowboy_Rig:L_C_Mouth_Control
+      position: {x: -0.06591319, y: 0.05093292, z: 0.001959915}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_A_Mouth_Control
+      parentName: BananaCowboy_Rig:L_B_Mouth_Control
+      position: {x: -0.048685875, y: 0.03745056, z: 0.0037659453}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_C_Mouth_Control
+      parentName: BananaCowboy_Rig:Center_Mouth_Control
+      position: {x: 0.08873812, y: 0.023178406, z: -0.0033529662}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_B_Mouth_Control
+      parentName: BananaCowboy_Rig:R_C_Mouth_Control
+      position: {x: 0.06741122, y: 0.05168213, z: 0.0030838011}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_A_Mouth_Control
+      parentName: BananaCowboy_Rig:R_B_Mouth_Control
+      position: {x: 0.04419179, y: 0.03670166, z: 0.002856903}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Eye_Control
+      parentName: BananaCowboy_Rig:Face_Control
+      position: {x: -0.2808238, y: -0.36745787, z: 1.2422608}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_Eye_Control
+      parentName: BananaCowboy_Rig:Face_Control
+      position: {x: 0.2835934, y: -0.36745787, z: 1.2422608}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Head_Control
+      parentName: BananaCowboy_Rig:Face_Control
+      position: {x: -0, y: 0.9881787, z: 0.18505366}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Stem_Control
+      parentName: BananaCowboy_Rig:Head_Control
+      position: {x: -0, y: 0.53900695, z: 0.09252685}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Lower_Body_Control
+      parentName: BananaCowboy_Rig:Root_Control
+      position: {x: -0.0009376293, y: -0.7308648, z: 0.32052547}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:Tip_Control
+      parentName: BananaCowboy_Rig:Lower_Body_Control
+      position: {x: -0, y: -0.8127487, z: 0.46215305}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_Hip_Control
+      parentName: BananaCowboy_Rig:Root_Control
+      position: {x: 0.50267315, y: -0.43260008, z: -0.38827288}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_Foot_Control
+      parentName: BananaCowboy_Rig:R_Hip_Control
+      position: {x: 0.10326195, y: -1.953724, z: 0.35740554}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_Pole_Vector
+      parentName: BananaCowboy_Rig:R_Foot_Control
+      position: {x: 0.008640019, y: 1.2683122, z: 1.6662464}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:R_Toe_Control
+      parentName: BananaCowboy_Rig:R_Foot_Control
+      position: {x: 0.01618504, y: 0.043283783, z: 0.44060943}
+      rotation: {x: -0.059967197, y: 0.040718514, z: 0.0024482224, w: 0.99736655}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Hip_Control
+      parentName: BananaCowboy_Rig:Root_Control
+      position: {x: -0.5026731, y: -0.43260497, z: -0.38827276}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Foot_Control
+      parentName: BananaCowboy_Rig:L_Hip_Control
+      position: {x: -0.50189686, y: -1.9636722, z: 0.35740578}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Pole_Vector
+      parentName: BananaCowboy_Rig:L_Foot_Control
+      position: {x: -0.0317628, y: 1.2683119, z: 1.6662462}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: BananaCowboy_Rig:L_Toe_Control
+      parentName: BananaCowboy_Rig:L_Foot_Control
+      position: {x: -0.04844596, y: 0.043265488, z: 0.4411931}
+      rotation: {x: -0.029048448, y: -0.04468535, z: -0.0012998887, w: 0.99857783}
+      scale: {x: 1, y: 1, z: 1}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: a414f84199e5111448517f85df8f5aa5, type: 3}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 3
+  humanoidOversampling: 1
+  avatarSetup: 2
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
