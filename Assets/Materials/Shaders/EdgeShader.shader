@@ -46,6 +46,10 @@ Shader "Hidden/BananaCowboyCustom/EdgeShader"
                 fixed4 col = tex2D(_MainTex, i.uv);
                 // use high precision function to get depth
                 float depth = Linear01Depth(tex2D(_CameraDepthTexture, i.uv));
+                // if our depth is out of range, return immediately
+                if(depth > 0.01) {
+                    return col;
+                }
                 
                 // sample all pixels around our current pixel
                 float n = Linear01Depth(tex2D(_CameraDepthTexture, i.uv + _CameraDepthTexture_TexelSize * float2(0, 1)).r);
