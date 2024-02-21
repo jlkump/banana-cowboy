@@ -1,4 +1,4 @@
-Shader "Hidden/EdgeShader"
+Shader "Hidden/BananaCowboyCustom/EdgeShader"
 {
     Properties
     {
@@ -57,10 +57,10 @@ Shader "Hidden/EdgeShader"
                 float se = Linear01Depth(tex2D(_CameraDepthTexture, i.uv + _CameraDepthTexture_TexelSize * float2(1, -1)).r);
                 float sw = Linear01Depth(tex2D(_CameraDepthTexture, i.uv + _CameraDepthTexture_TexelSize * float2(-1, -1)).r);
 
-                if (n - s > 0.01 || w - e > 0.01 || e - w > 0.01 || s - n > 0.01)
+                if (n - s > 0.0005 || w - e > 0.0005 || e - w > 0.0005 || s - n > 0.0005)
                     col = 0.0f;
                 
-                if (nw - se > 0.01 || ne - sw > 0.01 || se - nw > 0.01 || sw - ne > 0.01)
+                if (nw - se > 0.0005 || ne - sw > 0.0005 || se - nw > 0.0005 || sw - ne > 0.0005)
                     col = 0.0f;
 
                 return col;
