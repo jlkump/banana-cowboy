@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44581747, g: 0.49554384, b: 0.5743201, a: 1}
+  m_IndirectSpecularColor: {r: 0.44581795, g: 0.49554443, b: 0.57432115, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2436,7 +2436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd8d6079b6576364ea776072de96aa4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: -20
+  gravity: -40
   priority: 1
   attractDirection: 2
   centerOfGravity: {fileID: 0}
@@ -3407,7 +3407,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6285523471585405613, guid: 748331a6b33d0a04181e7c8879fe5fdb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 5.8299994
       objectReference: {fileID: 0}
     - target: {fileID: 6285523471585405613, guid: 748331a6b33d0a04181e7c8879fe5fdb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4119,7 +4119,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8014599562753797276, guid: 4bf0fd80f0dd2d44193d368678c8752b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0
+      value: 5.8299994
       objectReference: {fileID: 0}
     - target: {fileID: 8014599562753797276, guid: 4bf0fd80f0dd2d44193d368678c8752b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6322,7 +6322,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8922212204320345224, guid: 75614dbcafc47084ca5f860a25e3d7f2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 5.83
       objectReference: {fileID: 0}
     - target: {fileID: 8922212204320345224, guid: 75614dbcafc47084ca5f860a25e3d7f2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8024,7 +8024,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!114 &1626704896
 MonoBehaviour:
@@ -8065,7 +8065,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -8170,7 +8170,7 @@ Transform:
   m_GameObject: {fileID: 1626704895}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -59.7, y: 48.8, z: 20.1}
+  m_LocalPosition: {x: -27.4, y: 48.8, z: 27.9}
   m_LocalScale: {x: 25, y: 25, z: 25}
   m_ConstrainProportionsScale: 1
   m_Children: []

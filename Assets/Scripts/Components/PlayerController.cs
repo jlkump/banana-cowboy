@@ -236,7 +236,6 @@ public class PlayerController : MonoBehaviour
                     UpdateMoveHoldAnim();
                     break;
                 case PlayerState.TOSS:
-                    // GetMoveInput();
                     GetTossInput();
                     break;
                 default:
@@ -479,7 +478,6 @@ public class PlayerController : MonoBehaviour
             Vector3.Dot(_gravityObject.gravityOrientation.right, _moveInput) * _gravityObject.gravityOrientation.right 
             + Vector3.Dot(_gravityObject.gravityOrientation.forward, _moveInput) * _gravityObject.gravityOrientation.forward;
         Vector3 targetVelocity = _moveInput * (_state == PlayerState.RUN ? runSpeed : walkSpeed);
-        float targetSpeed = targetVelocity.magnitude;
 
         float accelRate;
         // Gets an acceleration value based on if we are accelerating (includes turning) 
@@ -492,9 +490,9 @@ public class PlayerController : MonoBehaviour
 
         //We won't slow the player down if they are moving in their desired direction but at a greater speed than their maxSpeed
         if (conserveMomentum &&
-            Mathf.Abs(_gravityObject.GetMoveVelocity().magnitude) > Mathf.Abs(targetSpeed) &&
+            _gravityObject.GetMoveVelocity().magnitude > targetVelocity.magnitude &&
             Vector3.Dot(targetVelocity, _gravityObject.GetMoveVelocity()) > 0 &&
-            Mathf.Abs(targetSpeed) > 0.01f && _lastTimeOnGround < 0)
+            targetVelocity.magnitude > 0.01f && _lastTimeOnGround < 0)
         {
             //Prevent any deceleration from happening, or in other words conserve are current momentum
             //You could experiment with allowing for the player to slightly increae their speed whilst in this "state"
@@ -731,6 +729,8 @@ public class PlayerController : MonoBehaviour
         _activeSwingJoint.connectedAnchor = _lassoHitObjectTransform.position;
         _activeSwingJoint.transform.position = (transform.position - _lassoHitObjectTransform.position).normalized * swingRadius + _lassoHitObjectTransform.position;
 
+        Vector3 prevVel = _rigidBody.velocity;
+
         _rigidBody.isKinematic = true;
         transform.position = _activeSwingJoint.transform.position;
         _rigidBody.isKinematic = false;
@@ -738,7 +738,8 @@ public class PlayerController : MonoBehaviour
         FixedJoint playerJoint = gameObject.AddComponent<FixedJoint>();
         playerJoint.connectedBody = _activeSwingJoint.GetComponent<Rigidbody>();
 
-        _rigidBody.AddForce(_cameraTransform.forward * 10f, ForceMode.Impulse);
+        _gravityObject.gravityMult = 3f;
+        //_rigidBody.AddForce(prevVel * 10f, ForceMode.Impulse);
     }
 
     void Swing()
@@ -748,7 +749,7 @@ public class PlayerController : MonoBehaviour
         _moveInput =
             Vector3.Dot(_gravityObject.gravityOrientation.right, _moveInput) * _gravityObject.gravityOrientation.right
             + Vector3.Dot(_gravityObject.gravityOrientation.forward, _moveInput) * _gravityObject.gravityOrientation.forward;
-        Vector3 targetVelocity = _moveInput * (_state == PlayerState.RUN ? runSpeed : walkSpeed);
+        Vector3 targetVelocity = _moveInput * 20f;
         float targetSpeed = targetVelocity.magnitude;
 
         float accelRate;
@@ -778,13 +779,13 @@ public class PlayerController : MonoBehaviour
         // Spin player model and orientation to right direction to face
         if (_gravityObject.IsInSpace())
         {
-            model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(_cameraTransform.up, model.up), Time.deltaTime * 8);
+            model.rotation = Quaternion.Slerp(model.rotation, Quaternion.FromToRotation(model.up, _cameraTransform.up) * model.rotation, Time.deltaTime * 8);
         } 
         else
         {
             if (_moveInput.magnitude > 0 && model != null)
             {
-                model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(targetVelocity.normalized, model.up), Time.deltaTime * 8);
+                model.rotation = Quaternion.Slerp(model.rotation, Quaternion.LookRotation(targetVelocity.normalized, _gravityObject.gravityOrientation.up), Time.deltaTime * 8);
             }
         }
     }
@@ -795,10 +796,14 @@ public class PlayerController : MonoBehaviour
 
         _lassoRenderer.StopRendering();
 
+        Vector3 prevVel = _rigidBody.velocity;
+
         Destroy(GetComponent<FixedJoint>());
         Destroy(_activeSwingJoint.gameObject);
 
-        _rigidBody.AddForce(model.forward * 30f, ForceMode.Impulse);
+        _gravityObject.gravityMult = 1f;
+
+        _rigidBody.AddForce(prevVel, ForceMode.Impulse);
 
         Invoke("SwingBoost", 0.1f);
 
