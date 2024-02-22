@@ -18052,6 +18052,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Orange Level Swingable
       objectReference: {fileID: 0}
+    - target: {fileID: 8455201791316520658, guid: 61166e281b3590e4fbf77dac059ef867, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8836291703294823304, guid: 61166e281b3590e4fbf77dac059ef867, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.46
