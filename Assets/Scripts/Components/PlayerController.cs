@@ -882,9 +882,9 @@ public class PlayerController : MonoBehaviour
         // Display UI rectangle for variable throw range
         _accumHoldTime += Time.deltaTime;
         _lassoHitObjectRigidBody.transform.position = transform.position 
-            + transform.right * Mathf.Cos(_accumHoldTime * holdSwingSpeed) * holdSwingRadius
-            + transform.forward * Mathf.Sin(_accumHoldTime * holdSwingSpeed) * holdSwingRadius
-            + transform.up * holdHeight;
+            + _gravityObject.gravityOrientation.right * Mathf.Cos(_accumHoldTime * holdSwingSpeed) * holdSwingRadius
+            + _gravityObject.gravityOrientation.forward * Mathf.Sin(_accumHoldTime * holdSwingSpeed) * holdSwingRadius
+            + _gravityObject.gravityOrientation.up * holdHeight;
 
         playerUI.SetThrowIndicatorPos(Mathf.Sin(_accumHoldTime * lassoIndicatorSpeed));
     }

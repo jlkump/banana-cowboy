@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
 {
     public Sprite[] healthSprites;
     public GameObject healthSprite;
+    public Sprite[] reticuleSprites;
     public GameObject reticuleSprite;
     public GameObject throwBarSpriteRoot;
     public Image throwBar;
@@ -28,12 +29,12 @@ public class UIManager : MonoBehaviour
 
     public void ReticleOverLassoable()
     {
-        reticuleSprite.GetComponent<Image>().color = Color.red;
+        reticuleSprite.GetComponent<Image>().sprite = reticuleSprites[1];
     }
 
     public void ReticleReset()
     {
-        reticuleSprite.GetComponent<Image>().color = Color.white;
+        reticuleSprite.GetComponent<Image>().sprite = reticuleSprites[0];
     }
 
     public void ShowThrowBar()

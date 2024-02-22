@@ -162,7 +162,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1868821985618755352}
   - component: {fileID: 7491750337520986040}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Grav Attractor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
