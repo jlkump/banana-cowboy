@@ -66,9 +66,6 @@ public class UIManager : MonoBehaviour
             indicatorStartingPos.y, 
             indicatorStartingPos.z
         );
-
-        print("Setting position of " + throwBarIndicator.position);
-
     }
 
     public PlayerController.ThrowStrength GetThrowIndicatorStrength()
@@ -77,7 +74,6 @@ public class UIManager : MonoBehaviour
         float medPowerWidth = (throwMedPower.rect.width / 2f) * throwMedPower.localScale.x;
         float highPowerWidth = (throwHighPow.rect.width / 2f) * throwHighPow.localScale.x;
 
-        print("local pos is: " + throwBarIndicator.localPosition.x + " High width: " + highPowerWidth + " Med width: " + medPowerWidth + " Low width: " + lowPowerWidth);
         if ((throwBarIndicator.localPosition.x > 0 && throwBarIndicator.localPosition.x < (highPowerWidth)) || 
             (throwBarIndicator.localPosition.x < 0 && throwBarIndicator.localPosition.x > -(highPowerWidth)))
         {
