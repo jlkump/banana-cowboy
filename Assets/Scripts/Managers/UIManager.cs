@@ -11,13 +11,19 @@ public class UIManager : MonoBehaviour
     public Sprite[] reticuleSprites;
     public GameObject reticuleSprite;
     public GameObject throwBarSpriteRoot;
-    public Image throwBar;
-    public Image throwBarIndicator;
-    public Transform throwBarIndicatorStartPos;
-    public Transform throwBarIndicatorEndPos;
-    public Transform throwWeakStartPos;
-    public Transform throwMediumStartPos;
-    public Transform throwStrongStartPos;
+
+    [SerializeField]
+    RectTransform throwBarContainer, throwLowPower, throwMedPower, throwHighPow, throwBarIndicator;
+
+    Vector3 indicatorStartingPos;
+
+    private void Awake()
+    {
+        if (throwBarIndicator != null)
+        {
+            indicatorStartingPos = throwBarIndicator.localPosition;
+        }
+    }
 
     public void ChangeHealthImage(int health)
     {
@@ -52,25 +58,33 @@ public class UIManager : MonoBehaviour
      */
     public void SetThrowIndicatorPos(float relativePos)
     {
-        float halfWidth = (throwBarIndicatorEndPos.position.x - throwBarIndicatorStartPos.position.x) / 2;
-        throwBarIndicator.rectTransform.position = new Vector3(
-            throwBarIndicatorStartPos.position.x + halfWidth + relativePos * halfWidth, 
-            throwBarIndicatorStartPos.position.y, 
-            throwBarIndicatorStartPos.position.z
+        if (throwBarIndicator == null) { return; }
+        float width = (throwLowPower.rect.width) * throwLowPower.localScale.x;
+        float halfWidth = width / 2;
+        throwBarIndicator.localPosition = new Vector3(
+            indicatorStartingPos.x + relativePos * halfWidth,
+            indicatorStartingPos.y, 
+            indicatorStartingPos.z
         );
+
+        print("Setting position of " + throwBarIndicator.position);
+
     }
 
     public PlayerController.ThrowStrength GetThrowIndicatorStrength()
     {
-        Vector3 throwBarPos = throwBarIndicator.rectTransform.position;
-        Vector3 center = throwBar.rectTransform.position;
-        if ((throwBarPos.x < center.x && throwBarPos.x > throwStrongStartPos.position.x) || 
-            (throwBarPos.x > center.x && throwBarPos.x < ((center.x - throwStrongStartPos.position.x)) + center.x))
+        float lowPowerWidth = (throwLowPower.rect.width / 2f) * throwLowPower.localScale.x;
+        float medPowerWidth = (throwMedPower.rect.width / 2f) * throwMedPower.localScale.x;
+        float highPowerWidth = (throwHighPow.rect.width / 2f) * throwHighPow.localScale.x;
+
+        print("local pos is: " + throwBarIndicator.localPosition.x + " High width: " + highPowerWidth + " Med width: " + medPowerWidth + " Low width: " + lowPowerWidth);
+        if ((throwBarIndicator.localPosition.x > 0 && throwBarIndicator.localPosition.x < (highPowerWidth)) || 
+            (throwBarIndicator.localPosition.x < 0 && throwBarIndicator.localPosition.x > -(highPowerWidth)))
         {
             return PlayerController.ThrowStrength.STRONG;
         }
-        if ((throwBarPos.x < center.x && throwBarPos.x > throwMediumStartPos.position.x) ||
-            (throwBarPos.x > center.x && throwBarPos.x < ((center.x - throwMediumStartPos.position.x)) + center.x))
+        if (throwBarIndicator.localPosition.x > 0 && throwBarIndicator.localPosition.x < medPowerWidth ||
+            (throwBarIndicator.localPosition.x < 0 && throwBarIndicator.localPosition.x > -medPowerWidth))
         {
             return PlayerController.ThrowStrength.MEDIUM;
         }

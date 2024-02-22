@@ -79,9 +79,6 @@ public class GravityObject : MonoBehaviour
             // We are not on the ground yet, so pull to the nearest attractor
             Vector3 grav = attractor.GetGravityDirection(gravityOrientation) * attractor.GetGravityForce();
             Vector3 fallingVec = GetFallingVelocity();
-            
-            if (tag == "Player")
-            print("Being attracted to: " + attractor.gameObject.name + " Towards " + grav);
 
             if (!_onGround)
             {
