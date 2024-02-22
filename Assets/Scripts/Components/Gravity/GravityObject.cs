@@ -75,12 +75,17 @@ public class GravityObject : MonoBehaviour
             // Reorient transform
             gravityOrientation.rotation = Quaternion.FromToRotation(gravityOrientation.up, targetGravUp) * gravityOrientation.rotation;
 
+
             // We are not on the ground yet, so pull to the nearest attractor
             Vector3 grav = attractor.GetGravityDirection(gravityOrientation) * attractor.GetGravityForce();
             Vector3 fallingVec = GetFallingVelocity();
+            
+            if (tag == "Player")
+            print("Being attracted to: " + attractor.gameObject.name + " Towards " + grav);
+
             if (!_onGround)
             {
-                if (fallingVec.magnitude < maxFallSpeed || Vector3.Dot(fallingVec, -targetGravUp) < 0)
+                if (fallingVec.magnitude < maxFallSpeed || Vector3.Dot(fallingVec, -targetGravUp) < 0.5f)
                 {
                     if (gravityOrientation.InverseTransformDirection(fallingVec).y < 0)
                     {

@@ -229,7 +229,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 350, y: 350}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &34295887702586339
 CanvasRenderer:
@@ -259,7 +259,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 18ec880046f95934695a6ad8b9a4c8b0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -427,6 +427,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ae855cff065dffe418c2f554e840993c, type: 3}
   - {fileID: 21300000, guid: 4e23a54e7c4456c4a8ce6674ac71b905, type: 3}
   healthSprite: {fileID: 2886521204953509738}
+  reticuleSprites:
+  - {fileID: 21300000, guid: 18ec880046f95934695a6ad8b9a4c8b0, type: 3}
+  - {fileID: 21300000, guid: f47894079c5fdca48916889c1ef37896, type: 3}
   reticuleSprite: {fileID: 1919438211218020867}
   throwBarSpriteRoot: {fileID: 5945864623176456424}
   throwBar: {fileID: 2191845692511404126}
@@ -846,7 +849,7 @@ MonoBehaviour:
   _aimAssistMinRadius: 0.4
   _aimAssistMaxRadius: 10
   _cameraRaycastRadius: 0.1
-  lassoAimRange: 40
+  lassoAimRange: 39.5
   _lassoIgnoreDist: 10
   lassoLayerMask:
     serializedVersion: 2
