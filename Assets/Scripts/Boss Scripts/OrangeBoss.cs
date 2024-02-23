@@ -107,7 +107,7 @@ public class OrangeBoss : MonoBehaviour
 
     void SpawnBoomerangs()
     {
-        cooldownTimer = 5f + boomerangCooldown + 1.5f; // for startup
+        cooldownTimer = 3.5f + boomerangCooldown;
         state = BossStates.COOLDOWN;
         StartCoroutine(BoomerangStartup());
     }

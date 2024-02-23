@@ -51,16 +51,14 @@ public class PauseManager : MonoBehaviour
                 settingScreen.SetActive(false);
                 pauseActive = false;
                 Time.timeScale = 1.0f;
-                UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-                UnityEngine.Cursor.visible = false;
+                PlayerCameraController.HideCursor();
             }
             else
             {
                 pauseMenu.SetActive(true);
                 pauseActive = true;
                 Time.timeScale = 0f;
-                Cursor.lockState = CursorLockMode.None;
-                UnityEngine.Cursor.visible = true;
+                PlayerCameraController.ShowCursor();
             }
         }
     }
@@ -73,8 +71,7 @@ public class PauseManager : MonoBehaviour
                 pauseMenu.SetActive(false);
                 pauseActive = false;
                 Time.timeScale = 1.0f;
-                UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-                UnityEngine.Cursor.visible = false;
+                PlayerCameraController.HideCursor();
                 break;
             case "Checkpoint Restart":
                 pauseActive = false;

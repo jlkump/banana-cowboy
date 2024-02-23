@@ -38,7 +38,11 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
+<<<<<<< Updated upstream
   m_IndirectSpecularColor: {r: 0.03662065, g: 0.055943064, b: 0.10633219, a: 1}
+=======
+  m_IndirectSpecularColor: {r: 0.03891472, g: 0.05775453, b: 0.10647496, a: 1}
+>>>>>>> Stashed changes
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5489,10 +5493,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player Prefab
       objectReference: {fileID: 0}
+<<<<<<< Updated upstream
     - target: {fileID: 5577803411208878517, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
       propertyPath: _cinemachineCamController
       value: 
       objectReference: {fileID: 141494500}
+=======
+    - target: {fileID: 4892724911055115183, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 1623697365}
+>>>>>>> Stashed changes
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
