@@ -6,7 +6,9 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public Animator healthAnimator = null;
     public Sprite[] healthSprites;
+    public Sprite[] healthBlinkSprites;
     public GameObject healthSprite;
     public Sprite[] reticuleSprites;
     public GameObject reticuleSprite;
@@ -14,6 +16,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     RectTransform throwBarContainer, throwLowPower, throwMedPower, throwHighPow, throwBarIndicator;
+    private int _health = 3;
+    private bool _flashingHealth = false;
 
     Vector3 indicatorStartingPos;
 
@@ -25,13 +29,46 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ChangeHealthImage(int health)
+    public void ChangeHealth(int change)
     {
-        if (health >= 0 && health < 5)
+        int newHealth = Mathf.Clamp(_health + change, 0, 4);
+        print("Changing health with change " + change);
+        if (newHealth != _health)
         {
+            healthAnimator.SetTrigger("Damaged");
+            _health = newHealth;
+            StartCoroutine(StopFlashHealthChange(healthSprite.GetComponent<Image>()));
+            StartCoroutine(FlashHealthChange(healthSprite.GetComponent<Image>()));
+        }
+    }
+
+    public void SetAbsHealth(int health)
+    {
+        if (health >= 0 && health < 4)
+        {
+            _health = health;
             healthSprite.GetComponent<Image>().sprite = healthSprites[health];
         }
-    } 
+    }
+
+    IEnumerator FlashHealthChange(Image im)
+    {
+        while(_flashingHealth)
+        {
+            yield return new WaitForSeconds(0.2f);
+            im.sprite = healthBlinkSprites[_health];
+            yield return new WaitForSeconds(0.2f);
+            im.sprite = healthSprites[_health];
+        }
+    }
+
+    IEnumerator StopFlashHealthChange(Image im)
+    {
+        _flashingHealth = true;
+        yield return new WaitForSeconds(0.6f);
+        _flashingHealth = false;
+        im.sprite = healthSprites[_health];
+    }
 
     public void ReticleOverLassoable()
     {

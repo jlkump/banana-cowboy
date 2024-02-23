@@ -579,11 +579,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3099b755812ab149bc28a68112f53d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthAnimator: {fileID: 6132763969182505666}
   healthSprites:
-  - {fileID: 21300000, guid: 527274857e92e884a98a9b13bf32ef61, type: 3}
-  - {fileID: 21300000, guid: 662b0254c7d232c49a26bfecb144c545, type: 3}
-  - {fileID: 21300000, guid: ae855cff065dffe418c2f554e840993c, type: 3}
-  - {fileID: 21300000, guid: 4e23a54e7c4456c4a8ce6674ac71b905, type: 3}
+  - {fileID: 21300000, guid: c769deeef3246fa4d8a955589ebc022c, type: 3}
+  - {fileID: 21300000, guid: d9d9fc571862e14489e99142c8269e1d, type: 3}
+  - {fileID: 21300000, guid: 93723472ee8c35d4a8515e42b6f6862d, type: 3}
+  - {fileID: 21300000, guid: fae35447524133a4abebd7ec89bf1e1e, type: 3}
+  healthBlinkSprites:
+  - {fileID: 21300000, guid: d4b106c7e11e592429a6d3a2686cf56f, type: 3}
+  - {fileID: 21300000, guid: 03d0ce78a8d774646a8f89c54e1b00e5, type: 3}
+  - {fileID: 21300000, guid: fc6a130bdee914545940d09a1a4b51db, type: 3}
   healthSprite: {fileID: 2886521204953509738}
   reticuleSprites:
   - {fileID: 21300000, guid: 18ec880046f95934695a6ad8b9a4c8b0, type: 3}
@@ -733,7 +738,7 @@ RectTransform:
   m_GameObject: {fileID: 2886521204953509738}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.65, y: 0.65, z: 0.65}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4239679806363491457}
@@ -741,7 +746,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 279, y: 382}
+  m_SizeDelta: {x: 240, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1818796422059957319
 CanvasRenderer:
@@ -771,7 +776,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4e23a54e7c4456c4a8ce6674ac71b905, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fae35447524133a4abebd7ec89bf1e1e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -897,7 +902,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4206451210062268687}
-  - component: {fileID: 542927592419071022}
   m_Layer: 5
   m_Name: Throwing Bar Holder
   m_TagString: Untagged
@@ -929,27 +933,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 317}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 1}
---- !u!95 &542927592419071022
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3423473375855337316}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: abcb91593b760014b9db6c615b690b05, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3879603049845090681
 GameObject:
   m_ObjectHideFlags: 0
@@ -1048,7 +1031,6 @@ MonoBehaviour:
   model: {fileID: 7838862824688470847}
   emptyObjectPrefab: {fileID: 4070204132712235945, guid: d076296c76109af44991ebf6823031f4, type: 3}
   playerAnimator: {fileID: 2504003000073130486}
-  healthAnimator: {fileID: 6132763969182505666}
   playerUI: {fileID: 574274520373564533}
   walkSpeed: 12
   runSpeed: 19
@@ -1119,7 +1101,7 @@ MonoBehaviour:
   _reorientSpeed: 8
   _orbitMinDist: 3
   _orbitMaxDist: 20
-  _orbitDistance: 0
+  _orbitDistance: 10
   invertY: 1
   invertZoom: 0
 --- !u!120 &2226797022978423219
@@ -1362,7 +1344,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 60, y: -100}
+  m_AnchoredPosition: {x: 60, y: -120}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 1}
 --- !u!95 &6132763969182505666

@@ -23,7 +23,6 @@ public class PlayerController : MonoBehaviour
     public Transform model;
     public Transform emptyObjectPrefab;
     public Animator playerAnimator = null;
-    public Animator healthAnimator = null;
     public UIManager playerUI;
     // We can find these ourselves
     Rigidbody _rigidBody;
@@ -209,7 +208,7 @@ public class PlayerController : MonoBehaviour
 
         health = maxHealth;
         _canTakeDamage = true;
-        playerUI.ChangeHealthImage(health);
+        playerUI.SetAbsHealth(health);
     }
     void Update()
     {
@@ -975,18 +974,16 @@ public class PlayerController : MonoBehaviour
         {
             if (damageAmount > 0)
             {
-                healthAnimator.SetTrigger("Damaged");
                 ScreenShakeManager.Instance.ShakeCamera(2, 1, 0.1f);
                 health -= damageAmount;
-                playerUI.ChangeHealthImage(health);
+                playerUI.ChangeHealth(-damageAmount);
                 SoundManager.Instance().PlaySFX("PlayerHurt");
             }
             ApplyKnockback(knockback);
             if (health <= 0)
             {
-                // TODO: for now reload the scene, it should be reload to checkpoint
-                SoundManager.Instance().StopAllSFX();
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                // TODO: Play death animation and invoke after animation is complete
+                Invoke("Respawn", 1.3f);
             }
             else
             {
@@ -997,6 +994,12 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    void Respawn()
+    {
+        SoundManager.Instance().StopAllSFX();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     IEnumerator FlashInvincibility(Renderer charRender)
