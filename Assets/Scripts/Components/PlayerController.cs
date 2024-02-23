@@ -497,19 +497,32 @@ public class PlayerController : MonoBehaviour
 
     public void ReleaseLassoMobile()
     {
-        CancelLasso();
+        // Ugly but needed
+        if (_state == PlayerState.THROW_LASSO)
+        {
+            CancelLasso();
+        }
 
-        // GetSwingInput()
-        _lassoSelectedObject.currentlyLassoed = false;
-        EndSwing();
+        if (_state == PlayerState.PULL)
+        {
+            _cancelLassoAction = true;
+            _lassoSelectedObject.currentlyLassoed = false;
+            _lassoHitObjectRigidBody.isKinematic = false;
+            _lassoHitObjectRigidBody.AddForce((transform.position - _lassoHitPointTransform.position).normalized * tossForwardImpulse * 0.5f,
+                ForceMode.Impulse);
+            UpdateState(PlayerState.IDLE);
+        }
 
-        // GetPullInput()
-        _cancelLassoAction = true;
-        _lassoSelectedObject.currentlyLassoed = false;
-        _lassoHitObjectRigidBody.isKinematic = false;
-        _lassoHitObjectRigidBody.AddForce((transform.position - _lassoHitPointTransform.position).normalized * tossForwardImpulse * 0.5f,
-            ForceMode.Impulse);
-        UpdateState(PlayerState.IDLE);
+        if (_state == PlayerState.GRAPPLE)
+        {
+            EndGrapple();
+        }
+
+        if (_state == PlayerState.SWING)
+        {
+            _lassoSelectedObject.currentlyLassoed = false;
+            EndSwing();
+        }
     }
 
     /**
@@ -633,10 +646,11 @@ public class PlayerController : MonoBehaviour
 
     void GetLassoInput()
     {
+        #if !UNITY_IOS
         if (Input.GetKeyDown(lassoKey)) {
             LassoTargeting();
         }
-
+        #endif
     }
 
     void LassoTargeting()
@@ -781,10 +795,12 @@ public class PlayerController : MonoBehaviour
 
     void GetGrappleInput()
     {
+    #if !UNITY_IOS
         if (Input.GetKeyUp(lassoKey))
         {
             EndGrapple();
         }
+    #endif
     }
 
     void StartSwing()
@@ -932,6 +948,8 @@ public class PlayerController : MonoBehaviour
 
     void GetPullInput()
     {
+#if !UNITY_IOS
+
         if (Input.GetKeyUp(lassoKey))
         {
             _cancelLassoAction = true;
@@ -941,6 +959,7 @@ public class PlayerController : MonoBehaviour
                 ForceMode.Impulse);
             UpdateState(PlayerState.IDLE);
         }
+#endif
     }
 
     void StartHold()
@@ -974,10 +993,13 @@ public class PlayerController : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
         _moveInput = new Vector3(horizontal, 0, vertical).normalized;
         // Start the toss of the enemy based on the UI rectangle power ended on
+#if !UNITY_IOS
+
         if (Input.GetKeyUp(lassoKey))
         {
             StartToss();
         }
+#endif
     }
 
     void StartToss()

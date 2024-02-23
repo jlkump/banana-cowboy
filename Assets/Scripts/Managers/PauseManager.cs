@@ -47,20 +47,30 @@ public class PauseManager : MonoBehaviour
         {
             if (pauseMenu.activeSelf)
             {
-                pauseMenu.SetActive(false);
-                settingScreen.SetActive(false);
-                pauseActive = false;
-                Time.timeScale = 1.0f;
-                PlayerCameraController.HideCursor();
+                ResumeGame();
             }
             else
             {
-                pauseMenu.SetActive(true);
-                pauseActive = true;
-                Time.timeScale = 0f;
-                PlayerCameraController.ShowCursor();
+                PauseGame();
             }
         }
+    }
+
+    public void PauseGame()
+    {
+        pauseMenu.SetActive(true);
+        pauseActive = true;
+        Time.timeScale = 0f;
+        PlayerCameraController.ShowCursor();
+    }
+
+    public void ResumeGame()
+    {
+        pauseMenu.SetActive(false);
+        settingScreen.SetActive(false);
+        pauseActive = false;
+        Time.timeScale = 1.0f;
+        PlayerCameraController.HideCursor();
     }
 
     public void ChangeScreen(Button button)

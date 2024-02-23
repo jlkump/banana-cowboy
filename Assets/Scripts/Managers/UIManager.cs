@@ -17,7 +17,6 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     RectTransform throwBarContainer, throwLowPower, throwMedPower, throwHighPow, throwBarIndicator;
     private int _health = 3;
-    private bool _flashingHealth = false;
 
     Vector3 indicatorStartingPos;
 
@@ -32,13 +31,11 @@ public class UIManager : MonoBehaviour
     public void ChangeHealth(int change)
     {
         int newHealth = Mathf.Clamp(_health + change, 0, 4);
-        print("Changing health with change " + change);
         if (newHealth != _health)
         {
             healthAnimator.SetTrigger("Damaged");
             _health = newHealth;
-            StartCoroutine(StopFlashHealthChange(healthSprite.GetComponent<Image>()));
-            StartCoroutine(FlashHealthChange(healthSprite.GetComponent<Image>()));
+            SetAbsHealth(_health);
         }
     }
 
@@ -49,25 +46,6 @@ public class UIManager : MonoBehaviour
             _health = health;
             healthSprite.GetComponent<Image>().sprite = healthSprites[health];
         }
-    }
-
-    IEnumerator FlashHealthChange(Image im)
-    {
-        while(_flashingHealth)
-        {
-            yield return new WaitForSeconds(0.2f);
-            im.sprite = healthBlinkSprites[_health];
-            yield return new WaitForSeconds(0.2f);
-            im.sprite = healthSprites[_health];
-        }
-    }
-
-    IEnumerator StopFlashHealthChange(Image im)
-    {
-        _flashingHealth = true;
-        yield return new WaitForSeconds(0.6f);
-        _flashingHealth = false;
-        im.sprite = healthSprites[_health];
     }
 
     public void ReticleOverLassoable()

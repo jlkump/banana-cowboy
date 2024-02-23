@@ -267,7 +267,7 @@ public class OrangeEnemyController : EnemyController
     {
         Physics.IgnoreCollision(body.GetComponent<Collider>(), collider, true);
         Physics.IgnoreCollision(feet.GetComponent<Collider>(), collider, true);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.1f);
         Physics.IgnoreCollision(body.GetComponent<Collider>(), collider, false);
         Physics.IgnoreCollision(feet.GetComponent<Collider>(), collider, false);
     }
