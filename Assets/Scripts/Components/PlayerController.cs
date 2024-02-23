@@ -23,7 +23,6 @@ public class PlayerController : MonoBehaviour
     public Transform model;
     public Transform emptyObjectPrefab;
     public Animator playerAnimator = null;
-    public Animator healthAnimator = null;
     public UIManager playerUI;
     // We can find these ourselves
     Rigidbody _rigidBody;
@@ -36,6 +35,9 @@ public class PlayerController : MonoBehaviour
     public float walkSpeed = 8.0f;
     [Tooltip("The maximum run speed.")]
     public float runSpeed = 12.0f;
+
+    float horizontal = 0;
+    float vertical = 0;
 
     [Tooltip("The rate of speed increase for getting to max walk / run speed")]
     public float accelerationRate = (50f * 0.5f) / 8.0f;  // The rate of speed increase
@@ -209,7 +211,7 @@ public class PlayerController : MonoBehaviour
 
         health = maxHealth;
         _canTakeDamage = true;
-        playerUI.ChangeHealthImage(health);
+        playerUI.SetAbsHealth(health);
     }
     void Update()
     {
@@ -391,11 +393,21 @@ public class PlayerController : MonoBehaviour
     {
         return true;
     }
-
+    public Joystick joystick;
     void GetMoveInput()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
+#if UNITY_IOS
+        if (joystick != null)
+        {
+            horizontal = joystick.Horizontal;
+            vertical = joystick.Vertical;
+        }
+#else
+
+        horizontal = Input.GetAxisRaw("Horizontal");
+        vertical = Input.GetAxisRaw("Vertical");
+#endif
+
         _moveInput = new Vector3(horizontal, 0, vertical).normalized;
 
         if (Input.GetKeyDown(sprintKey))
@@ -450,20 +462,54 @@ public class PlayerController : MonoBehaviour
             {
                 StartJump();
             }
-            else if (false)
+/*            else if (false)
             {
                 // this is here for jump buffering
-            }
+            }*/
 
         } 
-        else if (false)
+/*        else if (false)
         {
             // Again, this is here for jump buffering
-        }
+        }*/
         else if (Input.GetKeyUp(jumpKey))
         {
             EndJump();
         }
+    }
+
+    public void PressJumpMobile()
+    {
+        if (_lastTimeOnGround > 0)
+        {
+            StartJump();
+        }
+    }
+    public void ReleaseJumpMobile()
+    {
+        EndJump();
+    }
+
+    public void PressLassoMobile()
+    {
+        LassoTargeting();
+    }
+
+    public void ReleaseLassoMobile()
+    {
+        CancelLasso();
+
+        // GetSwingInput()
+        _lassoSelectedObject.currentlyLassoed = false;
+        EndSwing();
+
+        // GetPullInput()
+        _cancelLassoAction = true;
+        _lassoSelectedObject.currentlyLassoed = false;
+        _lassoHitObjectRigidBody.isKinematic = false;
+        _lassoHitObjectRigidBody.AddForce((transform.position - _lassoHitPointTransform.position).normalized * tossForwardImpulse * 0.5f,
+            ForceMode.Impulse);
+        UpdateState(PlayerState.IDLE);
     }
 
     /**
@@ -588,26 +634,31 @@ public class PlayerController : MonoBehaviour
     void GetLassoInput()
     {
         if (Input.GetKeyDown(lassoKey)) {
-            _hitLassoTarget = HitLassoTarget.NONE;
-            if (_lassoRaycastHit.point != Vector3.zero && _lassoSelectedObject != null)
-            {
-                // Move lassoHit to the location of the lasso hitpoint
-                _lassoHitPointTransform.position = _lassoRaycastHit.point;
-                _lassoHitObjectTransform = _lassoRaycastHit.collider.gameObject.transform;
-                _lassoHitObjectRigidBody = _lassoRaycastHit.collider.gameObject.GetComponentInParent<Rigidbody>();
-
-                if (_lassoSelectedObject is SwingableObject)
-                {
-                    _hitLassoTarget = HitLassoTarget.SWINGABLE;
-                } 
-                else if (_lassoSelectedObject is LassoableEnemy)
-                {
-                    _hitLassoTarget = HitLassoTarget.ENEMY;
-                }
-                ThrowLasso();
-            }
+            LassoTargeting();
         }
 
+    }
+
+    void LassoTargeting()
+    {
+        _hitLassoTarget = HitLassoTarget.NONE;
+        if (_lassoRaycastHit.point != Vector3.zero && _lassoSelectedObject != null)
+        {
+            // Move lassoHit to the location of the lasso hitpoint
+            _lassoHitPointTransform.position = _lassoRaycastHit.point;
+            _lassoHitObjectTransform = _lassoRaycastHit.collider.gameObject.transform;
+            _lassoHitObjectRigidBody = _lassoRaycastHit.collider.gameObject.GetComponentInParent<Rigidbody>();
+
+            if (_lassoSelectedObject is SwingableObject)
+            {
+                _hitLassoTarget = HitLassoTarget.SWINGABLE;
+            }
+            else if (_lassoSelectedObject is LassoableEnemy)
+            {
+                _hitLassoTarget = HitLassoTarget.ENEMY;
+            }
+            ThrowLasso();
+        }
     }
 
     void ThrowLasso()
@@ -651,16 +702,32 @@ public class PlayerController : MonoBehaviour
     {
         // Here we detect input if the player wants to cancel a throw while it is happening.
         // This may require fiddling with numbers to get it feeling right.
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
+#if UNITY_IOS
+        if (joystick != null)
+        {
+            horizontal = joystick.Horizontal;
+            vertical = joystick.Vertical;
+        }
+#else
+
+        horizontal = Input.GetAxisRaw("Horizontal");
+        vertical = Input.GetAxisRaw("Vertical");
+#endif
         _moveInput = new Vector3(horizontal, 0, vertical).normalized; // Update move input so it carries over to the next input
 
+#if !UNITY_IOS
         // Cancel on lift lmb
-        if (Input.GetKeyUp(lassoKey)) { 
-            _cancelLassoAction = true;
-            _lassoSelectedObject.currentlyLassoed = false;
-            UpdateState(PlayerState.IDLE); // Will be corrected next update, just get the player out of the throwing state
+        if (Input.GetKeyUp(lassoKey)) {
+            CancelLasso();
         }
+#endif
+    }
+
+    void CancelLasso()
+    {
+        _cancelLassoAction = true;
+        _lassoSelectedObject.currentlyLassoed = false;
+        UpdateState(PlayerState.IDLE); // Will be corrected next update, just get the player out of the throwing state
     }
 
     void HitNothing()
@@ -817,14 +884,26 @@ public class PlayerController : MonoBehaviour
     void GetSwingInput()
     {
 
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
+#if UNITY_IOS
+        if (joystick != null)
+        {
+            horizontal = joystick.Horizontal;
+            vertical = joystick.Vertical;
+        }
+#else
+
+        horizontal = Input.GetAxisRaw("Horizontal");
+        vertical = Input.GetAxisRaw("Vertical");
+#endif
         _moveInput = new Vector3(horizontal, 0, vertical).normalized; // Re-using _moveInput, cause why not
 
+#if !UNITY_IOS
         if (Input.GetKeyUp(lassoKey)) {
             _lassoSelectedObject.currentlyLassoed = false;
             EndSwing(); 
         }
+#endif
+
     }
 
     void StartPull()
@@ -975,18 +1054,16 @@ public class PlayerController : MonoBehaviour
         {
             if (damageAmount > 0)
             {
-                healthAnimator.SetTrigger("Damaged");
                 ScreenShakeManager.Instance.ShakeCamera(2, 1, 0.1f);
                 health -= damageAmount;
-                playerUI.ChangeHealthImage(health);
+                playerUI.ChangeHealth(-damageAmount);
                 SoundManager.Instance().PlaySFX("PlayerHurt");
             }
             ApplyKnockback(knockback);
             if (health <= 0)
             {
-                // TODO: for now reload the scene, it should be reload to checkpoint
-                SoundManager.Instance().StopAllSFX();
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                // TODO: Play death animation and invoke after animation is complete
+                Invoke("Respawn", 1.3f);
             }
             else
             {
@@ -997,6 +1074,12 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    void Respawn()
+    {
+        SoundManager.Instance().StopAllSFX();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     IEnumerator FlashInvincibility(Renderer charRender)

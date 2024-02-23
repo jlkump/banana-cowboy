@@ -27,8 +27,7 @@ public class PlayerCameraController : MonoBehaviour
     void Start()
     {
         // Removes cursor from screen and keeps it locked to center
-        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-        UnityEngine.Cursor.visible = false;
+        HideCursor();
     }
 
     void Update()
@@ -90,5 +89,17 @@ public class PlayerCameraController : MonoBehaviour
     {
         _cameraCurrent.rotation = Quaternion.Slerp(_cameraCurrent.rotation, _cameraTarget.rotation, Time.deltaTime * _reorientSpeed);
         _cameraCurrent.position = Vector3.Lerp(_cameraCurrent.position, _cameraTarget.position, Time.deltaTime * _reorientSpeed);
+    }
+
+    public static void HideCursor()
+    {
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = false;
+    }
+
+    public static void ShowCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        UnityEngine.Cursor.visible = true;
     }
 }

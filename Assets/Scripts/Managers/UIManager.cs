@@ -6,26 +6,69 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public Animator healthAnimator = null;
     public Sprite[] healthSprites;
+    public Sprite[] healthBlinkSprites;
     public GameObject healthSprite;
     public Sprite[] reticuleSprites;
     public GameObject reticuleSprite;
     public GameObject throwBarSpriteRoot;
-    public Image throwBar;
-    public Image throwBarIndicator;
-    public Transform throwBarIndicatorStartPos;
-    public Transform throwBarIndicatorEndPos;
-    public Transform throwWeakStartPos;
-    public Transform throwMediumStartPos;
-    public Transform throwStrongStartPos;
 
-    public void ChangeHealthImage(int health)
+    [SerializeField]
+    RectTransform throwBarContainer, throwLowPower, throwMedPower, throwHighPow, throwBarIndicator;
+    private int _health = 3;
+    private bool _flashingHealth = false;
+
+    Vector3 indicatorStartingPos;
+
+    private void Awake()
     {
-        if (health >= 0 && health < 5)
+        if (throwBarIndicator != null)
         {
+            indicatorStartingPos = throwBarIndicator.localPosition;
+        }
+    }
+
+    public void ChangeHealth(int change)
+    {
+        int newHealth = Mathf.Clamp(_health + change, 0, 4);
+        print("Changing health with change " + change);
+        if (newHealth != _health)
+        {
+            healthAnimator.SetTrigger("Damaged");
+            _health = newHealth;
+            StartCoroutine(StopFlashHealthChange(healthSprite.GetComponent<Image>()));
+            StartCoroutine(FlashHealthChange(healthSprite.GetComponent<Image>()));
+        }
+    }
+
+    public void SetAbsHealth(int health)
+    {
+        if (health >= 0 && health < 4)
+        {
+            _health = health;
             healthSprite.GetComponent<Image>().sprite = healthSprites[health];
         }
-    } 
+    }
+
+    IEnumerator FlashHealthChange(Image im)
+    {
+        while(_flashingHealth)
+        {
+            yield return new WaitForSeconds(0.2f);
+            im.sprite = healthBlinkSprites[_health];
+            yield return new WaitForSeconds(0.2f);
+            im.sprite = healthSprites[_health];
+        }
+    }
+
+    IEnumerator StopFlashHealthChange(Image im)
+    {
+        _flashingHealth = true;
+        yield return new WaitForSeconds(0.6f);
+        _flashingHealth = false;
+        im.sprite = healthSprites[_health];
+    }
 
     public void ReticleOverLassoable()
     {
@@ -52,25 +95,29 @@ public class UIManager : MonoBehaviour
      */
     public void SetThrowIndicatorPos(float relativePos)
     {
-        float halfWidth = (throwBarIndicatorEndPos.position.x - throwBarIndicatorStartPos.position.x) / 2;
-        throwBarIndicator.rectTransform.position = new Vector3(
-            throwBarIndicatorStartPos.position.x + halfWidth + relativePos * halfWidth, 
-            throwBarIndicatorStartPos.position.y, 
-            throwBarIndicatorStartPos.position.z
+        if (throwBarIndicator == null) { return; }
+        float width = (throwLowPower.rect.width) * throwLowPower.localScale.x;
+        float halfWidth = width / 2;
+        throwBarIndicator.localPosition = new Vector3(
+            indicatorStartingPos.x + relativePos * halfWidth,
+            indicatorStartingPos.y, 
+            indicatorStartingPos.z
         );
     }
 
     public PlayerController.ThrowStrength GetThrowIndicatorStrength()
     {
-        Vector3 throwBarPos = throwBarIndicator.rectTransform.position;
-        Vector3 center = throwBar.rectTransform.position;
-        if ((throwBarPos.x < center.x && throwBarPos.x > throwStrongStartPos.position.x) || 
-            (throwBarPos.x > center.x && throwBarPos.x < ((center.x - throwStrongStartPos.position.x)) + center.x))
+        float lowPowerWidth = (throwLowPower.rect.width / 2f) * throwLowPower.localScale.x;
+        float medPowerWidth = (throwMedPower.rect.width / 2f) * throwMedPower.localScale.x;
+        float highPowerWidth = (throwHighPow.rect.width / 2f) * throwHighPow.localScale.x;
+
+        if ((throwBarIndicator.localPosition.x > 0 && throwBarIndicator.localPosition.x < (highPowerWidth)) || 
+            (throwBarIndicator.localPosition.x < 0 && throwBarIndicator.localPosition.x > -(highPowerWidth)))
         {
             return PlayerController.ThrowStrength.STRONG;
         }
-        if ((throwBarPos.x < center.x && throwBarPos.x > throwMediumStartPos.position.x) ||
-            (throwBarPos.x > center.x && throwBarPos.x < ((center.x - throwMediumStartPos.position.x)) + center.x))
+        if (throwBarIndicator.localPosition.x > 0 && throwBarIndicator.localPosition.x < medPowerWidth ||
+            (throwBarIndicator.localPosition.x < 0 && throwBarIndicator.localPosition.x > -medPowerWidth))
         {
             return PlayerController.ThrowStrength.MEDIUM;
         }

@@ -4974,6 +4974,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1036199680}
     m_Modifications:
+    - target: {fileID: 1831130068349150590, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fd4d77308c29033498752ab6dc263588, type: 2}
+    - target: {fileID: 3431112703161950121, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fd4d77308c29033498752ab6dc263588, type: 2}
     - target: {fileID: 3948613311271076391, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
       propertyPath: m_Shadows.m_Bias
       value: 2
@@ -4982,6 +4990,14 @@ PrefabInstance:
       propertyPath: m_Shadows.m_NormalBias
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4094123513294350629, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fd4d77308c29033498752ab6dc263588, type: 2}
+    - target: {fileID: 4420246752431329052, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fd4d77308c29033498752ab6dc263588, type: 2}
     - target: {fileID: 4792375295655101336, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -410.1549
@@ -5022,15 +5038,62 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0.913
       objectReference: {fileID: 0}
+    - target: {fileID: 5632924078444936929, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fd4d77308c29033498752ab6dc263588, type: 2}
+    - target: {fileID: 6355895284477157281, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fd4d77308c29033498752ab6dc263588, type: 2}
     - target: {fileID: 6369561918749010671, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
       propertyPath: m_Name
       value: Orange Boss
       objectReference: {fileID: 0}
+    - target: {fileID: 8574513121011520908, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fd4d77308c29033498752ab6dc263588, type: 2}
+    - target: {fileID: 8924151894339297834, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fd4d77308c29033498752ab6dc263588, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3053276990585989332, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1372468290}
   m_SourcePrefab: {fileID: 100100000, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
+--- !u!1 &1372468289 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3053276990585989332, guid: d7696f80df4009b4c8f2afff70bda57e, type: 3}
+  m_PrefabInstance: {fileID: 1372468288}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1372468290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372468289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1001 &1381159490
 PrefabInstance:
   m_ObjectHideFlags: 0

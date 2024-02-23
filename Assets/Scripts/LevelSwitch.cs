@@ -45,8 +45,7 @@ public class LevelSwitch : MonoBehaviour
                 SoundManager.Instance().PlayMusic("Orange Boss");
             }
         }
-        UnityEngine.Cursor.lockState = CursorLockMode.None;
-        UnityEngine.Cursor.visible = true;
+        PlayerCameraController.ShowCursor();
         LevelData.resetLevelData();
         SoundManager.Instance().StopAllSFX();
         SceneManager.LoadScene(scene);
