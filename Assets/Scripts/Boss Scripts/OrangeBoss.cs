@@ -98,11 +98,6 @@ public class OrangeBoss : MonoBehaviour
             default:
                 break;
         }
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Damage(1);
-        }
     }
 
     void SpawnBoomerangs()

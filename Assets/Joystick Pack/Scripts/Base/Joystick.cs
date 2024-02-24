@@ -59,6 +59,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
+        PlayerCameraController.uiTouching++;
         OnDrag(eventData);
     }
 
@@ -131,6 +132,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     public virtual void OnPointerUp(PointerEventData eventData)
     {
+        PlayerCameraController.uiTouching--;
         input = Vector2.zero;
         handle.anchoredPosition = Vector2.zero;
     }

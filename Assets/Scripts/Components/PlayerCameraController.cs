@@ -2,6 +2,7 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerCameraController : MonoBehaviour
 {
@@ -22,7 +23,10 @@ public class PlayerCameraController : MonoBehaviour
     float _orbitMinDist = 3f, _orbitMaxDist = 20f, _orbitDistance = 10f;
 
     public bool invertY = true, invertZoom = false;
+    float mouseX, mouseY;
 
+    private int _validTouchID = -1;
+    public static int uiTouching;
 
     void Start()
     {
@@ -33,16 +37,72 @@ public class PlayerCameraController : MonoBehaviour
     void Update()
     {
         if (_cameraTarget == null || _cameraPivot == null) { return; }
-        if (!PauseManager.pauseActive) {
+        if (!PauseManager.pauseActive)
+        {
+#if !UNITY_IOS
+            mouseX = Input.GetAxisRaw("Mouse X");
+            mouseY = Input.GetAxisRaw("Mouse Y");
             GetRotationInput();
+#else
+            CameraMovementMobile();
+#endif
             BlendToTarget();
         }
     }
 
+    void CameraMovementMobile()
+    {
+        if (uiTouching == Input.touchCount) // Prevents unneccesary looping
+        {
+            return;
+        }
+
+        // Loop through all touches
+        for (int i = 0; i < Input.touchCount; i++)
+        {
+            // Get current touch
+            Touch touch = Input.GetTouch(i);
+
+            // Check if it's the beginning phase of touch
+            if (touch.phase == TouchPhase.Began)
+            {
+                // Check if the touch is not touching a UI element
+                if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                {
+                    // Assign the valid touch ID
+                    _validTouchID = touch.fingerId;
+                }
+            }
+
+            // Check if it's the end phase of touch
+            if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+            {
+                // Check if the ended/canceled touch matches the valid touch ID
+                if (touch.fingerId == _validTouchID)
+                {
+                    // Reset the valid touch ID
+                    _validTouchID = -1;
+                }
+            }
+
+            // Check if the current touch is the valid one
+            if (touch.fingerId == _validTouchID)
+            {
+                // Perform camera movement based on touch delta
+                Vector2 touchDeltaPosition = touch.deltaPosition * 0.05f;
+
+                // Adjust rotation based on touch delta
+                mouseX = touchDeltaPosition.x;
+                mouseY = touchDeltaPosition.y;
+                GetRotationInput();
+            }
+        }
+    }
+
+
+
     void GetRotationInput()
     {
-        float mouseX = Input.GetAxisRaw("Mouse X");
-        float mouseY = Input.GetAxisRaw("Mouse Y");
         float mouseScroll = -Input.GetAxisRaw("Mouse ScrollWheel");
 
         if (invertY)
@@ -93,8 +153,8 @@ public class PlayerCameraController : MonoBehaviour
 
     public static void HideCursor()
     {
-        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-        UnityEngine.Cursor.visible = false;
+        /*        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+                UnityEngine.Cursor.visible = false;*/
     }
 
     public static void ShowCursor()

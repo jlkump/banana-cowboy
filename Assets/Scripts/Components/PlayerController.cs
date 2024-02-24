@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     Rigidbody _rigidBody;
     Transform _cameraTransform;
     GravityObject _gravityObject;
+    public Joystick joystick;
 
 
     [Header("Movement")]
@@ -186,6 +187,8 @@ public class PlayerController : MonoBehaviour
         {
             playerAnimator.SetLayerWeight(1, 0.0f);
         }
+        joystick.gameObject.transform.parent.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
+        joystick.gameObject.transform.parent.GetComponent<Canvas>().worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         StartCoroutine(SetSpawnPos());
     }
 
@@ -217,6 +220,7 @@ public class PlayerController : MonoBehaviour
     {
         // Later, we will need to ignore input to the player controller
         // when in the UI or when in cutscenes
+        
         if (!PauseManager.pauseActive)
         {
             switch(_state)
@@ -393,7 +397,7 @@ public class PlayerController : MonoBehaviour
     {
         return true;
     }
-    public Joystick joystick;
+
     void GetMoveInput()
     {
 #if UNITY_IOS
@@ -455,6 +459,7 @@ public class PlayerController : MonoBehaviour
             // We are no longer on the ground, change state to air
             UpdateState(PlayerState.AIR);
         }
+#if !UNITY_IOS
         if (Input.GetKeyDown(jumpKey)) 
         {
             // Last time on ground acts as a coyote timer for jumping
@@ -476,10 +481,12 @@ public class PlayerController : MonoBehaviour
         {
             EndJump();
         }
+#endif
     }
 
     public void PressJumpMobile()
     {
+        PlayerCameraController.uiTouching++;
         if (_lastTimeOnGround > 0)
         {
             StartJump();
@@ -487,41 +494,61 @@ public class PlayerController : MonoBehaviour
     }
     public void ReleaseJumpMobile()
     {
+        PlayerCameraController.uiTouching--;
         EndJump();
     }
 
     public void PressLassoMobile()
     {
+        PlayerCameraController.uiTouching++;
         LassoTargeting();
     }
 
     public void ReleaseLassoMobile()
     {
-        // Ugly but needed
-        if (_state == PlayerState.THROW_LASSO)
+        PlayerCameraController.uiTouching--;
+        switch (_state)
         {
-            CancelLasso();
-        }
+            case PlayerState.THROW_LASSO:
+                CancelLasso();
+                break;
 
-        if (_state == PlayerState.PULL)
-        {
-            _cancelLassoAction = true;
-            _lassoSelectedObject.currentlyLassoed = false;
-            _lassoHitObjectRigidBody.isKinematic = false;
-            _lassoHitObjectRigidBody.AddForce((transform.position - _lassoHitPointTransform.position).normalized * tossForwardImpulse * 0.5f,
-                ForceMode.Impulse);
-            UpdateState(PlayerState.IDLE);
-        }
+            case PlayerState.PULL:
+                _cancelLassoAction = true;
+                _lassoSelectedObject.currentlyLassoed = false;
+                _lassoHitObjectRigidBody.isKinematic = false;
+                _lassoHitObjectRigidBody.AddForce((transform.position - _lassoHitPointTransform.position).normalized * tossForwardImpulse * 0.5f,
+                    ForceMode.Impulse);
+                UpdateState(PlayerState.IDLE);
+                break;
 
-        if (_state == PlayerState.GRAPPLE)
-        {
-            EndGrapple();
-        }
+            case PlayerState.GRAPPLE:
+                EndGrapple();
+                break;
 
-        if (_state == PlayerState.SWING)
+            case PlayerState.SWING:
+                _lassoSelectedObject.currentlyLassoed = false;
+                EndSwing();
+                break;
+        }
+    }
+
+    public void PauseMobile()
+    {
+        PauseManager temp = GameObject.Find("Pause Manager").GetComponent<PauseManager>();
+        temp.PauseGame();
+    }
+
+    public void RunMobile()
+    {
+        _isRunning = _isRunning ? false: true;
+        if (_isRunning)
         {
-            _lassoSelectedObject.currentlyLassoed = false;
-            EndSwing();
+            GameObject.Find("Run").GetComponent<UnityEngine.UI.Image>().color = Color.red;
+        }
+        else
+        {
+            GameObject.Find("Run").GetComponent<UnityEngine.UI.Image>().color = Color.white;
         }
     }
 
@@ -646,11 +673,7 @@ public class PlayerController : MonoBehaviour
 
     void GetLassoInput()
     {
-        #if !UNITY_IOS
-        if (Input.GetKeyDown(lassoKey)) {
-            LassoTargeting();
-        }
-        #endif
+
     }
 
     void LassoTargeting()
@@ -719,8 +742,8 @@ public class PlayerController : MonoBehaviour
 #if UNITY_IOS
         if (joystick != null)
         {
-            horizontal = joystick.Horizontal;
-            vertical = joystick.Vertical;
+           horizontal = joystick.Horizontal;
+           vertical = joystick.Vertical;
         }
 #else
 
@@ -795,12 +818,12 @@ public class PlayerController : MonoBehaviour
 
     void GetGrappleInput()
     {
-    #if !UNITY_IOS
+#if !UNITY_IOS
         if (Input.GetKeyUp(lassoKey))
         {
             EndGrapple();
         }
-    #endif
+#endif
     }
 
     void StartSwing()
