@@ -39,7 +39,7 @@ public class PlayerCameraController : MonoBehaviour
         if (_cameraTarget == null || _cameraPivot == null) { return; }
         if (!PauseManager.pauseActive)
         {
-#if !UNITY_IOS
+#if !UNITY_IOS || !UNITY_ANDROID
             mouseX = Input.GetAxisRaw("Mouse X");
             mouseY = Input.GetAxisRaw("Mouse Y");
             GetRotationInput();
@@ -153,8 +153,8 @@ public class PlayerCameraController : MonoBehaviour
 
     public static void HideCursor()
     {
-        /*        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-                UnityEngine.Cursor.visible = false;*/
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = false;
     }
 
     public static void ShowCursor()

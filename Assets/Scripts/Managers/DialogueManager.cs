@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -37,10 +38,11 @@ public class DialogueManager : MonoBehaviour
     }
     IEnumerator Type(string sentence)
     {
-        textDisplay.text = "";
+        StringBuilder stringBuilder = new StringBuilder();
         foreach (char letter in sentence.ToCharArray())
         {
-            textDisplay.text += letter;
+            stringBuilder.Append(letter);
+            textDisplay.text  = stringBuilder.ToString();
             yield return new WaitForSeconds(_typingSpeed);
         }
     }

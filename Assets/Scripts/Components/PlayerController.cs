@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     Transform _cameraTransform;
     GravityObject _gravityObject;
     public Joystick joystick;
+    public GameObject mobileControls;
     private Camera _camera;
 
 
@@ -185,6 +186,11 @@ public class PlayerController : MonoBehaviour
     {
         _rigidBody = GetComponent<Rigidbody>();
         _gravityObject = GetComponent<GravityObject>();
+#if UNITY_IOS || UNITY_ANDROID
+        mobileControls.SetActive(true);
+#else
+        mobileControls.SetActive(false);
+#endif
 
         if (playerAnimator != null)
         {
@@ -404,7 +410,7 @@ public class PlayerController : MonoBehaviour
 
     void GetMoveInput()
     {
-#if UNITY_IOS
+#if UNITY_IOS || UNITY_ANDROID
         if (joystick != null)
         {
             horizontal = joystick.Horizontal;
@@ -470,7 +476,7 @@ public class PlayerController : MonoBehaviour
             // We are no longer on the ground, change state to air
             UpdateState(PlayerState.AIR);
         }
-#if !UNITY_IOS
+#if !UNITY_IOS || !UNITY_ANDROID
         if (Input.GetKeyDown(jumpKey)) 
         {
             // Last time on ground acts as a coyote timer for jumping
@@ -687,7 +693,7 @@ public class PlayerController : MonoBehaviour
 
     void GetLassoInput()
     {
-#if !UNITY_IOS
+#if !UNITY_IOS || !UNITY_ANDROID
         if (Input.GetKeyDown(lassoKey))
         {
             LassoTargeting();
@@ -758,7 +764,7 @@ public class PlayerController : MonoBehaviour
     {
         // Here we detect input if the player wants to cancel a throw while it is happening.
         // This may require fiddling with numbers to get it feeling right.
-#if UNITY_IOS
+#if UNITY_IOS || UNITY_ANDROID
         if (joystick != null)
         {
            horizontal = joystick.Horizontal;
@@ -771,7 +777,7 @@ public class PlayerController : MonoBehaviour
 #endif
         _moveInput = new Vector3(horizontal, 0, vertical).normalized; // Update move input so it carries over to the next input
 
-#if !UNITY_IOS
+#if !UNITY_IOS || !UNITY_ANDROID
         // Cancel on lift lmb
         if (Input.GetKeyUp(lassoKey)) {
             CancelLasso();
@@ -837,7 +843,7 @@ public class PlayerController : MonoBehaviour
 
     void GetGrappleInput()
     {
-#if !UNITY_IOS
+#if !UNITY_IOS || !UNITY_ANDROID
         if (Input.GetKeyUp(lassoKey))
         {
             EndGrapple();
@@ -942,7 +948,7 @@ public class PlayerController : MonoBehaviour
     void GetSwingInput()
     {
 
-#if UNITY_IOS
+#if UNITY_IOS || UNITY_ANDROID
         if (joystick != null)
         {
             horizontal = joystick.Horizontal;
@@ -955,7 +961,7 @@ public class PlayerController : MonoBehaviour
 #endif
         _moveInput = new Vector3(horizontal, 0, vertical).normalized; // Re-using _moveInput, cause why not
 
-#if !UNITY_IOS
+#if !UNITY_IOS || !UNITY_ANDROID
         if (Input.GetKeyUp(lassoKey)) {
             _lassoSelectedObject.currentlyLassoed = false;
             EndSwing(); 
@@ -990,7 +996,7 @@ public class PlayerController : MonoBehaviour
 
     void GetPullInput()
     {
-#if !UNITY_IOS
+#if !UNITY_IOS || !UNITY_ANDROID
 
         if (Input.GetKeyUp(lassoKey))
         {
@@ -1035,7 +1041,7 @@ public class PlayerController : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
         _moveInput = new Vector3(horizontal, 0, vertical).normalized;
         // Start the toss of the enemy based on the UI rectangle power ended on
-#if !UNITY_IOS
+#if !UNITY_IOS || !UNITY_ANDROID
 
         if (Input.GetKeyUp(lassoKey))
         {
