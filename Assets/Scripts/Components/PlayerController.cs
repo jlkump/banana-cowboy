@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     Transform _cameraTransform;
     GravityObject _gravityObject;
     public Joystick joystick;
+    private Camera _camera;
 
 
     [Header("Movement")]
@@ -53,6 +54,8 @@ public class PlayerController : MonoBehaviour
     public float gravIncreaseOnJumpRelease = 3.0f;
     [Tooltip("If the player somehow achieves speed greater than the maximum allowed, we won't give them any more speed. However, with conserve momentum, we won't reduce their speed either.")]
     public bool conserveMomentum = true;
+    private float _jumpBufferTimer;
+    private float _jumpBuffer = 0.2f;
 
     public float walkAnimSpeed = 1.0f;
     public float runAnimSpeed = 1.0f;
@@ -194,7 +197,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        _cameraTransform = Camera.main.transform;
+        _camera = Camera.main;
+        _cameraTransform = _camera.transform;
         _lassoHitPointTransform = Instantiate(emptyObjectPrefab, transform.position, Quaternion.identity).transform;
 
         _lassoRenderer = new LassoRenderer();
@@ -429,6 +433,7 @@ public class PlayerController : MonoBehaviour
         // When on the ground, _lastTimeOnGround acts as a coyote timer when
         // we still accept jump input.
         _lastTimeOnGround -= Time.deltaTime;
+        _jumpBufferTimer -= Time.deltaTime;
         if (_gravityObject.IsOnGround())
         {
             if (_detectLanding)
@@ -436,6 +441,12 @@ public class PlayerController : MonoBehaviour
                 // This is how we detect if the player has landed or not.
                 // It is called once, only on landing after falling off a ledge or jumping.
                 OnLand();
+                if (_jumpBufferTimer > 0)
+                {
+                    print("Jump Buffered: "+_jumpBufferTimer);
+                    StartJump();
+                    _jumpBufferTimer = 0;
+                }
             }
             _lastTimeOnGround = 0.1f; // This might be good to later have a customizable parameter, but 0.1f seems good for now.
             if (_moveInput == Vector3.zero)
@@ -463,6 +474,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(jumpKey)) 
         {
             // Last time on ground acts as a coyote timer for jumping
+            _jumpBufferTimer = _jumpBuffer;
+
             if (_lastTimeOnGround > 0)
             {
                 StartJump();
@@ -487,6 +500,7 @@ public class PlayerController : MonoBehaviour
     public void PressJumpMobile()
     {
         PlayerCameraController.uiTouching++;
+        _jumpBufferTimer = _jumpBuffer;
         if (_lastTimeOnGround > 0)
         {
             StartJump();
@@ -636,7 +650,7 @@ public class PlayerController : MonoBehaviour
                     raycastHit.collider.gameObject.GetComponentInParent<LassoObject>() != null &&
                     raycastHit.collider.gameObject.GetComponentInParent<LassoObject>().isLassoable &&
                     Vector3.Distance(raycastHit.point, transform.position) < closestDist &&
-                    Camera.main.WorldToViewportPoint(raycastHit.point).z > _lassoIgnoreDist)
+                    _camera.WorldToViewportPoint(raycastHit.point).z > _lassoIgnoreDist)
                 {
                     closestDist = Vector3.Distance(raycastHit.point, transform.position);
                     hit = raycastHit;
@@ -673,7 +687,12 @@ public class PlayerController : MonoBehaviour
 
     void GetLassoInput()
     {
-
+#if !UNITY_IOS
+        if (Input.GetKeyDown(lassoKey))
+        {
+            LassoTargeting();
+        }
+#endif
     }
 
     void LassoTargeting()
