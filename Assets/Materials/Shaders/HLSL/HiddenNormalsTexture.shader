@@ -1,4 +1,4 @@
-Shader"Hidden/BananaCowboyCustom/Legacy/Normals Texture"
+Shader"Hidden/BananaCowboyCustom/ViewSpaceNormalsShader"
 {
     // adapted from Roystan's toon water article. Replaces the default Viewport's surface normals
     // for better percision

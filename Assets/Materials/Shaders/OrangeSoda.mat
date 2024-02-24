@@ -71,7 +71,7 @@ Material:
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
-    - _DepthMaxDistance: 33
+    - _DepthMaxDistance: 19.4
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _FoamDistance: 0.4
@@ -90,7 +90,7 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SurfaceDistortionAmount: 0.424
-    - _SurfaceNoiseCutoff: 0.743
+    - _SurfaceNoiseCutoff: 0.631
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
