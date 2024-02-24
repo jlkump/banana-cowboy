@@ -1,4 +1,4 @@
-Shader "BananaCowboyCustom/Soda"
+Shader"BananaCowboyCustom/Legacy/Soda"
 {
     // modified version of Roystan's toon water shader found here:
     // https://roystan.net/articles/toon-water/

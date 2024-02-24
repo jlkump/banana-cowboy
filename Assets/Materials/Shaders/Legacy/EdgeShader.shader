@@ -1,4 +1,4 @@
-Shader "Hidden/BananaCowboyCustom/EdgeShader"
+Shader"Hidden/BananaCowboyCustom/Legacy/EdgeShader"
 {
     Properties
     {

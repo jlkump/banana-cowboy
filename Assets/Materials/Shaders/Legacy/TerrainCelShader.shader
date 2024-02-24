@@ -1,4 +1,4 @@
-Shader "BananaCowboyCustom/CelShader"
+Shader"BananaCowboyCustom/Legacy/TerrainCelShader"
 {
     Properties
     {
@@ -6,17 +6,9 @@ Shader "BananaCowboyCustom/CelShader"
         _Color("Color", Color) = (0.5, 0.65, 1, 1)
         [HDR]
         _AmbientColor("Ambient Color", Color) = (0.4,0.4,0.4,1)
-        [HDR]
-        _SpecularColor("Specular Color", Color) = (0.9, 0.9, 0.9, 1)
-        _Glossiness("Glossisness", Float) = 32.0
-        [HDR]
-        _RimColor("Rim Color", Color) = (1,1,1,1)
-        _RimAmount("Rim Intensity", Range(0, 1)) = 0.716
-        _RimThreshold("Rim Spread", Range(0, 1)) = 0.1
     }
     SubShader
     {
-
         Pass {
 
             Name "Cel Shader"
@@ -103,19 +95,10 @@ Shader "BananaCowboyCustom/CelShader"
                 float intensity = smoothstep(0, 0.01, diffuse * shadow);
                 // includes the color of the main light source
                 float4 light = (intensity) * _LightColor0;
-                // blinn-phong specularity
-                float specularStr = dot(norm, halfDir);
-                float specularSmooth= smoothstep(0.005, 0.01, pow(specularStr * intensity, _Glossiness * _Glossiness));
-                float4 specular = specularSmooth * _SpecularColor;
-                // rim lighting. Lights up the part of the object facing away from the camera
-                float4 rimDot = 1 - dot(viewDir, norm);
-                float rimSmooth = rimDot * pow(diffuse, _RimThreshold);
-                rimSmooth = smoothstep(_RimAmount - 0.01, _RimAmount + 0.01, rimSmooth * intensity);
-                float4 rim = rimSmooth * _RimColor;
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);
                 // return color
-                return _Color * sample * (_AmbientColor + light + specular + rim);
+                return _Color * sample * (_AmbientColor + light);
             }
             ENDCG
         }
