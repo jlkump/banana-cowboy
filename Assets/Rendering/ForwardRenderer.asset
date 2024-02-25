@@ -53,7 +53,7 @@ MonoBehaviour:
   m_ShadowTransparentReceive: 1
   m_RenderingMode: 0
   m_DepthPrimingMode: 0
-  m_CopyDepthMode: 1
+  m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
 --- !u!114 &228992935150812345
@@ -72,7 +72,7 @@ MonoBehaviour:
   outlinesLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  renderPassEvent: 550
+  renderPassEvent: 450
   textureSettings:
     colorFormat: 0
     depthBufferBits: 32

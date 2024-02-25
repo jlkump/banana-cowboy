@@ -1433,10 +1433,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 107.9999771118164,
-            "y": -211.19996643066407,
-            "width": 230.4000244140625,
-            "height": 142.39996337890626
+            "x": 153.6000213623047,
+            "y": -211.19998168945313,
+            "width": 230.40000915527345,
+            "height": 142.39999389648438
         }
     },
     "m_Slots": [
@@ -1722,7 +1722,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "_SteepAngleThreshold",
     "m_StageCapability": 3,
-    "m_Value": 1.0,
+    "m_Value": 0.5,
     "m_DefaultValue": 0.0,
     "m_Labels": []
 }
@@ -3305,7 +3305,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "_SteepAngleMultiply",
     "m_StageCapability": 3,
-    "m_Value": 1.0,
+    "m_Value": 7.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
 }
