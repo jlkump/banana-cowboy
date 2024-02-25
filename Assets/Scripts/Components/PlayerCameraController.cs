@@ -39,7 +39,7 @@ public class PlayerCameraController : MonoBehaviour
         if (_cameraTarget == null || _cameraPivot == null) { return; }
         if (!PauseManager.pauseActive)
         {
-#if !UNITY_IOS || !UNITY_ANDROID
+#if !UNITY_IOS && !UNITY_ANDROID
             mouseX = Input.GetAxisRaw("Mouse X");
             mouseY = Input.GetAxisRaw("Mouse Y");
             GetRotationInput();
@@ -89,7 +89,7 @@ public class PlayerCameraController : MonoBehaviour
             if (touch.fingerId == _validTouchID)
             {
                 // Perform camera movement based on touch delta
-                Vector2 touchDeltaPosition = touch.deltaPosition * 0.05f;
+                Vector2 touchDeltaPosition = touch.deltaPosition * 0.02f;
 
                 // Adjust rotation based on touch delta
                 mouseX = touchDeltaPosition.x;
