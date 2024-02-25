@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    private static UIManager instance;
+
     public Animator healthAnimator = null;
     public Sprite[] healthSprites;
     public Sprite[] healthBlinkSprites;
@@ -22,6 +24,7 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
         if (throwBarIndicator != null)
         {
             indicatorStartingPos = throwBarIndicator.localPosition;
@@ -100,5 +103,22 @@ public class UIManager : MonoBehaviour
             return PlayerController.ThrowStrength.MEDIUM;
         }
         return PlayerController.ThrowStrength.WEAK;
+    }
+    
+    public void HideUIForCutscene()
+    {
+        healthSprite.SetActive(false);
+        reticuleSprite.SetActive(false);
+    }
+
+    public void ShowUIPostCutscene()
+    {
+        healthSprite.SetActive(true);
+        reticuleSprite.SetActive(true);
+    }
+
+    public static UIManager Instance()
+    {
+        return instance;
     }
 }

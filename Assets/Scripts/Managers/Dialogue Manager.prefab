@@ -634,10 +634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e97dbd28db3ba14b82f3a1abee2e999, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueHolder: {fileID: 262209572586537298}
-  textDisplay: {fileID: 5220900833327728886}
-  nameOfCharacter: {fileID: 3980671408776543402}
-  charPortrait: {fileID: 4747665593096480559}
-  portraitHolder: {fileID: 168958158217791396}
-  nameHolder: {fileID: 1425183110451390563}
-  portraits: []
+  dialogHolder: {fileID: 0}
+  portraitDisplay: {fileID: 0}
+  nameTextDisplay: {fileID: 0}
+  dialogTextDisplay: {fileID: 0}

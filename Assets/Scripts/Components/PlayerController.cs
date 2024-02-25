@@ -1,17 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using TMPro;
-using Unity.VisualScripting;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
-using UnityEngine.Device;
-using UnityEngine.Pool;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 [RequireComponent(typeof(GravityObject))]
 public class PlayerController : MonoBehaviour
@@ -174,6 +164,8 @@ public class PlayerController : MonoBehaviour
 
     private PlayerState _state = PlayerState.AIR;
 
+    private bool _disableForCutscene = false;
+
     // use coroutine to set player position
     IEnumerator SetSpawnPos()
     {
@@ -190,8 +182,11 @@ public class PlayerController : MonoBehaviour
         {
             playerAnimator.SetLayerWeight(1, 0.0f);
         }
+#if UNITY_IOS
+        GameObject.Find("Mobile Manager").SetActive(true);
         joystick.gameObject.transform.parent.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
         joystick.gameObject.transform.parent.GetComponent<Canvas>().worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+#endif
         StartCoroutine(SetSpawnPos());
     }
 
@@ -225,7 +220,7 @@ public class PlayerController : MonoBehaviour
         // Later, we will need to ignore input to the player controller
         // when in the UI or when in cutscenes
         
-        if (!PauseManager.pauseActive)
+        if (!PauseManager.pauseActive && !_disableForCutscene)
         {
             switch(_state)
             {
@@ -1167,6 +1162,20 @@ public class PlayerController : MonoBehaviour
     public void ApplyKnockback(Vector3 knockback)
     {
         GetComponent<Rigidbody>().AddForce(knockback, ForceMode.Impulse);
+    }
+
+    public void DisableForCutscene()
+    {
+        _disableForCutscene = true;
+        playerUI.HideUIForCutscene();
+        GetComponent<PlayerCameraController>().DisableForCutscene();
+    }
+
+    public void EnableAfterCutscene()
+    {
+        _disableForCutscene = false;
+        playerUI.ShowUIPostCutscene();
+        GetComponent<PlayerCameraController>().EnableAfterCutscene();
     }
 }
 public class LassoRenderer

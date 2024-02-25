@@ -1,36 +1,28 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
-using Unity.VisualScripting;
 
 
 public class CharacterDialogue : MonoBehaviour
 {
-    public string dialogueText;
-    public bool boss;
-    public string nameOfCharacter;
-    public TypeOfCharacter typeOfCharacter;
-    public enum TypeOfCharacter
-    {
-        None,Strawberry,Blueberry,Orange,Banana
-    };
+    public Dialog dialog;
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.CompareTag("Player"))
-        {
-            DialogueManager.StartText(dialogueText, nameOfCharacter, typeOfCharacter);
+        if (dialog.speakerDialog != string.Empty) { 
+            if (collision.CompareTag("Player"))
+            {
+                DialogueManager.Instance().DisplayDialog(dialog);
+            }
         }
     }
 
     private void OnTriggerExit(Collider collision)
     {
-        if (collision.CompareTag("Player"))
+        if (dialog.speakerDialog != string.Empty)
         {
-            DialogueManager.StopText();
+            if (collision.CompareTag("Player"))
+            {
+                DialogueManager.Instance().HideDialog(dialog);
+            }
         }
     }
 }

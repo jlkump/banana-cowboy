@@ -153,13 +153,29 @@ public class PlayerCameraController : MonoBehaviour
 
     public static void HideCursor()
     {
-        /*        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-                UnityEngine.Cursor.visible = false;*/
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        UnityEngine.Cursor.visible = false;
     }
 
     public static void ShowCursor()
     {
         Cursor.lockState = CursorLockMode.None;
         UnityEngine.Cursor.visible = true;
+    }
+
+    public void DisableForCutscene()
+    {
+        if (_cinemachineCamController != null)
+        {
+            _cinemachineCamController.gameObject.SetActive(false);
+        }
+    }
+
+    public void EnableAfterCutscene()
+    {
+        if (_cinemachineCamController != null)
+        {
+            _cinemachineCamController.gameObject.SetActive(true);
+        }
     }
 }
