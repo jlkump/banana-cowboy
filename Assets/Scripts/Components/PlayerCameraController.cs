@@ -58,11 +58,8 @@ public class PlayerCameraController : MonoBehaviour
         }
 
         // Loop through all touches
-        for (int i = 0; i < Input.touchCount; i++)
+        foreach (Touch touch in Input.touches)
         {
-            // Get current touch
-            Touch touch = Input.GetTouch(i);
-
             // Check if it's the beginning phase of touch
             if (touch.phase == TouchPhase.Began)
             {
@@ -153,8 +150,10 @@ public class PlayerCameraController : MonoBehaviour
 
     public static void HideCursor()
     {
+#if !UNITY_IOS && !UNITY_ANDROID
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
+#endif
     }
 
     public static void ShowCursor()

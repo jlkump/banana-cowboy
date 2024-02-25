@@ -190,8 +190,7 @@ public class PlayerController : MonoBehaviour
         }
 #if UNITY_IOS
         GameObject.Find("Mobile Manager").SetActive(true);
-        joystick.gameObject.transform.parent.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
-        joystick.gameObject.transform.parent.GetComponent<Canvas>().worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        mobileControls.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
 #endif
         StartCoroutine(SetSpawnPos());
     }
@@ -539,6 +538,9 @@ public class PlayerController : MonoBehaviour
 
             case PlayerState.GRAPPLE:
                 EndGrapple();
+                break;
+            case PlayerState.HOLD:
+                StartToss();
                 break;
 
             case PlayerState.SWING:
@@ -1105,6 +1107,7 @@ public class PlayerController : MonoBehaviour
     void EndJump()
     {
         _gravityObject.gravityMult = gravIncreaseOnJumpRelease;
+        _jumpBufferTimer = 0;
     }
 
     void OnLand()
