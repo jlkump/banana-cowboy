@@ -39,7 +39,7 @@ public class PlayerCameraController : MonoBehaviour
         if (_cameraTarget == null || _cameraPivot == null) { return; }
         if (!PauseManager.pauseActive)
         {
-#if !UNITY_IOS || !UNITY_ANDROID
+#if !UNITY_IOS && !UNITY_ANDROID
             mouseX = Input.GetAxisRaw("Mouse X");
             mouseY = Input.GetAxisRaw("Mouse Y");
             GetRotationInput();
@@ -58,11 +58,8 @@ public class PlayerCameraController : MonoBehaviour
         }
 
         // Loop through all touches
-        for (int i = 0; i < Input.touchCount; i++)
+        foreach (Touch touch in Input.touches)
         {
-            // Get current touch
-            Touch touch = Input.GetTouch(i);
-
             // Check if it's the beginning phase of touch
             if (touch.phase == TouchPhase.Began)
             {
@@ -89,7 +86,7 @@ public class PlayerCameraController : MonoBehaviour
             if (touch.fingerId == _validTouchID)
             {
                 // Perform camera movement based on touch delta
-                Vector2 touchDeltaPosition = touch.deltaPosition * 0.05f;
+                Vector2 touchDeltaPosition = touch.deltaPosition * 0.02f;
 
                 // Adjust rotation based on touch delta
                 mouseX = touchDeltaPosition.x;
@@ -153,8 +150,10 @@ public class PlayerCameraController : MonoBehaviour
 
     public static void HideCursor()
     {
+#if !UNITY_IOS && !UNITY_ANDROID
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
+#endif
     }
 
     public static void ShowCursor()

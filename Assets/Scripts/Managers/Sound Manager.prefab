@@ -150,7 +150,7 @@ MonoBehaviour:
     type: 0
     src: {fileID: 0}
   - name: Boss Hurt
-    audioClip: {fileID: 8300000, guid: a4c2d6a8be9fa0b46927490ee5ebe9bb, type: 3}
+    audioClip: {fileID: 8300000, guid: 67490cd2aa818c64ba69f60538015a4b, type: 3}
     volume: 1
     pitch: 1
     pitchVariance: 0
@@ -185,7 +185,7 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 7270f05ac9ed6fe45ab621633775cdf5, type: 3}
     volume: 1
     pitch: 1
-    pitchVariance: 0
+    pitchVariance: 0.25
     loop: 0
     type: 0
     src: {fileID: 0}

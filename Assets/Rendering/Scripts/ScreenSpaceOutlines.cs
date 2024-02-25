@@ -143,7 +143,7 @@ public class ScreenSpaceOutlines : ScriptableRendererFeature
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
         renderer.EnqueuePass(viewSpaceNormalsTexturePass);
-        // renderer.EnqueuePass(screenSpaceOutlinesPass);
+        renderer.EnqueuePass(screenSpaceOutlinesPass);
     }
 }
 
