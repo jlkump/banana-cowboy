@@ -41,12 +41,12 @@ public class CircularMovement : MonoBehaviour
         transform.position = target.position + offset;
         if (!target.GetComponentInParent<OrangeBoss>().indicating)
         {
-            angle += speed * Time.deltaTime * direction;
+            angle += direction * speed * Time.deltaTime;
         }
 
         if (ifRotateY)
         {
-            float rotationAngle = rotationSpeedY * Time.deltaTime * direction;
+            float rotationAngle = direction * rotationSpeedY * Time.deltaTime;
 
             // Rotate the object around the y-axis of the target
             transform.RotateAround(target.position, Vector3.up, rotationAngle);

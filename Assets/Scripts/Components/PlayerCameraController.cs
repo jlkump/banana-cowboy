@@ -39,7 +39,7 @@ public class PlayerCameraController : MonoBehaviour
         if (_cameraTarget == null || _cameraPivot == null) { return; }
         if (!PauseManager.pauseActive)
         {
-#if !UNITY_IOS
+#if !UNITY_IOS || !UNITY_ANDROID
             mouseX = Input.GetAxisRaw("Mouse X");
             mouseY = Input.GetAxisRaw("Mouse Y");
             GetRotationInput();

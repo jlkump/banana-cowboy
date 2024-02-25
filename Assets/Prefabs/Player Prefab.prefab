@@ -1206,6 +1206,7 @@ MonoBehaviour:
   playerAnimator: {fileID: 2504003000073130486}
   playerUI: {fileID: 574274520373564533}
   joystick: {fileID: 2597367190452789420}
+  mobileControls: {fileID: 3135388256612513573}
   walkSpeed: 12
   runSpeed: 19
   accelerationRate: 5
@@ -2666,6 +2667,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &3135388256612513573 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 271021700432520429, guid: 453e88d28d384ac4a91e04aecbab6ffa, type: 3}
+  m_PrefabInstance: {fileID: 2900880891219940296}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &3772615315241428882 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2025206311532885082, guid: 453e88d28d384ac4a91e04aecbab6ffa, type: 3}

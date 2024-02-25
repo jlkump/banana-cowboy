@@ -253,21 +253,28 @@ public class OrangeEnemyController : EnemyController
                 collision.gameObject.GetComponentInParent<PlayerController>().Damage(1, (collision.gameObject.transform.position - transform.position).normalized * knockbackForce);
                 StartCoroutine("ChangeCollisionInteraction", collision.collider);
             }
-            else if (collision.gameObject.GetComponent<Obstacle>() != null && _state == OrangeState.DIZZY)
+/*            else if (collision.gameObject.GetComponent<Obstacle>() != null && _state == OrangeState.DIZZY)
             {
                 StartCoroutine("ChangeCollisionInteraction", collision.collider);
                 //GetComponent<Rigidbody>().AddForce((transform.position - collision.transform.position).normalized * 2, ForceMode.Impulse);
-            }
+            }*/
         }
     }
 
     // Needed to make character not stick to walls. TODO: Test to see if it breaks things.
 
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<Obstacle>() != null && _state == OrangeState.IDLE)
+        {
+            StartCoroutine("ChangeCollisionInteraction", collision.collider);
+        }
+    }
     private IEnumerator ChangeCollisionInteraction(Collider collider)
     {
         Physics.IgnoreCollision(body.GetComponent<Collider>(), collider, true);
         Physics.IgnoreCollision(feet.GetComponent<Collider>(), collider, true);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
         Physics.IgnoreCollision(body.GetComponent<Collider>(), collider, false);
         Physics.IgnoreCollision(feet.GetComponent<Collider>(), collider, false);
     }
