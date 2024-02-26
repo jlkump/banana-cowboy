@@ -944,7 +944,6 @@ public class PlayerController : MonoBehaviour
 
     void GetSwingInput()
     {
-
 #if UNITY_IOS || UNITY_ANDROID
         if (joystick != null)
         {
@@ -1034,8 +1033,17 @@ public class PlayerController : MonoBehaviour
 
     void GetHoldInput()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
+#if UNITY_IOS || UNITY_ANDROID
+        if (joystick != null)
+        {
+            horizontal = joystick.Horizontal;
+            vertical = joystick.Vertical;
+        }
+#else
+
+        horizontal = Input.GetAxisRaw("Horizontal");
+        vertical = Input.GetAxisRaw("Vertical");
+#endif
         _moveInput = new Vector3(horizontal, 0, vertical).normalized;
         // Start the toss of the enemy based on the UI rectangle power ended on
 #if !UNITY_IOS && !UNITY_ANDROID
@@ -1086,8 +1094,17 @@ public class PlayerController : MonoBehaviour
 
     void GetTossInput()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
+#if UNITY_IOS || UNITY_ANDROID
+        if (joystick != null)
+        {
+            horizontal = joystick.Horizontal;
+            vertical = joystick.Vertical;
+        }
+#else
+
+        horizontal = Input.GetAxisRaw("Horizontal");
+        vertical = Input.GetAxisRaw("Vertical");
+#endif
         _moveInput = new Vector3(horizontal, 0, vertical).normalized;
         if (_moveInput.magnitude > 0 || Input.anyKeyDown)
         {
