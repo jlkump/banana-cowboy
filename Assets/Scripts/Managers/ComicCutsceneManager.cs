@@ -7,21 +7,12 @@ using DG.Tweening;
 
 public class ComicCutsceneManager : MonoBehaviour
 {
-    // cutscene = sequence of panels
-    // panel = full spread
-    // box = one part of panel 
-
-    public float fadeTime = 0.2f;
-    public float timeBetweenBoxes = 3f;
+    public float fadeTime = 0.5f;
+    public float timeBetweenBoxes = 1.5f;
     public string nextScene;
+    public GameObject skipButton;
+
     public List<GameObject> panelGroups = new List<GameObject>();
-    // public List<List<GameObject>> panels = new List<List<GameObject>>();
-    // public List<GameObject> boxes1 = new List<GameObject>();
-    // public List<GameObject> boxes2 = new List<GameObject>();
-
-    
-
-    public int test = 0;
     private int currPanel = 0;
     private bool endOfCutscene;
 
@@ -34,7 +25,6 @@ public class ComicCutsceneManager : MonoBehaviour
 
     public void Start()
     { 
-        
         endOfCutscene = false;
 
         foreach (GameObject panel in panelGroups)
@@ -42,14 +32,24 @@ public class ComicCutsceneManager : MonoBehaviour
             panel.SetActive(false);
         }
 
+        // fade in skip button
+        skipButton.GetComponent<Image>().color -= new Color(0, 0, 0, 1);
+        StartCoroutine("SkipButtonAnimation");
+
         StartCoroutine("PanelAnimation");
+    }
+
+    IEnumerator SkipButtonAnimation()
+    {
+        yield return new WaitForSeconds(0.1f);
+        Color endColor = skipButton.GetComponent<Image>().color + new Color(0, 0, 0, 1);
+        skipButton.GetComponent<Image>().DOColor(endColor, 1f).SetEase(Ease.OutExpo);
     }
 
 
     IEnumerator PanelAnimation()
     {
         panelGroups[currPanel].SetActive(true);
-
 
         // initially set all panels to have 0 alpha
         foreach (GameObject box in panels[currPanel].boxes)
@@ -100,6 +100,27 @@ public class ComicCutsceneManager : MonoBehaviour
     IEnumerator ChangeScene()
     {
         yield return new WaitForSeconds(1.2f);
+        switch (nextScene)
+        {
+            case "Tutorial Level":
+                break;
+            case "Orange Level":
+                if (SoundManager.Instance() != null)
+                {
+                    SoundManager.Instance().StopMusic("Main Menu");
+                    SoundManager.Instance().PlayMusic("Orange Planet");
+                }
+                break;
+
+        }
         SceneManager.LoadScene(nextScene);
+    }
+
+    public void SkipCutscene()
+    {
+        endOfCutscene = true;
+        StopAllCoroutines();
+        FadeOut(currPanel);
+        StartCoroutine("ChangeScene");
     }
 }

@@ -48,13 +48,16 @@ public class MenuManager : MonoBehaviour
         switch (button.name)
         {
             case "Play":
+                // Go to Backstory Cutscene
+                SceneManager.LoadScene("Cutscene1");
+
                 // Go to level selection screen
-                if (SoundManager.Instance() != null)
-                {
-                    SoundManager.Instance().StopMusic("Main Menu");
-                    SoundManager.Instance().PlayMusic("Orange Planet");
-                }
-                SceneManager.LoadScene("Orange Level");
+                // if (SoundManager.Instance() != null)
+                // {
+                    // SoundManager.Instance().StopMusic("Main Menu");
+                    // SoundManager.Instance().PlayMusic("Orange Planet");
+                // }
+                // SceneManager.LoadScene("Orange Level");
                 break;
             case "Settings":
                 settings.SetActive(true);
