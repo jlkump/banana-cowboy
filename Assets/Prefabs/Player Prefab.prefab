@@ -116,6 +116,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7183610922977414858}
   - component: {fileID: 4075203376313498946}
+  - component: {fileID: 8644664447017165748}
   m_Layer: 9
   m_Name: Feet Collider
   m_TagString: Untagged
@@ -153,12 +154,24 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 2, y: 1, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8644664447017165748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1217146964242234490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30a3139387d730144b201c4c6e84cb5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1919438211218020867
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,10 +512,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8925892245031520248}
   - {fileID: 7239246675022263076}
-  - {fileID: 7183610922977414858}
   - {fileID: 4555225583473077096}
+  - {fileID: 7183610922977414858}
   - {fileID: 7838862824688470847}
   m_Father: {fileID: 1526105572669686172}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1082,7 +1094,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gravityIncreaseOnFall: 1.5
   gravityOrientation: {fileID: 5503662033258183763}
-  _feetCollider: {fileID: 4075203376313498946}
   _freezeRotation: 1
 --- !u!114 &9187660138696086715
 MonoBehaviour:
@@ -1703,7 +1714,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4555225583473077096}
   - component: {fileID: 4556485446633655030}
-  m_Layer: 0
+  - component: {fileID: 7365846526864489973}
+  m_Layer: 14
   m_Name: Player Collider
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1745,9 +1757,30 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 4
+  m_Height: 3
   m_Direction: 1
-  m_Center: {x: 0, y: 1.7, z: 0}
+  m_Center: {x: 0, y: 1.5, z: 0}
+--- !u!65 &7365846526864489973
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5256079624072375790}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: -0.2, z: 0}
 --- !u!1 &5724474050856554619
 GameObject:
   m_ObjectHideFlags: 0
@@ -1984,37 +2017,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!1 &6136787508877954005
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8925892245031520248}
-  m_Layer: 0
-  m_Name: Lasso Throw Pos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8925892245031520248
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6136787508877954005}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.72, y: 2.552, z: 0.38}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5503662033258183763}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6435897076055692967
 GameObject:
   m_ObjectHideFlags: 0

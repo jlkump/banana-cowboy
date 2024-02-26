@@ -40,13 +40,10 @@ public class GravityObject : MonoBehaviour
 
     public Transform gravityOrientation = null;
 
-    [Header("Ground Detection")]
-    [SerializeField, Tooltip("The collider to detect if the player is on the ground")]
-    Collider _feetCollider = null;
     [SerializeField, Tooltip("Freeze rotation for the rigid-body")]
     bool _freezeRotation = true;
-    List<Collider> _groundColliders = new List<Collider>();
-    bool _onGround = false;
+
+    GroundDetection _groundDetector;
 
 
     void Awake()
@@ -63,11 +60,12 @@ public class GravityObject : MonoBehaviour
         {
             gravityOrientation = transform;
         }
+        _groundDetector = GetComponentInChildren<GroundDetection>();
     }
 
     void FixedUpdate()
     {
-        if (_highestPrioAttractorIndex != -1 && !_rigidBody.isKinematic)
+        if (_highestPrioAttractorIndex != -1 && !_rigidBody.isKinematic && _groundDetector != null)
         {
             GravityAttractor attractor = _attractors[_highestPrioAttractorIndex];
             Vector3 targetGravUp = attractor.GetGravityDirection(gravityOrientation);
@@ -80,8 +78,9 @@ public class GravityObject : MonoBehaviour
             Vector3 grav = attractor.GetGravityDirection(gravityOrientation) * attractor.GetGravityForce();
             Vector3 fallingVec = GetFallingVelocity();
 
-            if (!_onGround)
+            if (!_groundDetector.OnGround())
             {
+                Debug.DrawRay(transform.position, grav, Color.yellow);
                 if (fallingVec.magnitude < maxFallSpeed || Vector3.Dot(fallingVec, -targetGravUp) < 0.5f)
                 {
                     if (gravityOrientation.InverseTransformDirection(fallingVec).y < 0)
@@ -159,7 +158,7 @@ public class GravityObject : MonoBehaviour
 
     public bool IsOnGround()
     {
-        return _onGround;
+        return _groundDetector.OnGround();
     }
 
     public bool IsInSpace()
@@ -184,35 +183,6 @@ public class GravityObject : MonoBehaviour
         {
             _attractors.Remove(collision.gameObject.GetComponentInParent<GravityAttractor>());
             _highestPrioAttractorIndex = GetHighestPrioAttractorIndex();
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (_feetCollider == null) { return; }
-        if (collision.contactCount != 0)
-        {
-            _groundColliders.Add(collision.GetContact(0).otherCollider);
-            // Not exactly Dot > 0 comparison since very occasionally the player will phase through the floor if that is the case
-            if (Vector3.Dot((_feetCollider.transform.position - collision.GetContact(0).point).normalized, gravityOrientation.up) > -0.4f) {
-                if (collision.GetContact(0).thisCollider == _feetCollider)
-                {
-                    _onGround = true;
-                }
-            }
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (_feetCollider == null) { return; }
-        if (_groundColliders.Contains(collision.collider))
-        {
-            _groundColliders.Remove(collision.collider);
-        }
-        if (_groundColliders.Count == 0)
-        {
-            _onGround = false;
         }
     }
 }
