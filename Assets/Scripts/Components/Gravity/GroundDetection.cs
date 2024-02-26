@@ -6,23 +6,13 @@ public class GroundDetection : MonoBehaviour
 {
     private bool _onGround;
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        _onGround = true;
-    }
-    //private void OnCollisionStay(Collision collision)
-    //{
-    //    _onGround = true;
-    //}
-
     private void OnTriggerStay(Collider other)
     {
-        _onGround = true;
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        _onGround = false;
+        if ((transform.position - other.ClosestPoint(transform.position)).magnitude == 0 || 
+            Vector3.Dot(transform.up, (transform.position - other.ClosestPoint(transform.position)).normalized) > 0.3f) {
+            Debug.DrawLine(other.ClosestPoint(transform.position), transform.position, Color.green);
+            _onGround = true;
+        }
     }
 
     private void OnTriggerExit(Collider other)
