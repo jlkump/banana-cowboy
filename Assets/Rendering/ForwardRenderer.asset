@@ -71,7 +71,7 @@ MonoBehaviour:
   m_Active: 1
   outlinesLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 16379
   renderPassEvent: 450
   textureSettings:
     colorFormat: 0
