@@ -19,8 +19,6 @@ struct ThresholdConstants {
 
 // It was suggested I do this to keep things organized and (easier) to understand and I like it
 struct SurfaceValues {
-    float4 ambient;
-    float4 albedo;
     float3 normal;
     float3 viewDir;
     float smoothness;
@@ -52,8 +50,8 @@ float3 CalculateCelShading(Light l, SurfaceValues s) {
     rim = s.rimStrength * smoothstep( s.rimAmount - 0.5f * s.tc.rim, 
       s.rimAmount + 0.5f * s.tc.rim, rim );
     // final color output
-    //return rim;
-    // return s.albedo * l.color * (diffuse + s.ambient + max(specular, rim));
+    // return rim; // Isolating rim component
+    // return s.albedo * l.color * (diffuse + s.ambient + max(specular, rim)); // cant figure out why this dumb line wont work
     return l.color * (diffuse + max(specular, rim));
 }
 #endif
@@ -67,8 +65,6 @@ void LightingCelShaded_float(float3 Normal, float3 View, float Smoothness, float
         //Col = Albedo;
         // populate our surface shading variables
         SurfaceValues s;
-        s.ambient = Ambient;
-        s.albedo = Albedo;
         s.normal = normalize(Normal);
         s.viewDir = normalize(View);
         s.smoothness = Smoothness;
