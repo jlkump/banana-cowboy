@@ -580,7 +580,7 @@ public class PlayerController : MonoBehaviour
         _moveInput = 
             Vector3.Dot(_gravityObject.gravityOrientation.right, _moveInput) * _gravityObject.gravityOrientation.right 
             + Vector3.Dot(_gravityObject.gravityOrientation.forward, _moveInput) * _gravityObject.gravityOrientation.forward;
-        Vector3 targetVelocity = _moveInput * (_state == PlayerState.RUN ? runSpeed : walkSpeed);
+        Vector3 targetVelocity = _moveInput.normalized * (_state == PlayerState.RUN ? runSpeed : walkSpeed);
 
         float accelRate;
         // Gets an acceleration value based on if we are accelerating (includes turning) 
