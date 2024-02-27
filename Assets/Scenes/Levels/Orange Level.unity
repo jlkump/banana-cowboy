@@ -19889,10 +19889,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 272883269327562652, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 272883269327562652, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7f4ddf7915bfdb849a6ef4f580a41733, type: 2}
     - target: {fileID: 387488930694480310, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
       propertyPath: m_DecalLayerMask
-      value: 4294967295
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1085710553567166283, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1085710553567166283, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7f4ddf7915bfdb849a6ef4f580a41733, type: 2}
     - target: {fileID: 1526105572669686172, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
       propertyPath: m_LocalPosition.x
       value: 241.22
@@ -19933,6 +19949,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 3049582709254008821, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3049582709254008821, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7f4ddf7915bfdb849a6ef4f580a41733, type: 2}
+    - target: {fileID: 3726396360410514689, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3879603049845090681, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
       propertyPath: m_Name
       value: Player Prefab
@@ -19941,13 +19969,25 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5043751060660943332, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5538218403534575563, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5577803411208878517, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
       propertyPath: _cinemachineCamController
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5688568690316987658, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.36
+      value: 3.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 7124155312819114380, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9187660138696086715, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
       propertyPath: lassoPredictionReticule

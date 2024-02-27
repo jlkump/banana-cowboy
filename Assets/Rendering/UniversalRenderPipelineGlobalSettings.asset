@@ -15,7 +15,7 @@ MonoBehaviour:
   k_AssetVersion: 3
   m_RenderingLayerNames:
   - Default
-  - RecieveProjector
+  - IgnoreProjector
   m_ValidRenderingLayers: 3
   lightLayerName0: 
   lightLayerName1: 
