@@ -29,7 +29,7 @@ struct SurfaceValues {
     ThresholdConstants tc;
 };
 
-float3 CalculateCelShading(Light l, SurfaceValues s) {
+float3 calculateCelShading(Light l, SurfaceValues s) {
     // shadow attenuation
     float attenuation = smoothstep(0.0f, s.tc.shadowAttenuation, l.shadowAttenuation) * 
         smoothstep(0.0f, s.tc.distanceAttenuation, l.distanceAttenuation);
@@ -89,12 +89,79 @@ void LightingCelShaded_float(float3 Normal, float3 View, float Smoothness, float
         #endif
         // get light information and calculate color
         Light light = GetMainLight(shadowCoord);
-        Col = CalculateCelShading(light, s);
+        Col = calculateCelShading(light, s);
         // get additional lighting information
         int additionalLightsCount = GetAdditionalLightsCount();
         for(int i = 0; i < additionalLightsCount; i++) {
             light = GetAdditionalLight(i, Position, 1);
-            Col += CalculateCelShading(light, s);
+            Col += calculateCelShading(light, s);
+        }
+        // do final lighting calculations
+        Col += Ambient;
+        Col *= Albedo;
+    #endif
+}
+
+
+// structs for terrain shading
+struct TerrainThresholdConstants {
+    float diffuse;
+    float distanceAttenuation;
+    float shadowAttenuation;
+};
+
+struct TerrainSurfaceValues {
+    float3 normal;
+    float3 viewDir;
+    TerrainThresholdConstants tc;
+};
+
+// calculate cel shading for terrain
+float3 calculateTerrainShading(Light l, TerrainSurfaceValues ts) {
+    // shadow attenuation
+    float attenuation = smoothstep(0.0f, ts.tc.shadowAttenuation, l.shadowAttenuation) * 
+        smoothstep(0.0f, ts.tc.distanceAttenuation, l.distanceAttenuation);
+    // simple lambertian diffuse
+    float diffuse = saturate(dot(ts.normal, l.direction));
+    diffuse *= attenuation;
+    // smoothstep our diffuse
+    diffuse = smoothstep(0.0f, ts.tc.diffuse, diffuse);
+    // final color calculation
+    return l.color * diffuse;
+}
+
+// Main lighting function for terrain
+void TerrainLightingCel_float(float3 Normal, float3 View, float3 Position, float EdgeDiffuse, 
+    float EdgeDistanceAttenuation, float EdgeShadowAttenuation, float4 Ambient, float4 Albedo, out float3 Col) {
+    
+    #if defined(SHADERGRAPH_PREVIEW)
+        Col = half3(0.5f, 0.5f, 0.5f);
+    #else
+        // populate Terrain Surface Values
+        TerrainSurfaceValues ts;
+        ts.normal = Normal;
+        ts.viewDir = View;
+        // populate Thresholding Constants
+        TerrainThresholdConstants ttcon;
+        ttcon.diffuse = EdgeDiffuse;
+        ttcon.distanceAttenuation = EdgeDistanceAttenuation;
+        ttcon.shadowAttenuation = EdgeShadowAttenuation;
+        ts.tc = ttcon;
+        // shadow stuff
+        #if SHADOWS_SCREEN
+            float4 clipPos = TransformWorldToHClip(Position);
+            float4 shadowCoord = ComputeScreenPos(clipPos);
+        #else
+            float4 shadowCoord = TransformWorldToShadowCoord(Position);
+        #endif
+        // get light information and calculate color
+        Light light = GetMainLight(shadowCoord);
+        Col = calculateTerrainShading(light, ts);
+        // get additional lighting information
+        int additionalLightsCount = GetAdditionalLightsCount();
+        for(int i = 0; i < additionalLightsCount; i++) {
+            light = GetAdditionalLight(i, Position, 1);
+            Col += calculateTerrainShading(light, ts);
         }
         // do final lighting calculations
         Col += Ambient;
