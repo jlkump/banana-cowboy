@@ -171,7 +171,16 @@ public class PlayerController : MonoBehaviour
     IEnumerator SetSpawnPos()
     {
         yield return new WaitForEndOfFrame();
-        this.transform.position = LevelData.getRespawnPos();
+        if (GameObject.Find("CheckpointManager") != null)
+        {
+            print("Normal Levels");
+            transform.position = LevelData.getRespawnPos();
+        }
+        else
+        {
+            print("No checkpoints needed");
+            transform.position = Vector3.zero;
+        }
     }
 
     private void Awake()
@@ -183,6 +192,8 @@ public class PlayerController : MonoBehaviour
 #else
         mobileControls.SetActive(false);
 #endif
+        // TODO: TEST IF PUT HERE OR IN START
+        StartCoroutine(SetSpawnPos());
 
         if (playerAnimator != null)
         {
@@ -192,7 +203,6 @@ public class PlayerController : MonoBehaviour
         GameObject.Find("Mobile Manager").SetActive(true);
         mobileControls.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
 #endif
-        StartCoroutine(SetSpawnPos());
     }
 
     void Start()
@@ -216,6 +226,8 @@ public class PlayerController : MonoBehaviour
         //_lassoThrowCooldown = SoundManager.S_Instance().GetSound("LassoThrow").src.clip.length;
         _lassoThrowCooldown = 0.5f;
 
+/*        StartCoroutine(SetSpawnPos());
+*/
         health = maxHealth;
         _canTakeDamage = true;
         playerUI.SetAbsHealth(health);
