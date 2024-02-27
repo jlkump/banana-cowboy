@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6679030358070620446}
   - component: {fileID: 5425248356028779901}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Feet Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,7 +47,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -163,7 +163,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gravityIncreaseOnFall: 1.5
   gravityOrientation: {fileID: 3285677746079740160}
-  _feetCollider: {fileID: 5425248356028779901}
   _freezeRotation: 1
 --- !u!114 &5567951755585114793
 MonoBehaviour:
@@ -177,6 +176,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaa7ed5c6a19ea84bbc4bac4aa8781ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  materialRenderer: {fileID: 7629766330076869421}
+  originalMaterial: {fileID: 2100000, guid: 71e79426460c22742982bc8011777a12, type: 2}
+  selectedMaterial: {fileID: 2100000, guid: 4bb0ce82ebf5b144cb380b5fdf8e9a73, type: 2}
+  thrown: 0
   explosion: {fileID: 5669016145455679879, guid: ad58d7c04cb40224cbbc76cb00d16ec4, type: 3}
 --- !u!1 &7981144115022165262
 GameObject:

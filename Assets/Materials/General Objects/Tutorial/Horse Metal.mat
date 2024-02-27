@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Cactus
+  m_Name: Horse Metal
   m_Shader: {fileID: -6465566751694194690, guid: 9e455f76d3227404796aadbb8449fb16, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -117,7 +117,7 @@ Material:
     - _RimStrength: 1
     - _RimThreshold: 0.15
     - _SkyMultiplier: 0
-    - _Smoothness: 0
+    - _Smoothness: 2.72
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -126,13 +126,13 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _AmbientColor: {r: 0.4037736, g: 0.25017473, b: 0.23388395, a: 0}
-    - _BaseColor: {r: 0.28325006, g: 0.3882353, b: 0, a: 1}
-    - _Color: {r: 0.7374253, g: 0.7509433, b: 0.2479529, a: 1}
+    - _AmbientColor: {r: 0.6603774, g: 0.6603774, b: 0.6603774, a: 0}
+    - _BaseColor: {r: 0.39569247, g: 0.43005523, b: 0.4415095, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &4612142346470126157
+--- !u!114 &863680598344635604
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

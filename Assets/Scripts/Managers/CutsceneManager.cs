@@ -34,10 +34,10 @@ public class CutsceneManager : MonoBehaviour
     {
         if (activeCutscene != null && !activeCutscene.cutscene.IsCutsceneComplete())
         {
-            if (Input.GetKeyDown(cutsceneInput))
-            {
-                activeCutscene.cutscene.SkipActiveScene();
-            }
+            //if (Input.GetKeyDown(cutsceneInput))
+            //{
+            //    activeCutscene.cutscene.SkipActiveScene();
+            //}
         }
     }
 
