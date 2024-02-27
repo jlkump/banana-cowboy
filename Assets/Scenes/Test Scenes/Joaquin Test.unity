@@ -374,6 +374,10 @@ PrefabInstance:
       propertyPath: m_FadeFactor
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 387488930694480310, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
+      propertyPath: m_DecalLayerMask
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 1526105572669686172, guid: b953fa1acc53b4446b30f097302a0d30, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.79
