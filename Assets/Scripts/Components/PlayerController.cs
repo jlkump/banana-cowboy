@@ -441,12 +441,12 @@ public class PlayerController : MonoBehaviour
                 // This is how we detect if the player has landed or not.
                 // It is called once, only on landing after falling off a ledge or jumping.
                 OnLand();
-                if (_jumpBufferTimer > 0)
-                {
-                    print("Jump Buffered: "+_jumpBufferTimer);
-                    StartJump();
-                    _jumpBufferTimer = 0;
-                }
+                //if (_jumpBufferTimer > 0)
+                //{
+                //    print("Jump Buffered: "+_jumpBufferTimer);
+                //    StartJump();
+                //    _jumpBufferTimer = 0;
+                //}
             }
             _lastTimeOnGround = 0.1f; // This might be good to later have a customizable parameter, but 0.1f seems good for now.
             if (_moveInput == Vector3.zero)
@@ -649,11 +649,11 @@ public class PlayerController : MonoBehaviour
             float deltaRadius = (_aimAssistMaxRadius - _aimAssistMinRadius) / (_aimAssistRaycastResolution - 1);
             float closestDist = float.MaxValue;
 
+            Vector3 centerCameraPoint = new Vector3(0.5f, 0.5f, 0.0f);
 
             for (int i = 0; i < _aimAssistRaycastResolution; i++)
             {
                 float raycastRadius = _aimAssistMinRadius + deltaRadius * i;
-
                 RaycastHit raycastHit;
                 if (Physics.SphereCast(_cameraTransform.position, raycastRadius, _cameraTransform.forward,
                     out raycastHit, lassoAimRange + Vector3.Distance(_cameraTransform.position, transform.position), 
@@ -661,11 +661,15 @@ public class PlayerController : MonoBehaviour
                     raycastHit.collider != null && raycastHit.collider.gameObject != null &&
                     raycastHit.collider.gameObject.GetComponentInParent<LassoObject>() != null &&
                     raycastHit.collider.gameObject.GetComponentInParent<LassoObject>().isLassoable &&
-                    Vector3.Distance(raycastHit.point, transform.position) < closestDist &&
                     _camera.WorldToViewportPoint(raycastHit.point).z > _lassoIgnoreDist)
                 {
-                    closestDist = Vector3.Distance(raycastHit.point, transform.position);
-                    hit = raycastHit;
+                    Vector3 cameraSpacePoint = _camera.WorldToViewportPoint(raycastHit.point);
+                    cameraSpacePoint.z = 0;
+                    if (Vector3.Distance(cameraSpacePoint, centerCameraPoint) < closestDist)
+                    {
+                        closestDist = Vector3.Distance(cameraSpacePoint, centerCameraPoint);
+                        hit = raycastHit;
+                    }
                 }
             }
         }
@@ -1202,6 +1206,8 @@ public class PlayerController : MonoBehaviour
     public void DisableForCutscene()
     {
         _disableForCutscene = true;
+        UpdateState(PlayerState.IDLE);
+        _moveInput = Vector3.zero;
         playerUI.HideUIForCutscene();
         GetComponent<PlayerCameraController>().DisableForCutscene();
     }
