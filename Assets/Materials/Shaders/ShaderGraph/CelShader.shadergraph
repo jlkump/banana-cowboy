@@ -1871,7 +1871,7 @@
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.CategoryData",
     "m_ObjectId": "9f76974233c04edd9a07621ff789786a",
-    "m_Name": "ThresholdingConstants",
+    "m_Name": "Edge Thresholding Constants",
     "m_ChildObjectList": [
         {
             "m_Id": "6e8f1eedd4a44ad6861f385efad49aa8"
@@ -2743,10 +2743,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 44.799949645996097,
-            "y": 280.0,
-            "width": 125.60002899169922,
-            "height": 117.5999755859375
+            "x": 136.00001525878907,
+            "y": 254.40000915527345,
+            "width": 130.40003967285157,
+            "height": 117.59999084472656
         }
     },
     "m_Slots": [
