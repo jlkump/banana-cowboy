@@ -152,7 +152,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.01912259, y: -0.026575914, z: 0.18606234, w: 0.98199236}
   m_LocalPosition: {x: 30.870068, y: -7.1600013, z: -18.28}
-  m_LocalScale: {x: 6, y: 12, z: 3}
+  m_LocalScale: {x: 6, y: 12, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1701867392}
@@ -1769,7 +1769,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.9547169, g: 0.756575, b: 0.53860444, a: 1}
+  m_Color: {r: 0.4339623, g: 0.2292631, b: 0, a: 1}
   m_Intensity: 1.5
   m_Range: 10
   m_SpotAngle: 30
@@ -2314,7 +2314,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.075570114, y: -0.037233252, z: 0.18422602, w: 0.9792669}
   m_LocalPosition: {x: 31.09, y: -7.43, z: -20.79}
-  m_LocalScale: {x: 6, y: 12, z: 3}
+  m_LocalScale: {x: 6, y: 12, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1701867392}
@@ -2629,7 +2629,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.07615287, y: -0.008415623, z: 0.18776195, w: 0.9792218}
   m_LocalPosition: {x: 30.910028, y: -7.520008, z: -12.97}
-  m_LocalScale: {x: 6, y: 12, z: 3}
+  m_LocalScale: {x: 6, y: 12, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1701867392}
@@ -3022,7 +3022,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.11302964, y: -0.044263527, z: 0.18266436, w: 0.97565305}
   m_LocalPosition: {x: 31.6, y: -8.01, z: -22.96}
-  m_LocalScale: {x: 6, y: 12, z: 3}
+  m_LocalScale: {x: 6, y: 12, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1701867392}
@@ -3447,7 +3447,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.027277462, y: -0.017758682, z: 0.18710972, w: 0.98179966}
   m_LocalPosition: {x: 30.900028, y: -7.16, z: -15.63}
-  m_LocalScale: {x: 6, y: 12, z: 3}
+  m_LocalScale: {x: 6, y: 12, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1701867392}
@@ -3552,7 +3552,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.0820854, y: -0.0072776545, z: 0.18780941, w: 0.9787424}
   m_LocalPosition: {x: 30.96, y: -8.02, z: -9.94}
-  m_LocalScale: {x: 6, y: 12, z: 3}
+  m_LocalScale: {x: 6, y: 12, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1701867392}
@@ -5351,15 +5351,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2410488934447341284, guid: 3adbae3f5d000c64e992f2f00591a900, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -35.9
+      value: -35.57
       objectReference: {fileID: 0}
     - target: {fileID: 2410488934447341284, guid: 3adbae3f5d000c64e992f2f00591a900, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.44
+      value: -5.64
       objectReference: {fileID: 0}
     - target: {fileID: 2410488934447341284, guid: 3adbae3f5d000c64e992f2f00591a900, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -25.08
+      value: -25.48
       objectReference: {fileID: 0}
     - target: {fileID: 2410488934447341284, guid: 3adbae3f5d000c64e992f2f00591a900, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5393,6 +5393,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tutorial Swingable Sphere
       objectReference: {fileID: 0}
+    - target: {fileID: 6528682300834733338, guid: 3adbae3f5d000c64e992f2f00591a900, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 813bdd861e07ed74d81eb007ffcb08a0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
